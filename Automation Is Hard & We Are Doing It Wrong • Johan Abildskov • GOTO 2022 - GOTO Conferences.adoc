@@ -1,0 +1,161 @@
+= Automation Is Hard & We Are Doing It Wrong
+Johan Abildskov (GOTO 2022) — Analysis & Extended Thesis
+:revdate: 2025-10-13
+:toc:
+:toclevels: 3
+
+== 🎯 Executive Summary
+Automation is not a luxury; it’s the foundation of sustainable software delivery.  
+Johan Abildskov argues that most organizations misunderstand automation by treating it as a side activity or “bonus” rather than as a *core competency of software engineering*.  
+Both management and engineers contribute to this misunderstanding — management by undervaluing automation work, and engineers by treating scripts as disposable artifacts rather than production software.
+
+== 🧩 Core Theses and Analysis
+
+=== 1. Automation Is the Foundation, Not a Luxury
+> “We are constrained not by what we can do, but by what we choose to do.”
+
+*Thesis:*  
+Automation should be considered a *first-class business capability*, not an afterthought.  
+Organizations that postpone automation (“after the next sprint”) create fragile systems that slow down future progress.
+
+*Extended Insight:*  
+Treat automation as *part of the product*, not a tool around it. Allocate explicit capacity for automation in roadmaps and metrics — e.g., track “automation coverage” as seriously as “test coverage”.
+
+---
+
+=== 2. Speed and Stability Are Not Opposites
+> “The DevOps promise is that if we become very quick, we will also become very stable.”
+
+*Thesis:*  
+High-performing teams achieve both speed and reliability through automation. Manual work is the true bottleneck.
+
+*Extended Insight:*  
+Adopt automation to *remove toil*, not just to accelerate deployments. The correlation between high deployment frequency and reliability is proven (e.g., *Accelerate* by Forsgren et al.).  
+*Action:* Replace “fast vs. safe” trade-off thinking with “safe because fast”.
+
+---
+
+=== 3. Automation Defines Organizational Scalability
+> “Manual tests, manual deploys — they have consequences. We’re coding on the margins.”
+
+*Thesis:*  
+The cost of scaling teams is exponential when automation lags behind. Without automation, each new engineer adds coordination overhead instead of value.
+
+*Extended Insight:*  
+Plan automation roadmaps alongside headcount growth. For every major process (testing, release, onboarding, monitoring), define automation maturity levels — *manual → scripted → self-service → autonomous* — and continuously evolve.
+
+---
+
+=== 4. Automation Is Software — Apply Engineering Discipline
+> “Automation is software, so treat it as such.”
+
+*Thesis:*  
+Automation scripts and pipelines should follow the same lifecycle management as any production system:  
+version control, testing, documentation, observability, and failure handling.
+
+*Extended Insight:*  
+Establish a *Platform Engineering Code of Conduct*:
+
+- All automation in Git (no orphan scripts)
+- CI pipelines with self-tests
+- Monitoring of automation health and stale configurations
+- Circuit breakers and safe defaults to prevent cascading failures
+
+---
+
+=== 5. Cultural and Leadership Gaps Block Automation
+> “Limited software skills in senior leadership… digitalization is not an R&D problem, it’s a business problem.”
+
+*Thesis:*  
+Executives often misclassify automation and DevOps as “technical” or “engineering-only” topics, missing their strategic value.  
+Leadership that cannot reason about software abstractions will underinvest in automation and overinvest in process bureaucracy.
+
+*Extended Insight:*  
+Embed technical literacy into leadership training.  
+Make automation metrics (e.g., lead time, deployment frequency, change failure rate) part of business KPIs.  
+Business strategy and automation strategy must align.
+
+---
+
+=== 6. Complex Automation Reflects Complex Systems
+> “Automating simple things is simple; automating complex things might be impossible while retaining sanity.”
+
+*Thesis:*  
+When automation feels hard, the root cause is usually system complexity, not tooling.  
+Architectural simplicity is the real enabler of automation.
+
+*Extended Insight:*  
+Adopt architecture principles that prioritize *changeability*:
+
+- Loose coupling and clear contracts
+- Testability and deployability built into design
+- Treat “ease of change” as a primary quality attribute in architecture reviews
+
+---
+
+=== 7. Engineers Also Misuse Automation
+> “We throw away all our software engineering principles when writing bash scripts.”
+
+*Thesis:*  
+Developers often violate their own standards when automating — ignoring DRY, SOLID, versioning, testing, and documentation.
+
+*Extended Insight:*  
+Formally recognize *automation engineering* as a skill domain.  
+Create internal repositories or libraries for reusable automation patterns (approval testing, dependency management, retries, etc.)  
+Encourage peer reviews for automation code as for any other feature.
+
+---
+
+=== 8. Automation Requires Lifecycle Governance
+> “With great power comes great options for shooting in foot.”
+
+*Thesis:*  
+Unchecked automation can cause large-scale failures.  
+We must monitor, validate, and govern automation systems as production systems.
+
+*Extended Insight:*  
+Implement:
+
+- Circuit breakers and approval flows
+- Alerts for stale overrides (e.g., temporary escalations left unreset)
+- Idempotent design — repeated automation runs must produce predictable results
+- Ownership and observability — assign clear maintainers for automation codebases
+
+---
+
+== 💡 Key Takeaways for Management
+
+[cols="1,1,1", options="header"]
+|===
+| Problem | Root Cause | Strategic Action
+| Automation seen as optional | Misaligned incentives | Make automation part of definition of done & delivery KPIs
+| “Too busy to automate” culture | Short-termism | Mandate Improvement Days / Engineering Time (e.g., 20%)
+| Fragile automation pipelines | Treated as side projects | Apply SDLC rigor: versioning, tests, docs
+| Leadership doesn’t understand automation ROI | Low technical literacy | Educate with *Accelerate* metrics; link automation to business outcomes
+| Engineers reinventing wheels | Lack of shared platform | Create internal automation libraries & platform team
+|===
+
+---
+
+== 🚀 Extended Recommendations
+
+. **Define “Automation Maturity Index”**  
+Evaluate teams on automation of build, test, deploy, monitoring, and rollback.
+
+. **Treat CI/CD as Product**  
+Assign ownership, roadmap, and backlog. It’s not infrastructure — it’s part of your value stream.
+
+. **Architect for Automability**  
+Adopt domain boundaries and test seams that allow partial deployments and simulation.
+
+. **Reward Automation as Value Creation**  
+Make automation time visible and recognized in planning, not “extra work”.
+
+. **Govern and Observe Automation**  
+Track automation failures and stale configurations as production incidents.
+
+---
+
+== 🧭 Closing Reflection
+Automation is not about replacing humans — it’s about *freeing humans from toil to think, learn, and improve*.  
+The ultimate maturity is when automation becomes invisible: it’s simply *how work happens*.
