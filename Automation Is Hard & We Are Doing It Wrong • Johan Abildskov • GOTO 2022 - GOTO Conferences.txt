@@ -1,0 +1,255 @@
+(Transcribed by TurboScribe.ai. Go Unlimited to remove this message.)
+
+(0:13 - 0:38)
+Hello, hello, yes, there is sound, that is a good start. I'm Johan, as presented, I wrote a book about Git, and I say accidentally because it was mostly because I wanted to see if I could. And I succeeded, but I find Git quite boring these days, because why should we care about Git? It's working on completely the wrong abstraction level of us trying to solve our day-to-day tasks.
+
+(0:39 - 1:22)
+But if you want to nerd snipe me later, I'm happy to take either side of the discussion in classics such as pull requests are bad, mono repositories or many repositories, or like we can trunk-based development, merge or pull rebases. I'll take any side and do my best to be right anyway. I'm currently a software engineer at Uber working in Aarhus, and most Danes at least are like Uber is not in Denmark, but Uber is building software in Denmark.
+
+(1:23 - 1:34)
+Hashtag we're hiring, and now I won't mention any more about that. It's the last talk of the day. We are all tired.
+
+(1:34 - 2:15)
+I hope you've seen some good talks I have. Let's do it a little bit light, and otherwise we can't focus. Before I started actually building software on my own, not on my own with my colleagues, but actually being a software engineer, I was a DevOps consultant or password compliant, I suppose, mostly spending my time with organizations trying to figure out how to make them better at building software, or maintaining software, running software.
+
+(2:16 - 2:44)
+I just say we build software, and then it's implied that we also test our software, we run our software, we monitor our software, all those kinds of things that are basic hygiene, that maybe we as an industry forget is the basics that we must do. Based on that, I will talk a bit about how automation is hard, and we're doing it wrong. Yes, so that's kind of the context.
+
+(2:46 - 3:12)
+DevOps, is this still a buzzword thing? Even though everyone wanted an SRE team two years ago, three years ago, now everyone is starting up a platform engineering organization or something like that. But I think we can conclude that everyone still wants to be agile and do DevOps. So I guess that's my reason that I think DevOps is still relevant.
+
+(3:13 - 3:36)
+DevOps has one of these unfortunate things where, depending on who you ask, DevOps is something different. There's eight different definitions, and generally the definition depends on what people are trying to sell you. But one of the commonly accepted definitions is CALMS, which is DevOps is about culture.
+
+(3:36 - 4:02)
+It's about psychological safety, creating a culture where we learn, do continuous stuff. It's also about automation, minimize toil, minimize manual work, all these software engineering things that we want to do. It's about lean, removing waste, looking at our values, dreams, that kind of thing.
+
+(4:02 - 4:19)
+It's about measuring. Some people say we want to be committed to the truth, and I think more like we want to actually focus on reality rather than opinion. Truth sounds like very capital T. And then it's about sharing, making local wins global.
+
+(4:20 - 5:07)
+Not like necessarily we will push our code or our stuff into the public domain, but the wins that we have at the team level, we will make sure that we disseminate them throughout our organizations, making a larger impact. But when we know we want this DevOps thing, and we don't really know how we're doing it, but we did an agile transformation, and that was complete, so now we'll do a DevOps transformation, I suppose. But how do we start? And then we look at it, culture, that's kind of difficult and vague, and how do we even approach this? Measuring sounds like something that will keep me accountable.
+
+(5:07 - 5:18)
+That's scary. Lean is boring, we're not a production company, and sharing sounds like some hippie bullshit. So we'll start with automation, obviously.
+
+(5:20 - 5:48)
+And that just leads us to the notion that we need an army of robots. What is automation? That's tons of robots that does stuff for us. But when we want to achieve DevOps heaven, DevOps Nirvana, and we are taking automation as the very first step, it becomes very important for our DevOps transformation, how we go about this, because it will set the entire context for our narrative around our DevOps transformation.
+
+(5:49 - 6:14)
+And the problem is, our organizations are wrong about automation. So one of the core, chronically, conflicts about DevOps in a traditional organization is that we think we can either optimize for speed, or we can optimize for stability. But kind of the DevOps promise is that if we become very quick, we will also become very stable.
+
+(6:16 - 6:30)
+If we're very stable, that's a prerequisite for being very quick. That's kind of the DevOps promise, contrary to intuition. And our organization thinks about automation as a luxury.
+
+(6:31 - 6:52)
+The engineers, they can automate when they have done their feature work. But that's just plain wrong. We're generally constrained as software engineers, not by, we could be constrained by ideas, we could be constrained by resources, but that's the wrong way of looking at it.
+
+(6:52 - 7:20)
+I've never seen a team run out of things to do. Our backlogs, they grow in one direction, and it's not downwards. And simultaneously, what is it, why are we so afraid of running out of stuff to do? Oh no, three software engineers with nothing to do, they will probably break something.
+
+(7:20 - 7:30)
+No, they will build something genius. They will solve all the problems, because now they have time, now they have slack. So there's this general concept.
+
+(7:30 - 7:57)
+I talked to a software engineer, and he was like, I always make sure that I allocate myself around 130%, because then I know I will always have something to do. So at what utilization do you run your service? And I know big cloud providers, oversubscription, probably smart stuff you can do. Unlikely it's a good idea for most people.
+
+(7:57 - 8:21)
+So we are constrained not by the things that we can do, we are constrained about the things that we choose to do. And this is a graph from Accelerate, a book. There's just recent, how many are familiar with Accelerate, the book about a number of people, ballpark figure.
+
+(8:22 - 8:55)
+One of the great things about this book, Accelerate, the science of high-performing technology organizations or something like that, is that you can read it as an engineer, and it will give you all the arguments from talking to your manager about doing the things that you know as a subject matter expert that you should be doing. And you can say, well, this is the science that shows that if we don't do things the good way, it is a bad business decision. And that might be a superpower for engineers who kind of like don't want to talk about money and things like that.
+
+(8:56 - 9:40)
+But anyway, this is a figure from said book, where generally they have done some survey and figured out what are the prime things that organizations that are successfully doing DevOps, they're calling it. One of the things that they do, and they show two things, that being good at delivering software and doing DevOps is good for the business, and that it actually are some concrete things that you can do. And this actually shows that the high-performing organizations, they succeed in increasing the amount of deploys per developer per day as they grow.
+
+(9:41 - 9:59)
+That's the scale golden goal. Because we know in many organizations, as they grow, there's more coordination, there's more organization, there's more process, there's more bureaucracy. Because we are more people.
+
+(10:00 - 10:19)
+But the very excellent organizations actually succeed in making that, leverage that, and become more effective rather than less effective per person. And that means stuff like manual tests, manual deploys, all these things, they have consequences. We're coding on the margins.
+
+(10:19 - 10:36)
+We want to minimize the cost of adding one more engineer while maximizing the value of adding one more engineer. And how do we do that? We automate. So automation is not a luxury, it's permission to play.
+
+(10:38 - 10:54)
+I don't want to buy software from people who do not think about automation. I don't want to buy software from people who are not automating their unit tests. Because I don't want to buy software from people who are basically wasting their time.
+
+(10:55 - 11:22)
+They're not wasting their time doing unit testing or things like that. They're actually making better value for me as a customer because they're doing stuff better. If you look at from the same report at some of the things that we automate across different performance profiles, these data are getting kind of ancient, or in our world, two years old.
+
+(11:24 - 11:46)
+But one of the interesting things is that we can see in the top two lines, we have things like automated build and automated unit tests. And across the board, more than half of all organizations are automating these things. So if you are in an organization where you do not have automated build and automated unit tests, that should really be an indication that you should self-reflect a bit.
+
+(11:48 - 12:06)
+We also have all sorts of crazy stuff like integration with Slack and automated deployment to production. It's at least in the hype of elite performing organizations, again, more than half. And it's not like this is a checkmark and you should do all these things and then you'll be better.
+
+(12:06 - 12:30)
+But it's just interesting to see what are the things that we can automate and how do we actually do it. Some of the things are a bit weird to me, like we have over here in our corner, that 4% of the elite performers, those are the most excellent companies at delivering software, they don't automate anything. I'm unsure what's going on here.
+
+(12:31 - 12:40)
+But I guess there needs to be some counter example. And it's already here. We have the technology.
+
+(12:41 - 12:59)
+Coming in? No? Yes. This is, again, an ancient screenshot, more than two years old. And this is a public open source repository where a robot notices there's a dependency that needs to be updated, so it creates a pull request.
+
+(13:00 - 13:28)
+Another robot runs and builds the code, verifies that the change is valid, and then the code is automatically merged to the repository, after which another robot replies with a thumbs up GIF. This is in an open source project. In the Agile manifest, we have something along the lines of building software teams around motivated individuals.
+
+(13:29 - 13:43)
+This is motivated individuals. Now imagine we have motivated individuals with a budget. That should be all of us in our day job, right? Otherwise, something is wrong.
+
+(13:45 - 14:02)
+So if this is possible for motivated individuals without a budget, the world's our oyster. Everything is possible. And one of the most common excuses, but the customer doesn't want automation.
+
+(14:04 - 14:26)
+Customer doesn't want to pay for automation. Okay, I'm pretty sure your customer also doesn't want to pay for your daily stand-up, or your retrospective, or if you're so lucky you're in a safe universe, your PI planning. That's my favorite part of the invoice.
+
+(14:29 - 14:40)
+It doesn't matter. Somehow you convinced me that you actually know about building software. So you know what should be part of building software, the line item.
+
+(14:40 - 15:13)
+We build software, one unit, many millions, right? So why is it that suddenly we accidentally leave the abstraction that the customer gets to decide whether we unit test our code or not? It's completely crazy. And the same is related to the customer doesn't want my release. How many here have struggled with getting a customer to actually install something new that you release to them? Okay, a few.
+
+(15:14 - 15:19)
+The rest of you are extremely lucky. I don't know how that happened. But this is not uncommon.
+
+(15:20 - 15:31)
+A customer goes to you, say, I would like to give you money to build this. Yes, I will build this. Then you come back soon thereafter, motivated, happy.
+
+(15:31 - 15:39)
+Here, I built what you paid me to do. And they say, no, we don't want it now. It's completely crazy.
+
+(15:39 - 16:03)
+So there's something odd on the perceived friction versus the perceived value of whatever you're trying to hand to your customer. And this is also where automation comes into place. And generally, why is it a choice? I think there's this famous Apple thing where they bundle together a new set of emojis on the Mac OS such that people would get the security update.
+
+(16:07 - 16:25)
+How silly is that? So either the user doesn't understand the importance of the security update, that it is valuable to them, or the friction in getting that security update. No, not now. Delay one month, yes.
+
+(16:26 - 16:41)
+There's something odd there. There's an excellent research professor called Jan Bosch who does some good writing and some research. And he has done some things around why digitalization will kill your company too.
+
+(16:42 - 16:53)
+And he names six reasons, and I hope it's six, otherwise the slide will prove me wrong. Limited software skills in their senior leadership. So it's a new world.
+
+(16:54 - 17:09)
+If we are trying to manage building software as we are trying to manage building physical hardware, it's going to be a challenge. We're going to fail or at least have tons of unnecessary friction. Another challenge is ambidexterity.
+
+(17:10 - 17:42)
+So that is basically being able to both look at the long term and the short term at the same time. Most often, at least my bias towards or against traditional companies, is that we tend to dive down into the day-to-day and we want to focus on the next feature. And then someone will say, well, after the next sprint, then you can do the improvements, then you can fix the technical debt.
+
+(17:42 - 18:08)
+But it will always be after the next sprint, right? And I know Christian is a big proponent of Improvement Mondays. And it's important that it's a Monday that's an Improvement Day, because otherwise it's not more important than actually doing the work the rest of the week. And also if you've decided you want to spend one day a week at improving, why are you doing it at the end? You could have had four days where you were better.
+
+(18:10 - 18:29)
+That's one of the craziest things about SAFe, where you have an improvement sprint at the end. Start with the improvement sprint. Leaders will also believe that digitalization is an R&D, research and development problem, right? Rather than saying research, digitalization, technology, software, it's a business problem.
+
+(18:30 - 19:09)
+And that leads to both conflicts and lack of focus. There's only four bullet points I was like way off. And justify the lack of initiative, referring to the lack of desire for change from the most valuable customers, right? And that just goes again to what is it that we believe in? What is it that we should be able to motivate ourselves to do? What is it that we take responsibility for as professionals? And then there's this notion that automation is complex.
+
+(19:10 - 19:25)
+And that's wrong. Asterix. If we're taking a shovel and we want to move a ton of dirt, an upgrade to Excavator is an obvious upgrade, and we can have automated some of the process.
+
+(19:26 - 20:08)
+But sometimes what we try to do as developers is that we have this game of Jenga, and we want to deploy it throughout this rickety bridge, except that it's not just a game of Jenga, someone is playing with it while we move it. That's kind of like the tasks that we're trying to do, and then it becomes less obvious what we're trying to solve, what we're trying to automate. And there's this quote from Nicole Forsgren, who is the primary author of Accelerate that I mentioned earlier, saying that their findings show that industry and technology stack doesn't matter, architecture does.
+
+(20:09 - 20:28)
+So it doesn't matter what we're trying to do, it matters how we're trying to do it. And I think there's another caveat that I would call the last cruise corollary, right word? Good. Which is you also have a ton of choice in your technology stack.
+
+(20:29 - 20:57)
+If you choose to be on a mainframe, or if you choose to be on-prem rather than in cloud, that also imposes some perhaps unnecessary restrictions on your architecture. But basically, we don't have software architecture based on blueprints, right? We don't build something and then it stays there forever. Except it kind of feels that way, right? When we have written the code, it's permanent.
+
+(20:57 - 21:18)
+When we have named the piece of code, it will be the same name forever, right? We think, it's not important, we'll just do it. Then we'll fix it when we get there. And eight years later, it's become a two-year plan to migrate, right? For each change, make the change easy.
+
+(21:19 - 21:30)
+Warning, this may be hard. Then make the easy change, right? We want to keep the focus on actually making changes easy to do. That should be one of the prime characteristics of software architecture.
+
+(21:31 - 21:56)
+One of the prime quality dimensions of software is how easy is it to change, right? Then we can also talk about the artifact that our software... Actually, I'll make a distinction. There's a distinction between our code and our software, right? Our software needs to be performant. It needs to be deployable.
+
+(21:57 - 22:23)
+It needs to be measurable, observability-able. Our code needs to be easy to change. We also need to think testability into our code, right? And this is, again, one place where people are struggling to test things because their thing that they're testing is trying to be hard.
+
+(22:23 - 22:31)
+It's not trying to be hard. I know some people are trying to make their software hard. How many are familiar with the KISS principle? Keep it simple, stupid.
+
+(22:32 - 22:44)
+How many are familiar with the KICKME principle? None? Keep it complex, keep me employed. I know we've all met one. I digress.
+
+(22:45 - 23:00)
+When we're building our software, if we're not thinking things like testability, deployability, all the abilities into the code, and we're just trying to sprinkle them on afterwards, of course we'll struggle. Of course there will be tons of friction. Deployability.
+
+(23:02 - 23:19)
+My way of thinking about this is that automating simple things is simple. But automating complex things might be impossible while retaining sanity. Right? And that's kind of where the automation becomes complex.
+
+(23:19 - 23:34)
+It becomes complex when we're trying to do complex things with our automation rather than in itself. And that was the kind thing. That was saying, well, the organization, our managers, our leaders, they're wrong about automation.
+
+(23:34 - 23:47)
+But the problem is, we, the engineers, we are also wrong about automation. Automation is software, so we should treat this as such. But we know I have a script for that.
+
+(23:49 - 24:22)
+It seems like every time we smell the opportunity, even though we know about dry and solid, whether you like it or not, principles, we have all these tools in our box of architectural things and microservices, and then we smell the opportunity to write a simple bash script, and we throw away all the principles that we know about. How do we share our code? Well, I could email you my script or attach it to a Slack message. Why is it not in Git? Well, it's just something I wrote.
+
+(24:22 - 24:33)
+Okay, but we agree that it interacts with production systems and should be a part of eight different runbooks. Yeah, yeah, but... So version control matters. Version control, our automation.
+
+(24:34 - 24:42)
+If it's not version controlled, it doesn't exist. Testing still matters. But it's hard to test automation.
+
+(24:43 - 24:58)
+Yes, but we also paid very well. So maybe it's expected that we do hard things. Things like approval testing might be useful for scripting, testing scripts and automation.
+
+(24:59 - 25:11)
+Documentation still matters, even though it's extremely annoying. I can also take both sides on the argument on whether code should be self-documenting or not. Write documentation.
+
+(25:11 - 25:24)
+Make good documentation. I'm so sad I missed the talk earlier today on engineering documentation. Documentation matters both for ourselves, for our colleagues, for our users, for everyone.
+
+(25:26 - 25:36)
+And then we have this tendency to automate all the things. It's either or. Either we do it manually or we go completely overboard in the other direction and automate all the things.
+
+(25:36 - 25:58)
+But we never stop up to remember what is the total cost of ownership of our tools that we build. We kind of become the accidental ops of some piece of critical infrastructure because it solved a small problem once and then we forgot to actually make it into a real project. And we have the not invented here syndrome.
+
+(25:58 - 26:24)
+It's much easier to build something that matches your own mental model rather than getting something that has tons of good practices in it. But we maybe have to tweak our own mental model a bit in order to fit in it. I have this theory that any organization over a certain number of employees, I'm not sure what the number is, but they will have built their own version of a message bus.
+
+(26:26 - 26:42)
+It's just a message bus. How hard can it be? But there are very, very large open source projects that are trying to solve these problems. But it's just easier when all you see is that, well, we just need to publish some messages and consume them.
+
+(26:42 - 26:54)
+How hard can it be? It's actually also called the IKEA effect. We love stuff more that we build ourselves. Build versus buy, I guess.
+
+(26:55 - 27:09)
+But we love building stuff and we forget that there are tons of things that we didn't account for. So just a few useful practices for our automation. We want the fundamentals to be in place.
+
+(27:10 - 27:16)
+Automation is running. It is a piece of living software. It is not just some bash scripts on my laptop.
+
+(27:17 - 27:26)
+It is version controlled. Otherwise, it doesn't exist. It is documented and, of course, also tested.
+
+(27:27 - 28:18)
+So at least in my opinion, I'm not saying that doing things in bash is bad, but I'm saying that even though we have the intuition that it is just a couple of scripts, we still need to apply the same software engineering principles to everything we build. Then we also want to monitor progress. Is our automation doing the thing that we're expecting at the rate we're expecting? Is things actually happening or not? We want to have circuit breakers, such that if someone does something silly or unintended, we might not just continue scaling up infinitely.
+
+(28:21 - 28:44)
+So we want to have something saying, well, if our automation wants to do this, that will be very expensive or very risky. Maybe we want someone to verify we want to do this. And, of course, we want to alert on an active circuit breaker saying, well, now our automation is no longer progressing because we're in some sort of error state.
+
+(28:46 - 28:58)
+And the inverse is also nice. We want to have an alert on a stale circuit breaker override. So let's say that I'm doing something new and our automation wants to... I have just onboarded a new use case.
+
+(28:58 - 29:21)
+So our automation is starting and wants to scale stuff up. I might be very okay with that going very quickly, so I'll bump the circuit breaker limit. But a week later, when we are back to normal operations, and we would like to assume normal operations, and forgetting something like a circuit breaker limit override in a configuration is a classic way to destroy stuff.
+
+(29:24 - 29:33)
+So with great power comes great options for shooting in foot. Right. We can build extremely powerful tools.
+
+(29:34 - 29:56)
+With extremely powerful tools, we can do extremely powerful things. Another thing is that we want to be idempotent. And that basically means that we want to have no additional effects by doing the same thing over and over.
+
+(29:57 - 29:59)
+So there's a difference between saying there should be...
+
+(This file is longer than 30 minutes. Go Unlimited at TurboScribe.ai to transcribe files up to 10 hours long.)
