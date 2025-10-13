@@ -1,0 +1,352 @@
+(Transcribed by TurboScribe.ai. Go Unlimited to remove this message.)
+
+(0:00 - 0:42)
+What I plan to talk about today is a little bit of the kind of technicalities of an acceptance test driven approach to software development and the practicalities of building automated high level functional tests that you can live with and that your system under test can change and not compromise the ability of keeping those tests running and passing. That's a tricky thing to get right and so there are a number of different small things that add together to make this possible. And that's really the focus of my talk today.
+
+(0:43 - 0:59)
+So first I should remind you to please vote on the talk and then we'll talk about what it is that we're really aiming to cover here. So this is my model of a deployment pipeline. So this is kind of a schematic that I tend to use to describe what we're talking about.
+
+(0:59 - 1:27)
+And when we're talking about continuous delivery, really what we're aiming to do is that we're trying to get a high level of confidence that the changes that we just made are likely to be good. We can never prove that the changes are good and so what we work is we work to falsify our changes with automated tests. We want to run lots and lots of automated tests and if one of those tests fails we want to discard the release candidate and move on to trying to fix the problem that we've introduced.
+
+(1:27 - 1:48)
+So all of these things really are forms of acceptance tests. But really my focus is here on these acceptance tests. And these are kind of defined as part of the continuous delivery approach as evaluating the software from the perspective of an external user of the system.
+
+(1:49 - 2:07)
+So that's a good place to start. We're trying to answer the question does this do what the users would like it to do? The earlier stage of tests, the kind of TDD stage, the unit testing stage is about asserting whether the software does what the developers think it should be doing. And that's really really important, really really valuable and gives us fast feedback.
+
+(2:08 - 2:21)
+But beyond that we also want to know that it does what the users want it to do. We want to be able to use these things as a kind of automated definition of done. We'd like to be able to write one of these things, these specifications for the behaviour of the system.
+
+(2:22 - 2:34)
+And then we'd like to be able to work until we've finished. And when that test passes we know that we've finished. It defines the scope of the piece of work that we're trying to do.
+
+(2:35 - 2:39)
+This is not just about testing. This is a tool for design. This is a tool for development.
+
+(2:39 - 2:53)
+It aids the development process. We want to assert that the code works in production-like environments. It's not good enough just to run tests that say this little piece works alone.
+
+(2:53 - 3:09)
+My bet is that if you were silly enough to let me sit loose in your organisation, I could break your software more quickly by changing its configuration than I could by changing the source code. And yet very often we don't bother testing those sorts of changes. I want to evaluate those changes.
+
+(3:09 - 3:16)
+I want to deploy the software into production-like environments. Evaluate the configuration of the system. It also works.
+
+(3:16 - 3:28)
+The deployment of the system also works. The dependencies that all of our software relies on are also in place and working. We want to test the deployment and configuration of the whole system.
+
+(3:30 - 3:41)
+And we want to provide timely feedback. If it takes us three years to learn whether the change that we just made is good, that's a waste of our time. That's not valuable feedback.
+
+(3:41 - 3:54)
+The shorter the time between making the change and learning whether the change is good, the better. The more that drives good behaviours. In general, I advise aiming for feedback under an hour.
+
+(3:55 - 4:18)
+No matter the scale of the technical problem. And you can do that with some surprisingly complicated technical problems if you apply the ingenuity and think hard about how to optimise for short feedback cycles. The sort of acceptance testing that I'm talking about has probably got a number of different names.
+
+(4:18 - 4:31)
+In the context of continuous delivery, we talk about it as acceptance testing. But it's also been referred to as acceptance test driven development. It's been often talked about in the context of behaviour driven development.
+
+(4:32 - 4:46)
+Behaviour driven development actually came from somewhere else. Behaviour driven development was originally an idea that was designed to try and allow us to teach TDD more effectively and get to the high value of TDD sooner. But often BDD is now seen.
+
+(4:46 - 4:56)
+The ideas certainly align very nicely with the ideas of test driven development. It's just the scope of the test that is different really. And specification by example.
+
+(4:56 - 5:02)
+Actually, my favourite description of what we're trying to do is this last one. Executable specifications. These are not really tests.
+
+(5:02 - 5:14)
+We're trying to define executable specifications for the behaviour of our system. I have a friend who has a client that's an airline. And they've been using this approach.
+
+(5:15 - 5:35)
+And when a member of the public phones up the support organisation at this airline and talk to the support personnel, the information that the support people are using on screen are the executable specifications for the behaviour of the system. They describe the behaviour of the system. This is a very, very strong assertion.
+
+(5:35 - 5:47)
+The version of the system that is in production passed this test. It fulfilled this specification. The person on the phone knows that that's how the system works because the specification says that's how the system works.
+
+(5:48 - 5:59)
+That's what I'm talking about. So I like to think a good acceptance test is an executable specification for the behaviour of the system. And that's a good mental model for going in and thinking about these things.
+
+(6:02 - 6:15)
+Another mental model I think of fondly is this one. And this is the idea of software development as a series of feedback loops. At the outside we have the crucial feedback loop that we try to optimise in continuous delivery.
+
+(6:15 - 6:28)
+Have an idea. Get that idea into the hands of our users and figure out what our users make of the idea. And we work to make the feedback loop from having an idea and getting that idea into the hands of our users as short and efficient as possible.
+
+(6:29 - 6:35)
+At the inside is the TDD feedback loop, the test-driven development feedback loop. We're going to write a test. We're going to see it fail.
+
+(6:35 - 6:38)
+We're going to write some code to make it pass. We're going to refactor. We're going to commit.
+
+(6:38 - 6:45)
+We're going to move on. And that's happening in a few minutes usually. And then in between is this feedback loop.
+
+(6:45 - 6:58)
+And this is the one that I'm talking about today. This is about these executable specifications for the behaviour of our system. We're going to examine the behaviour of our software from the perspective of an external user of our system in production-like environments.
+
+(6:58 - 7:23)
+And evaluate it and understand the impact of our changes. So what's the problem? Why are you all here? Why am I talking to you about this? This seems like a good idea, right? Why don't we just do this? Why is it so hard? Well, the problem is that what tends to happen... People have been trying to do this kind of thing for a long time. And what tends to happen is that when the system under test changes, it breaks the tests.
+
+(7:26 - 7:37)
+That's a hard problem to solve. And what we're really talking about from a computer science point of view is a problem of coupling. The tests in this example are too tightly coupled to the system under test.
+
+(7:38 - 7:51)
+Therefore, one of our strategies is to try and reduce that coupling. To work in a way where our test cases are loosely coupled with respect to the system under test. Tests can be complex to develop.
+
+(7:53 - 8:08)
+Ideally, if we're going to use these things as a fundamental part of our development process, we want to be able to have tens of thousands of these test cases. Be able to develop them very quickly and run them very quickly to assert the behaviour of our systems. And so we want to be able to create these things quickly and efficiently.
+
+(8:08 - 8:21)
+We don't have to spend hours and hours and hours and days trying to come up with each individual test case. So a lot of this is about a problem of design. And we're going to talk about that in some detail through the rest of the talk.
+
+(8:22 - 8:37)
+Meanwhile, I think the history of this kind of functional testing is littered with bad examples. I particularly loathe UI record and playback systems. I think that they're just so fragile, so difficult to maintain.
+
+(8:37 - 8:46)
+And I think these are anti-patterns. I think using production data in our systems is an anti-pattern. I want to be able to test, I want to evaluate the behaviour of my system precisely.
+
+(8:46 - 8:55)
+I don't want to just randomly throw data at it and see what happens. And so I think there are a lot of bad patterns that are around and commonly practised. And we're going to talk some more about those things too.
+
+(8:57 - 9:21)
+A fundamental part of this from a process point of view is a matter of who owns the test. I think it's important to recognise, and a vital part of establishing these effective feedback loops, that the developers are in the loop. The developers are the people that will make changes that will break tests.
+
+(9:22 - 9:34)
+Therefore, they are the people that need to be responsible for making the test pass when that happens. We need to close the feedback loop. We need to actually slow the developers down.
+
+(9:34 - 9:56)
+If they're making changes that are breaking stuff, we've got to slow them down to fix them. We've got to keep the software working. If these things genuinely are executable specifications for the behaviour of the system, then when a developer introduces a change that breaks a test, what that means is that the system no longer fulfils its requirements.
+
+(9:57 - 10:04)
+It's no longer fulfilling its behavioural contract. And that's where we'd like to get to. That's the way in which we'd like to work.
+
+(10:05 - 10:18)
+I've been working in software development as a developer and a technician for over 35 years. And this last one, I have never ever seen this work. I think this is one of the most toxic ideas in our industry.
+
+(10:18 - 10:31)
+The idea of having a separate QA team writing automated tests, divorced from the development team. What happens is that the QA team write a few tests and they get them working. And then the development team move on.
+
+(10:31 - 10:42)
+They make changes that break the tests. And then for the rest of their existence, the QA team spends their effort trying to run behind and trying to catch up and trying to patch things together to make the test pass. And they almost never do.
+
+(10:43 - 10:49)
+That doesn't give you good feedback. We need to close the loop. We need to make developers responsible for the tests.
+
+(10:49 - 10:58)
+Anybody can write the test. These are specifications. Whoever has the clearest idea of what the requirement is from the perspective of an external user of the system, they can write the test.
+
+(10:59 - 11:16)
+But as soon as that test begins executing, developers are responsible for it. And they are the ones that will make changes to make it pass if they introduce a change that makes it fail. One of the definitions of continuous delivery is working in a way that our software is always in a releasable state.
+
+(11:16 - 11:29)
+This is a key part of that. The rest of my talk really focuses around this. And this is a list of properties that I think of as properties of good acceptance tests.
+
+(11:29 - 11:47)
+A lot of the stuff I'm going to put before you is based on experience that I had working in a reasonably complex environment building one of the highest performance exchanges in the world. We built the entire enterprise system and used this kind of strategy. So I want you to just keep that in mind.
+
+(11:47 - 11:59)
+We're not talking about simple trivial systems here. We're talking about big, complicated, real world enterprise class systems with performance characteristics that would scare you. They scared me when we were working on it.
+
+(12:00 - 12:11)
+So I want to talk a little bit about in that context. And this is kind of informed by that learning. I think it's fair to say that that organization, which was called LMAX, were probably world class at automated testing.
+
+(12:12 - 12:22)
+We had tens of thousands of these things running and we'll get into that more later. So here are the properties. I think we should be focusing our testing on what we want to assert.
+
+(12:22 - 12:30)
+Not how is that the system under test achieves that. We want our tests to be isolated from one another. We'd like to be able to run lots of these.
+
+(12:31 - 12:39)
+And if we want to get fast feedback we probably want to run them in parallel. And therefore we can't afford them to bump into one another. We want them to be repeatable.
+
+(12:39 - 13:07)
+We'd like to be able to run the same test over and over again and get reliable, consistent results. In order to do this, one of the things that really helps, and to help us, anybody write the test, and to help us understand what the tests mean in the context of the problem domain, is we use the language of the problem domain. I'm going to introduce the idea of using domain specific languages to express our needs in this automated testing.
+
+(13:07 - 13:17)
+We want to be able to test any change. We want to be able to evaluate our software in almost any context that we can think of and understand the impact of that. We're going to talk about some cases around that.
+
+(13:17 - 13:27)
+There are more than we cover. We'd also like these things to be efficient. We can't afford to spend days or weeks or even hours waiting for a result.
+
+(13:27 - 13:45)
+We want the fastest feedback that we can get. If we can get feedback in under an hour, that's a game-changing level of feedback. If after an hour we can be in a position that there's no more work for us to do before we push a change out into production, however complex the system, that's a game-changing level of feedback.
+
+(13:48 - 13:50)
+Let's start. Let's go through the list. We're going to focus on what, not how.
+
+(13:52 - 14:01)
+Here's a schematic of the system that I was talking about. The details of this don't matter very much. I'm going to be talking about this bit, the Fix API.
+
+(14:02 - 14:28)
+For those of you that are not from the finance industry and don't know what Fix is, it doesn't matter. The mental model for this is, imagine that I'm talking about a REST API. It's not a REST API. 
+
+It's different, but semantically it might as well be in the context of this talk. Let's imagine we've got a system like this. We've got a number of different communities of users, a number of channels of interaction through the system, and we'd like to be able to evaluate the software through all of those channels.
+
+(14:29 - 15:01)
+Typically, if we're going to write tests against a system like that, this is what we'd do. We'd introduce a whole bunch of test cases that describe what it is that we want to test and how it is that we're going to interact with the system on the test. The problem with this is, if a change happens in one of these channels of communications and invalidates a whole bunch of these test cases that talk through that channel, the only thing that we can do to fix that is go to each of these individual test cases and fix up those test cases.
+
+(15:01 - 15:17)
+That's going to be complicated because they're going to be complicated bits of code because they're worrying about two different things. If you care deeply about design and ideas like separation of concerns, we're conflating concerns. We're conflating what it is that we're trying to express with how it is that we're interacting with the system on the test.
+
+(15:18 - 15:48)
+That always adds to more complexity. What do we do in a problem like this in software engineering? We introduce a level of indirection and raise the level of abstraction. Here's our bunch of channels representing different communities of users and we provide a device driver, if you like, a stub, a channel, an abstraction that represents that concept in the terminology that fulfills the needs of test cases.
+
+(15:49 - 16:03)
+Now, if this system changes and invalidates the assumptions in the test cases, we only have one place to fix it because all of these things come through this one channel of communication. We can fix it in one place. Don't worry.
+
+(16:03 - 16:19)
+I am going to go into more detail of what I mean by that as we go through. What you tend to find as you make this kind of abstraction is that you find that you've now got this placeholder for infrastructure. You're not just talking about test cases.
+
+(16:19 - 16:38)
+You're talking about some test infrastructure. There are some supporting design ideas and tools and facilities that enable this kind of thinking, this kind of abstraction. We're going to talk more about these things over time, these little green blobs of different kinds that are going to help us achieve this level of abstraction and maintain it.
+
+(16:40 - 16:52)
+The idea is that we've got this test infrastructure that's shared between the test cases. You can go and touch these things. You can go and fix problems in one place.
+
+(16:59 - 17:10)
+We want to think about these things in terms of the behaviour of the system. Here's a list of things. Just to confuse you, some of these things are wrong.
+
+(17:10 - 17:34)
+I don't think every test should control the start conditions. That's a great starting point for unit testing and it's a poor starting point for this kind of functional testing because usually starting up the system is expensive. We'd like to be able to maybe share out starting up the system and maybe, certainly if it's a multi-user system, we'd like to be able to start the system at once and then have lots of different tests run against the same system.
+
+(17:36 - 17:53)
+That's going to have some implications of its own, but we'd like to be able to separate those two decisions. Sometimes we might want to start the system for one test case, but sometimes we don't, so we'd like to be able to have the choice. We want the test to be a rehearsal for production release.
+
+(17:53 - 18:29)
+We'd like, by the time a release candidate gets to the point of deployment into production, that's a non-event because this release candidate has already been deployed using this version of the deployment tools and this configuration of the infrastructure many times during its journey and validation through the deployment pipeline. If we do these kinds of things, what this leads to is it gives us this nice opportunity for, in future, speeding up our testing feedback cycle by parallelising things and sharing the startup overhead, as I mentioned. Let's move on to the next in our list.
+
+(18:29 - 18:50)
+We'd like our test to be isolated from other tests. One caveat here is I've spent most of my career working in multi-user systems of one form or another. If you're writing software for an individual person that's dedicated to them, which is probably getting increasingly unusual these days, but if you're writing software like that, some of these bits of advice don't quite fit.
+
+(18:50 - 19:04)
+But for the rest of us, these ideas kind of work, I think. Let's start thinking about test isolation. I think that any form of testing in whatever domain is evaluating something in controlled circumstances.
+
+(19:06 - 19:16)
+The control part is important. Isolation is important in this context in multiple levels. We want to be able to isolate the system under test.
+
+(19:17 - 19:29)
+We want to be able to just be testing the stuff that's the boundary of our responsibility. We want to be able to isolate test cases from one another. As I said before, we'd like to be able to run many of these in parallel and not have them bump into one another.
+
+(19:29 - 19:51)
+We'd like to be able to isolate test cases from themselves so we can run the same test case over and over again. I think it's useful to think in these terms. If you don't do this, what tends to happen is that when you start to scale up and get faster feedback cycles, you find all sorts of resource sharing conflicts and tests running into one another when you try to parallelise.
+
+(19:51 - 20:02)
+That starts to make it more difficult to speed up. That's a very common attribute of people that haven't thought about isolation ahead of time. My thing stopped working.
+
+(20:06 - 20:15)
+Let's start with thinking about isolation. Here's one example of what I'm talking about. This tends to be very common in large enterprises.
+
+(20:15 - 20:24)
+Let's imagine that we are working on system B. System B is one of these systems. There's another system upstream and another system downstream. It's in the middle.
+
+(20:25 - 20:34)
+What's often recommended in these sorts of examples is you've got to test the whole thing end to end. You've got to evaluate all of these things together. There's a problem with that.
+
+(20:35 - 20:55)
+If I want to be able to precisely specify the state that my system is in in order to be able to test it, and I'm only doing that via another system, I can't. I can't be precise enough. There are a whole raft of different kinds of scenarios that I cannot simulate by going through an external system first.
+
+(20:57 - 21:21)
+If I want to be able to simulate system A sending me garbage or the communication channel to system C being down, I can't simulate those. I can't test my system in those sorts of scenarios if I'm testing this whole thing end to end. So I haven't really got a very good, clear way of getting the system under test into the state that I want it to be in.
+
+(21:22 - 21:44)
+Worse than that, if I'm working on system B, I'm not going to be an expert in system A and system C, and so the degree to which I can exert control, even if there are things that I could do through there, is going to be limited based on my understanding. We've got to compartmentalise our understanding so that things can fit into our heads. So this is a problem.
+
+(21:45 - 22:01)
+It means that the system under test is not in a controllable state when we're doing this kind of testing. So I think this is an anti-pattern. This can't be a solid basis for effective acceptance testing.
+
+(22:02 - 22:21)
+What we'd really like instead is something more like this. We'd like to be able to have our test cases as close to the system under test as we can, and then capture outputs and verify that we're getting what we expect. We'd like to be able to simulate all of these different kinds of scenarios.
+
+(22:21 - 22:39)
+We'd like to be able to inject crap data and simulate these communications failures. Whatever it is that we care about, we'd like to be able to take control. We'd like to be able to think about putting probes around the system under test, which means that we've got to be very clear about where the boundaries for our system are.
+
+(22:41 - 23:09)
+The problem is that when organisations say that what we'd like you to do this, is that they're worrying about these bits. They're worrying about those interfaces changing. That's a real concern. 
+
+It's a real issue. One of the strategies for this that Mary talked about in the keynote talk here is make sure that those interfaces are based on loose coupled protocols, so you can use a messaging system and that gives you a little bit of wiggle room. But still, it's a real problem.
+
+(23:10 - 23:55)
+What do we do to verify those interfaces? I think that what we'd really like is that we'd like a series of tests, each focused on the individual systems as we've just described. If we're still doing this from the perspective of system B though, what we'd like to know of external system A is, does it fulfil our expectations of its protocol of communication with us? When we take that focus, the number of tests that we need to run is actually quite small. We can define some tests that say, is the interface still the same? Maybe even we can go as far as to give those tests to team A, and they can run their tests as part of their continuous integration infrastructure.
+
+(23:55 - 24:24)
+If they make a change that invalidates our assumption of their interface, they know that we've now got an integration problem. This gives us the facility to do all of our careful thorough detailed testing, getting the system under test into precisely the state that we'd like it to be in, but also some defence of the interfaces between us. I've used this strategy many times, including with external third parties, and that's been enough for me so far.
+
+(24:24 - 24:44)
+I haven't found a problem where that's caused a difficulty using that strategy. As I said before, on the whole I'm working from the assumption of multi-user systems. We want to be able to isolate test cases.
+
+(24:44 - 24:54)
+We want to be able to run lots of these tests. What we'd really like is we'd like to be able to start the system at once and then run lots of these tests. In order to do that, we need to isolate the tests from one another.
+
+(24:54 - 25:07)
+We can't afford them to share resources. We don't want them to be writing to the same files or the same data sets or the same records in the databases or whatever it might be. That's tricky when we think about a whole system that we're evaluating.
+
+(25:08 - 25:23)
+One of the nice strategies to do, if we are talking about a multi-user system, is something that I call functional aliasing. You use natural boundaries in the system to isolate tests from one another. This is another one of those 80-20 approach.
+
+(25:23 - 25:33)
+Actually, it's probably more like a 95-5. For the vast majority of test cases, you can use this kind of functional isolation and you get no problems. What I'm talking about, imagine that we were testing Amazon.
+
+(25:34 - 25:48)
+If we were testing Amazon, every single test would create a new account and a new book or product. Then if we were testing eBay, we'd create a new account and a new auction for every test case. If we were testing GitHub, we'd create a new account and a new repository for every test case.
+
+(25:48 - 26:09)
+You get a kind of weird profile in the system under test because you have lots of repositories or lots of books created and lots of users created. But it's a really nice way of isolating the test cases really simply from one another. If you want to do that, then there's another step.
+
+(26:09 - 26:20)
+We would like to have these repeatable results. We'd like to be able to run the same test case over and over again. If I run the same test twice, I should get the same result.
+
+(26:21 - 26:31)
+Here's a cheesy example. Here's somebody trying to write a test case to buy my book. We've got a store and we're creating a book in the scope of the test case.
+
+(26:31 - 26:40)
+Then we're going to place an order for the book and then we're going to assert that the order was placed. The bit that I'm worried about here is this bit. We're creating a book.
+
+(26:40 - 27:03)
+If I run this test case and I just read that literally and end up somewhere storing some information in the system under test that represents that book like that, then the next time I come to run that test case, I'm now in a different state. Now when I run that test case, the book already exists. Last time I just created it.
+
+(27:03 - 27:10)
+Now it already exists. Maybe the test has changed the state that that book is in. Maybe it's sold out or something like that because of a test case that was run.
+
+(27:10 - 27:17)
+We're going to get a collision. We're going to get a problem, a flaky test case here. That's a really simple strategy now.
+
+(27:17 - 27:37)
+Instead of doing it this way, what we do is that in the test case, in the instance of a test case, our infrastructure, remember our test infrastructure, our infrastructure is going to read this as a request rather than instruction. It says, okay, you'd like a book. It's called continuous delivery, but you don't really care that it's continuous delivery.
+
+(27:37 - 27:52)
+I know you don't really care, so I'm going to make up a different name. I'm going to map it to the name that you want in the scope of this test run, but inside the system under test it's going to be different, and you don't care. The next time I run, I'm going to get a different name.
+
+(27:53 - 28:09)
+Now I've got test isolation. Just using the aliasing facility for all of these functional entities allows us to run these test cases in parallel and separate from one another. It's a trivially simple idea, but it's really quite effective.
+
+(28:13 - 28:18)
+A good starting point. Use functional isolation entities. Always alias them.
+
+(28:18 - 28:33)
+Always just mangle the name in some way so the name is going to be unique for every text execution. Then you can run the same test over and over again, and you're not going to get any problems. We'd like our tests to be repeatable.
+
+(28:33 - 28:44)
+We want to be able to use testing as a falsification mechanism. We'd like to be able to, as soon as a test fails, we're going to discard the release candidate. We want to be able to trust the tests.
+
+(28:45 - 28:58)
+I'd argue that automated tests of any form are actually only valuable when they're failing. You can have as many tests as you like, and if they're all passing, you don't know. The tests might be rubbish.
+
+(28:58 - 29:12)
+You might have missed the key thing. They're only really conveying information. You get a probability that maybe you're okay if you've got lots of test cases that are passing, but you only really know the state of your system when a test fails and tells you that your system's not good enough.
+
+(29:13 - 29:19)
+We need our tests to be reliable. We can't afford flaky tests. We can't afford tests that sometimes work and sometimes don't.
+
+(29:22 - 29:40)
+What that means is that we've got to control, again, be very precise and very specific about the control of our system. Let's imagine that we've got a system like this. We've got our system under test, and we've got some external system that we were talking about before where we had these end-to-end tests, which we don't like very much.
+
+(29:40 - 29:55)
+Let's imagine that we learnt to write software not from Visual Basic for dummies but for something else. We didn't just tightly couple those two things. We have a local interface between here, an abstraction of the communication between this system and this system in some way.
+
+(29:55 - 29:59)
+Further, beyond that, we've got the communication channel between these two systems.
+
+(This file is longer than 30 minutes. Go Unlimited at TurboScribe.ai to transcribe files up to 10 hours long.)
