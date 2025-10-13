@@ -1,0 +1,831 @@
+# tactiq.io free youtube transcript
+# Millisecond Full Stack Acceptance Tests • Aslak Hellesøy • GOTO 2019
+# https://www.youtube.com/watch/sUclXYMDI94
+
+00:00:03.550 [Music]
+00:00:16.020 right so I have several different titles
+00:00:19.090 for this talk another alternative talk
+00:00:21.160 for this an alternative title for this
+00:00:23.470 talk would be programmer happiness I've
+00:00:28.029 been I've been a programmer for twenty
+00:00:30.160 twenty-five years and during my career
+00:00:32.738 things have gotten gradually worse
+00:00:35.820 they've gotten more complex and and
+00:00:39.070 slower you know back back twenty years
+00:00:41.559 ago you it was basically just you the
+00:00:46.449 editor and the compiler and not lots of
+00:00:49.539 frameworks and things have grown over
+00:00:52.179 the time and I used to be able to to
+00:00:58.600 really quickly get into this zone of
+00:01:01.809 programming where I just forget about
+00:01:04.930 everything around me and I'm just
+00:01:08.770 programming and as anyone had that
+00:01:13.240 experience you know did you just forget
+00:01:17.620 about everything else and and I find it
+00:01:19.420 increasingly harder to get into the zone
+00:01:21.780 I think this has to do with a lot of
+00:01:28.210 things library machines are getting
+00:01:31.300 faster everybody knows that but but at
+00:01:33.790 the same time libraries and and
+00:01:35.800 frameworks and tools there's just
+00:01:38.380 getting more and more of them as anyone
+00:01:39.790 here doing JavaScript development right
+00:01:42.400 so you know what I'm talking about right
+00:01:44.140 it's you have to deal with Babel and
+00:01:46.960 webpack and your to spin up docker
+00:01:49.660 containers and and all this stuff and
+00:01:52.380 it's just really really hard to get into
+00:01:55.120 the zone nowadays and I think it's
+00:01:57.580 something that people have almost
+00:02:00.010 forgotten about I think young
+00:02:02.740 programmers you know people who are
+00:02:05.920 joining the programming profession today
+00:02:07.930 they they might not even know what it's
+00:02:09.729 like so I've been interested in in
+00:02:15.749 programmer happiness
+00:02:17.500 or developer experience for a long time
+00:02:21.580 but I'm becoming even more interested in
+00:02:25.000 it in the past years because I think I
+00:02:27.310 think the technology is taking you know
+00:02:30.700 taking a wrong turn I want to talk today
+00:02:34.150 about how can we get back into the zone
+00:02:36.820 how can we make hungry make acceptance
+00:02:39.670 test fast how can get fast feedback and
+00:02:41.530 so on I want to start off with a little
+00:02:43.840 bit of psychology a couple of references
+00:02:47.920 to some some psychology books that I've
+00:02:49.950 read it would be allowed to say that
+00:02:53.410 I've read them you know from from page
+00:02:55.480 one to till the end but I've read sort
+00:02:58.000 of like the first half of it and then I
+00:03:01.150 flicked back and forth and other people
+00:03:02.830 have pointed me to these books but there
+00:03:05.590 are some interesting things in in this
+00:03:07.240 book by a lady called Kendra cherry
+00:03:09.460 three components of flow and we're
+00:03:11.710 talking about psychological flow here
+00:03:14.460 what is immediate feedback so in order
+00:03:17.920 to get into the into this state of flow
+00:03:21.610 you have to get immediate feedback on
+00:03:24.160 whatever you're doing right if feedback
+00:03:26.680 doesn't happen you cannot enter the
+00:03:28.600 state of flow you also need to have the
+00:03:32.410 feeling that you can succeed in what
+00:03:34.870 you're doing if if you're not sure
+00:03:37.480 whether you're heading in the right
+00:03:38.500 direction you have this nagging worry
+00:03:41.140 all the time that prevents you from
+00:03:42.940 entering into a state of flow and the
+00:03:47.590 third thing she mentions is that you
+00:03:51.400 have to feel so engrossed in the
+00:03:53.050 experience that everything else just
+00:03:54.190 becomes negligible you forget that
+00:03:55.930 you're hungry you forget that you are
+00:03:58.709 need to make this phone call you forget
+00:04:01.480 hopefully you don't forget that you need
+00:04:02.739 to go to the toilet but you know you
+00:04:05.050 just forget about everything else
+00:04:06.780 there's another book as well by a
+00:04:09.959 gentleman called me Hyde she sent me hi
+00:04:13.410 from Czech Republic I think similar
+00:04:18.310 similar stuff his book is called flow
+00:04:21.459 and it's about the components that he
+00:04:25.570 talks about that are important is
+00:04:27.150 intense concentration if you're super
+00:04:29.620 super concentrated
+00:04:30.759 you get into the state of flow but if
+00:04:33.400 you get interrupted all the time by
+00:04:35.169 various things either by either by other
+00:04:37.029 tools or technologies or maybe people
+00:04:38.770 you know if you're sitting in an open
+00:04:40.419 environment for example it's difficult
+00:04:42.309 to get into the state of flow and when
+00:04:45.069 you're in a state of flow you have this
+00:04:46.300 merging of action and awareness you
+00:04:50.169 can't really tell them apart
+00:04:52.389 talks about the same thing as what was
+00:04:59.409 her name
+00:05:00.039 Kendra Terry you lose sort of the
+00:05:03.399 reflective self-consciousness and you
+00:05:07.210 have this sense of personal agency that
+00:05:10.089 you control the situation sports people
+00:05:12.629 if you do some kind of sport you know
+00:05:15.430 you're probably familiar with this
+00:05:16.719 feeling that you feel that you you
+00:05:19.270 completely control of the other you know
+00:05:22.360 when you're skiing for example that I
+00:05:24.129 like to ski you know it's just I stop
+00:05:28.779 thinking everything is just flowing
+00:05:30.039 naturally distortion of temporal
+00:05:34.120 experience you look at your watch and
+00:05:36.789 you realize that three hours just flew
+00:05:38.499 by right this doesn't happen if you are
+00:05:42.849 not in a state to flood you do looking
+00:05:45.759 at your watch and it's five minutes and
+00:05:47.439 you're looking at what and you just
+00:05:48.969 can't wait for the day to be over and
+00:05:52.779 finally he talks about Auto telling
+00:05:56.139 experience that means that whatever
+00:05:58.360 you're doing is an intrinsically
+00:06:00.279 rewarding experience just doing what
+00:06:03.129 you're doing
+00:06:03.639 gives you joy and this is what
+00:06:06.189 programming should be like I think but I
+00:06:09.039 think for a lot of people it isn't like
+00:06:12.099 this because there are all sorts of
+00:06:14.589 things that prevent us from entering
+00:06:17.499 this state of flow and one of those
+00:06:22.839 things is really really slow acceptance
+00:06:25.209 tests
+00:06:31.850 now a couple of decades ago this is the
+00:06:36.680 last book I'm going to refer to Jakob
+00:06:39.800 Nielsen who kind of founded the the
+00:06:42.050 usability engineering movement did some
+00:06:44.570 research into people's ability to how
+00:06:54.500 different time delays how they affect
+00:07:00.710 people's perceptive abilities so he came
+00:07:04.250 up with or he discovered that there's
+00:07:05.810 three time limits that you need to keep
+00:07:07.760 in mind when you design user interfaces
+00:07:09.770 in order for those the use of interfaces
+00:07:12.650 to to be usable by people and the first
+00:07:16.100 time limit that Jakob Nielsen talks
+00:07:18.530 about is a tenth of a second if you have
+00:07:23.150 a user interface and you do something
+00:07:24.680 you click a button and you get some sort
+00:07:29.300 of feedback within a tenth of a second
+00:07:31.430 the user will it will feel like this is
+00:07:35.930 this is a system that is operating or
+00:07:38.470 responding instantaneously the user
+00:07:41.030 cannot distinguish between instantaneous
+00:07:42.770 and a tenth of a second it just feels
+00:07:44.740 like you click your button you see the
+00:07:46.700 thing immediately and if you can if you
+00:07:50.570 can respond that quickly you don't need
+00:07:52.250 any sort of visual feedback like
+00:07:53.950 spinners or progress bars and stuff like
+00:07:56.570 that one second is the next limit that
+00:08:02.060 Yakima Nielsen talks about and that is
+00:08:06.640 that is the limit for the users thought
+00:08:09.350 to remain uninterrupted if it takes more
+00:08:13.100 than a second your mind starts wandering
+00:08:15.830 a bit and that's when you user interface
+00:08:18.890 designers decide to put up some sort of
+00:08:21.620 visual cues like little spinners and and
+00:08:23.780 stuff you know just telling the user
+00:08:25.070 that don't go away you know that you're
+00:08:27.830 going to get something back pretty soon
+00:08:31.210 so you don't need those kind of visual
+00:08:34.099 feedbacks but the user is by one second
+00:08:38.390 the user has lost the the sense of
+00:08:40.820 operating directly on the data right
+00:08:44.179 and the third time limit that Jakob
+00:08:48.230 Nielsen talks about is ten seconds and
+00:08:51.400 this is the limit for keeping the users
+00:08:55.610 attention focused on the dialogue if
+00:08:58.300 you're working with a with a user
+00:09:01.430 interface where a feedback takes longer
+00:09:03.650 than 10 seconds you will lose them they
+00:09:06.950 will go and do something else they will
+00:09:08.720 go and check their email they'll go and
+00:09:12.110 all tab into some other social media
+00:09:14.870 stuff just to fill that gap with
+00:09:16.940 something meaningful so feedback is
+00:09:21.230 incredibly important now I'm talking
+00:09:24.200 about user interface design here but
+00:09:25.910 what about what about programmers what
+00:09:28.910 is this like when when you're sitting in
+00:09:30.680 your in your text editor or in your IDE
+00:09:33.620 you do something how long do you have to
+00:09:36.080 wait for feedback you write some line up
+00:09:39.200 you write and maybe write a new method
+00:09:41.480 maybe you refactor some code how long do
+00:09:44.270 you have to wait until you know whether
+00:09:46.400 or not you completely screwed everything
+00:09:47.750 up well if you have to wait 10 seconds
+00:09:53.870 for that that's going to take a massive
+00:09:56.990 hit to your ability to concentrate on
+00:09:59.450 what you're doing and consequently it's
+00:10:01.790 going to take a massive hit for for your
+00:10:04.220 ability to be productive in a team so
+00:10:06.940 fast feedback is incredibly important
+00:10:09.860 and obviously there's there's people
+00:10:12.620 some people have to wait more than 10
+00:10:14.330 seconds right some people have to wait 2
+00:10:15.860 weeks at the end of the Sprint before
+00:10:20.530 before they know whether or not their
+00:10:22.490 code is working or not now that's a
+00:10:25.910 different class of problem that's an
+00:10:27.380 organizational problem right so you
+00:10:29.960 can't I'm not going to tell you how to
+00:10:31.700 fix that today but hopefully I can I can
+00:10:33.860 give you some hints about how you can
+00:10:35.480 make the feedback cycle the tests really
+00:10:38.930 fast
+00:10:46.620 so we don't want people to go and and
+00:10:49.890 fence in a corridor while they're
+00:10:51.910 compiling of code or while they're
+00:10:53.170 running the tests so what does the
+00:10:55.780 industry come up with to to address this
+00:10:59.320 problem of slow feedback well there's
+00:11:04.510 one thing that I'm sure everybody's
+00:11:05.740 heard about and that's the test pyramid
+00:11:09.060 what does the test pyramid say test
+00:11:13.360 pyramid says that out of all of the
+00:11:16.540 tests that you have for your system you
+00:11:19.750 should have a certain proportion of unit
+00:11:21.790 tests most of your tests should be unit
+00:11:23.560 tests and then service tests whatever
+00:11:27.550 that means you can have not quite as
+00:11:29.770 many of those and you should have
+00:11:31.080 relatively few user interface tests
+00:11:34.860 because UI tests
+00:11:36.610 as we all know are brittle they're
+00:11:38.950 expensive to write and they're
+00:11:40.570 time-consuming to run right well this is
+00:11:45.700 the conventional wisdom but I think I
+00:11:51.660 I'm not sure I agree with that stuff
+00:11:53.800 anymore I'm interested in understanding
+00:11:57.330 what is it that makes you eye tests
+00:12:01.870 brittle expensive to write and
+00:12:04.420 time-consuming to run so I've got an
+00:12:10.180 alternative pyramid which I call the the
+00:12:14.950 love-hate relationship pyramid recently
+00:12:18.910 I've been moving so I've learned about
+00:12:20.410 Mary Kondo so you could call it does it
+00:12:22.990 spark joy pyramid so you should have
+00:12:26.110 many of the tests that spark joy for
+00:12:29.950 whatever that means and as few as
+00:12:35.500 possible of the tests that spark hate
+00:12:40.860 right or sadness or frustration now what
+00:12:49.240 do we put up in these different buckets
+00:12:51.010 here well one thing what's important
+00:12:52.930 here more speed as I talked about
+00:12:55.540 initially is important
+00:12:58.110 if you have tests that take more than 10
+00:13:00.570 seconds you're gonna lose your app
+00:13:03.810 you're gonna lose your focus you're
+00:13:06.450 gonna go and do something else so you
+00:13:07.620 don't want to rely on too many of those
+00:13:09.120 tests you want to have relatively few
+00:13:10.920 tests that take more than 10 seconds and
+00:13:14.610 you also don't want to have too many
+00:13:16.950 tests that take more than one second
+00:13:18.570 because you know as soon as you have 10
+00:13:20.490 of them you believe you've lost your
+00:13:22.589 flow right so mostly your tests need to
+00:13:26.790 be really really fast and I'm talking
+00:13:29.279 about millisecond fast here and I'm not
+00:13:32.579 making a distinction between unit tests
+00:13:35.760 and acceptance tests and integration
+00:13:37.890 tests and service tests and whatever
+00:13:40.500 people would decide to call them I'm
+00:13:42.959 just saying
+00:13:43.940 lots of really fast tests very few
+00:13:46.910 really slow tests now the other thing
+00:13:50.640 that makes us love or hate tests is
+00:13:52.970 determinism raise your hand if you've
+00:13:55.320 ever run a test that sometimes fails and
+00:13:57.990 sometimes passes right everybody hates
+00:14:02.250 that that is just the worst right what's
+00:14:06.240 the point in that test when it fails you
+00:14:08.610 don't really know whether it's just
+00:14:10.430 because it's a race condition or whether
+00:14:16.019 you have a genuine bug in your system so
+00:14:18.720 you want to have as few as possible of
+00:14:20.670 those tests that are non-deterministic
+00:14:23.570 so I've just chosen to put them in
+00:14:25.920 arbitrary categories here tests that
+00:14:27.870 pass 80% of the time you should have or
+00:14:30.649 let or less frequently you should have
+00:14:32.790 very few of those and you should have
+00:14:35.820 most of your tests should be completely
+00:14:37.440 deterministic right another thing you
+00:14:41.519 can think about you know love/hate is is
+00:14:44.610 maintenance cost how long does it take
+00:14:47.910 to write a test well if it takes a few
+00:14:52.290 minutes to write a test that's great but
+00:14:55.980 if it takes days to write it or I'm not
+00:14:58.769 talking about just writing by the way
+00:15:00.300 it's you know maintaining existing tests
+00:15:02.630 diagnosing tests that fail when a test
+00:15:05.670 fails you want to be able to figure out
+00:15:08.130 fairly quickly why it failed
+00:15:11.340 that's usually what takes the most time
+00:15:12.680 fixing it once you've found out
+00:15:15.000 why'd fails is usually relatively quick
+00:15:17.700 compared to diagnosing it in the first
+00:15:19.680 place so you want to be able to get good
+00:15:21.600 error messages that will point exactly
+00:15:24.390 at where the problem is so so I think it
+00:15:30.210 I think it's more productive to think
+00:15:31.470 about the love-hate relationship pyramid
+00:15:33.240 you want to have lots of the tests that
+00:15:35.070 you love and very few in the tests that
+00:15:37.380 you that you hate alright so what is it
+00:15:45.960 that we're looking at when we are
+00:15:47.640 testing why do we test in the first
+00:15:50.400 place why do we test our code well
+00:15:54.029 because we want to have confidence we
+00:15:58.230 want to have confidence that our code
+00:16:00.089 works but if you think about it there as
+00:16:03.779 many there are many different categories
+00:16:07.650 of confidence there are many different
+00:16:09.810 characteristics of a system that we can
+00:16:11.520 have confidence about and I think a lot
+00:16:16.020 of developers and testers they they tend
+00:16:23.700 to conflate a lot of these different
+00:16:26.160 aspects and try and get all lots of
+00:16:28.800 different kinds of confidence from the
+00:16:31.170 same tests so I don't have an exhaustive
+00:16:34.620 list of what different kinds of
+00:16:36.450 confidence that you should be looking
+00:16:37.920 for but I'll give you a few just to give
+00:16:39.780 you an idea so business logic right
+00:16:42.870 that's maybe the most obvious one you
+00:16:46.770 want to make sure that the algorithms in
+00:16:49.589 your program are correct for example
+00:16:54.330 that if you say while for example that
+00:16:58.380 you calculate the insurance premium
+00:17:00.530 correctly right or that you move the
+00:17:03.660 money to the right bank account but
+00:17:05.310 stuff like that is your business logic
+00:17:08.250 working correctly that's definitely one
+00:17:10.500 thing that we want to have confidence
+00:17:11.490 about but we also want to have
+00:17:14.640 confidence about the user interface if
+00:17:16.890 this is a system that has a user
+00:17:18.329 interface you know what you want to make
+00:17:20.130 sure that the buttons and the text
+00:17:21.630 fields and all of our stuff is wired up
+00:17:23.369 correctly to the underlying this
+00:17:24.959 logic but this is a different kind of
+00:17:27.390 confidence than verifying that the
+00:17:30.450 business logic itself is correct and
+00:17:33.289 because it's a different kind of
+00:17:35.159 confidence it means that you shouldn't
+00:17:37.440 necessarily try and shoehorn all of
+00:17:39.840 these different kinds of confidences
+00:17:41.250 into the same text I got more for you
+00:17:44.340 platform confidence does my system work
+00:17:47.610 on Windows and Linux and Mac OS does it
+00:17:52.860 work in Firefox Safari ie and so on does
+00:17:58.500 it work with Java version eight nine ten
+00:18:02.610 eleven blah blah blah blah blah right so
+00:18:04.350 you can you can have confidence about
+00:18:06.210 how portable your program is in on
+00:18:08.549 different different platforms again it's
+00:18:10.740 a it's a different kind of confidence
+00:18:12.360 you should probably use a separate kind
+00:18:14.760 of testing to get that kind of
+00:18:16.260 confidence integration by integration
+00:18:21.149 people people have different things when
+00:18:23.669 they when we talk about integration
+00:18:25.470 tests to me integration tests that is
+00:18:27.990 the test that verifies that two systems
+00:18:30.470 that you can when you connect them
+00:18:32.370 together everything works so you can
+00:18:34.620 have an integration test between the
+00:18:37.409 part of your system that deals with
+00:18:39.510 payment and stripe for example but you
+00:18:42.929 can test just that integration without
+00:18:44.460 testing everything else but again that's
+00:18:46.590 a different kind of confidence poor
+00:18:49.440 performance you want to you want to be
+00:18:52.039 confident that your your system works
+00:18:55.380 well under load that it's got the right
+00:18:56.940 throughput and latency and so on and
+00:18:58.940 security all these different kinds of
+00:19:01.740 confidences and I think what what I tend
+00:19:07.260 to see I you know when I go and look at
+00:19:09.450 other people's code base and very often
+00:19:11.760 my own I look at a test and I'm out if
+00:19:14.730 you ask the question what kind of
+00:19:16.919 confidence are we supposed to get from
+00:19:18.450 this test I think that's a useful
+00:19:20.100 question to ask and and if you're not
+00:19:22.860 sure well maybe you should rewrite the
+00:19:25.649 test or if the question is or if the
+00:19:28.620 answer is well we are trying to get
+00:19:30.299 confidence about all these eight things
+00:19:31.590 that I mentioned on my previous slides
+00:19:33.149 that test probably isn't very good at
+00:19:36.360 doing any of these things
+00:19:37.900 right so so when you write them and when
+00:19:42.040 you design tests try and figure out what
+00:19:44.559 what particular aspect of our system is
+00:19:48.430 that we're trying to gain confidence
+00:19:49.510 about and I think it makes sense to to
+00:19:52.390 split them up in different kinds of
+00:19:54.430 tests and have multiple different test
+00:19:56.020 Suites that will give you give you just
+00:20:03.100 confidence about security for example or
+00:20:05.020 about business logic but if you try and
+00:20:07.059 put everything into the same into the
+00:20:10.150 same magic cauldron your tests are
+00:20:12.570 always going to be slow and brittle and
+00:20:15.400 expensive to maintain so to illustrate
+00:20:19.179 how how we can improve this stuff I'm
+00:20:23.230 going to give you an example here with a
+00:20:24.550 little to-do app that I've written
+00:20:26.070 everybody rise to do apps when they want
+00:20:28.150 to show off something so this is a small
+00:20:35.410 react application written with an ojs
+00:20:38.860 back-end and a database to store all the
+00:20:42.850 to Do's so let's have a look at what the
+00:20:47.400 architecture for that kind of
+00:20:49.420 application might look like and I'm
+00:20:53.740 going to actually show you the
+00:20:55.059 architecture not just with the runtime
+00:20:57.370 configuration but also what it looks
+00:20:58.809 like with the test environment so I'm
+00:21:01.270 going to start from the top at the very
+00:21:04.120 top we have a test that is going to test
+00:21:06.550 our application or to do application and
+00:21:11.730 you'll see some Lego kind of shapes here
+00:21:14.710 I'll get back to what those means so
+00:21:16.179 just ignore that for now the test is
+00:21:19.270 going to talk to some something here
+00:21:21.880 that I've called the webdriver actor
+00:21:23.559 I'll get back to what I mean by actor
+00:21:26.580 then there's going to be a browser
+00:21:28.920 Firefox Chrome may be a mobile browser
+00:21:36.390 inside the browser there's a Dom and
+00:21:40.710 we've written our application to
+00:21:43.830 interface with the Dom the react
+00:21:45.880 application or it can be jQuery or it
+00:21:48.460 can be view it can be anything
+00:21:50.630 but some sort of JavaScript application
+00:21:53.660 then we need to communicate with the
+00:21:55.669 server over some Ajax calls HTTP
+00:21:58.190 WebSocket whatever so there's something
+00:22:00.530 that is responsible for talking to the
+00:22:03.410 server and then we've got some HTTP here
+00:22:06.890 in the middle and this is the client and
+00:22:12.410 the tests for the client then now the
+00:22:15.410 server comes into the picture we've got
+00:22:16.940 a web server here the part of it that
+00:22:19.610 receives the HTTP requests and maybe
+00:22:22.039 forwards that to another component which
+00:22:25.159 is where the domain logic is and then
+00:22:28.520 finally we need to store or everything
+00:22:30.169 in the database oops
+00:22:31.880 no we got a little data access layer
+00:22:34.010 here to be couple of cells from the
+00:22:37.370 database and then we have the database
+00:22:38.600 right with all of these layers and
+00:22:42.460 people are wondering what why is my test
+00:22:45.679 so slow any ideas if I ran this test how
+00:22:53.630 long do you think that would take
+00:22:59.860 depends let's say about a second okay so
+00:23:04.730 you can't have that many of these kind
+00:23:06.110 of tests before you start reading happy
+00:23:10.220 news or going on Facebook or Twitter or
+00:23:12.679 something so if all your test looks like
+00:23:16.580 like this you're never going to get into
+00:23:19.010 the flow unless you have two tests and
+00:23:24.220 if you have two tests you never gonna
+00:23:26.179 get confidence so we got a problem but
+00:23:27.830 why is this why is this slow what is it
+00:23:30.230 that makes computer program slow there's
+00:23:32.299 basically two things we say that a
+00:23:37.100 program is bound by something so you can
+00:23:42.500 say that a computer a program running on
+00:23:46.610 a computer can be CPU bound that means
+00:23:50.080 that if you buy a faster CPU a CPU
+00:23:55.760 that's twice as fast your program will
+00:23:57.140 run twice as fast right if the program
+00:24:00.919 is CPU bound now
+00:24:03.230 this program here is not cpu-bound is
+00:24:07.320 bound by another constraint if there's
+00:24:10.590 another constraint that limits how fast
+00:24:11.970 it can run you can throw as much CPU as
+00:24:14.520 you wanted this it's nothing really
+00:24:15.750 going to make it any faster its i/o
+00:24:19.440 bound networking input/output sockets
+00:24:24.650 HTTP calls calls of the database that
+00:24:27.630 kind of stuff that's what makes your
+00:24:29.040 tests slow so what can we do to make
+00:24:39.240 this test suite here faster well I've
+00:24:45.810 said this one is going to take ten
+00:24:47.130 seconds depending on while turret for it
+00:24:50.070 to do application very simple scenario
+00:24:53.040 but for a more complicated I don't know
+00:24:55.620 some sort of e-commerce site where you
+00:24:57.390 have to go through several steps a test
+00:24:59.490 like this can easily take ten seconds
+00:25:01.520 how can we make it faster well we can
+00:25:05.310 remove some of the slow bits for example
+00:25:10.130 up in the top here where we're doing
+00:25:12.390 webdriver webdriver by other way is an
+00:25:15.030 amazing tool oh yeah what kind of
+00:25:17.700 confidence do you get from from from
+00:25:20.340 tests using selenium webdriver the
+00:25:23.460 things that I mentioned previously
+00:25:26.750 business logic user interface platform
+00:25:32.990 performance security what what do you
+00:25:37.500 get cut her comedy webdriver is an
+00:25:45.660 amazing tool for getting calm getting
+00:25:47.490 confidence about platform right you can
+00:25:49.410 use it to check that your your
+00:25:52.170 application is working on on all sorts
+00:25:55.320 of different browsers that's amazing and
+00:25:58.140 then you get confidence that the
+00:26:00.150 business logo that the logic is is
+00:26:01.770 working as well but you pay a pretty
+00:26:04.170 high price for that confidence so what
+00:26:07.170 if we could have one set of tests that
+00:26:10.850 we've put up in the red
+00:26:13.670 you know I hate them because they're so
+00:26:17.190 slow category and we have very few of
+00:26:21.030 those just to verify that yet this works
+00:26:22.800 on all the browsers and then all of the
+00:26:24.870 other tests that are going to give us
+00:26:26.730 confidence about the business logic well
+00:26:28.590 they don't have to use webdriver do they
+00:26:30.210 no they don't so let's just remove
+00:26:33.270 webdriver like this so I had a little
+00:26:38.580 animation here but I'll run it again if
+00:26:42.180 you if you look carefully you'll see
+00:26:45.000 that those different Lego intersections
+00:26:48.930 here which are contracts allows me to do
+00:26:53.010 that so I'm going to push out something
+00:26:54.360 here and put a new one in so the same
+00:26:57.720 test now connects to the DOM and I
+00:27:01.590 replaced that webdriver selenium stuff
+00:27:03.510 with with something else which I've
+00:27:05.130 called a Dom actor which to the test
+00:27:10.230 looks exactly the same it's got the same
+00:27:11.970 interface you know the test just needs
+00:27:13.560 to talk to some interface that has one
+00:27:17.610 stud like that it doesn't really care
+00:27:19.920 what it is so this is a different
+00:27:22.560 implementation of that thing that just
+00:27:24.450 talks directly to the Dom without going
+00:27:26.310 through webdriver and I in no js' I can
+00:27:30.870 do this because I can I can run the Dom
+00:27:34.200 inside of my node process very easily so
+00:27:38.310 now this test is a lot faster it's just
+00:27:40.290 one second now because I removed the
+00:27:42.690 slowest bit of of the system the thing
+00:27:46.020 that was the most I Oh bound which is
+00:27:48.200 selenium and now I can look at the next
+00:27:53.580 bottleneck well where is that gonna be
+00:27:56.330 probably HTTP right because I'm still
+00:28:00.270 doing making HTTP calls from from my
+00:28:02.640 application so let's see if we can
+00:28:04.710 remove that as well boom
+00:28:07.380 let me run that again so Goenka is there
+00:28:12.270 a laser on this thing no but I'm going
+00:28:15.300 to remove the stuff in the middle the
+00:28:18.510 thing above and below the the HTTP thing
+00:28:21.780 there I'm going to connect the user
+00:28:23.790 interface directly to the server-side
+00:28:25.710 domain logic
+00:28:28.159 boom now things are starting to get
+00:28:32.340 really really fast and again I can do
+00:28:34.169 that because the way I've designed my
+00:28:35.580 application the reactor app it needs to
+00:28:41.159 talk to an interface which I visualized
+00:28:42.899 here is something with two studs maybe
+00:28:44.970 there's two methods here like ant to do
+00:28:46.799 and remove to do right it doesn't matter
+00:28:50.610 whether that's an implementation that
+00:28:52.380 does it over HTTP or I can connect it
+00:28:54.509 straight to the domain logic which runs
+00:28:56.669 on the server this is easy to do in
+00:28:59.039 JavaScript LAN because you've got the
+00:29:00.509 same language on both the server and the
+00:29:03.480 client but you can also do it with with
+00:29:07.110 a more polar clock platform where you
+00:29:09.179 have say dotnet on the server and
+00:29:12.409 JavaScript on the client but it's a
+00:29:14.129 little bit more complicated but you can
+00:29:16.019 still do it now things are getting
+00:29:18.059 really fast where is the last IO
+00:29:20.940 bottleneck now it's the database so
+00:29:26.429 let's get rid of it I'm going to replace
+00:29:29.370 a database with a memory data access
+00:29:32.279 object which doesn't put stuff in the
+00:29:34.019 database it just stores it in hash
+00:29:35.309 tables now I can run this test in ten
+00:29:37.409 milliseconds now I'm CPU bound because
+00:29:44.700 there's no I own all of this stuff runs
+00:29:49.019 in the same process my tests my user
+00:29:52.740 interface and my service I logic it's
+00:29:55.590 all in the same nodejs process and I
+00:30:01.379 realized that not everybody here does no
+00:30:03.450 js' and react but the principle applies
+00:30:10.429 no matter what sort of platform you're
+00:30:12.539 working on it try and put the test try
+00:30:15.840 to put as much as possible inside of the
+00:30:17.340 same process so that you don't have to
+00:30:18.750 do i oh when you do this you're
+00:30:21.269 sacrificing some confidence sacrificing
+00:30:25.190 confidence that you've integrated
+00:30:26.820 everything correctly but you can get
+00:30:28.769 that confidence from other tests we're
+00:30:31.110 focusing on getting the really important
+00:30:34.110 confidence here which is the business
+00:30:35.370 logic now is CPU bound
+00:30:40.440 probably by the Dom because the Dom has
+00:30:43.180 have been too you know
+00:30:44.080 quite complicated beast needs to render
+00:30:46.990 stuff so we can remove the Dom as well
+00:30:49.320 now we have tests that run in
+00:30:53.050 milliseconds but what we have kept here
+00:30:55.540 is the domain logic the domain logic is
+00:30:58.480 still there we're testing the domain
+00:31:00.190 logic without going through all of these
+00:31:01.960 layers of quite frankly uninteresting
+00:31:06.070 gibberish it doesn't really spark joy so
+00:31:14.110 let's put them next to each other
+00:31:16.450 that's another variant so by having
+00:31:22.060 these very clear interfaces between the
+00:31:23.950 different components in your system you
+00:31:25.990 can mix and match and assemble them in
+00:31:28.060 different ways when you run your tests
+00:31:30.360 depending on what sort of confidence
+00:31:32.350 you're looking for are you looking for
+00:31:34.060 performance confidence well then we need
+00:31:36.100 the whole stack are you looking for
+00:31:37.990 business logic confidence well then we
+00:31:40.270 only need a little bit of it are you
+00:31:42.220 looking for platform confidence well
+00:31:45.700 then we need a whole stack again and so
+00:31:47.320 on so putting them all side-by-side you
+00:31:51.400 can see that on the left here you've got
+00:31:54.640 the really really slow and expensive
+00:31:56.670 tests that give you the that a few
+00:32:00.120 hopefully and this slow but they give
+00:32:03.550 you this kind of integration and
+00:32:04.690 platform confidence and on the right
+00:32:07.090 we've stripped out most of the
+00:32:09.700 infrastructure and they really really
+00:32:12.190 fast so let me give you a demo I know I
+00:32:20.020 have to remember to turn off the
+00:32:21.850 mirroring here there we go all right
+00:32:28.020 so I'm the cucumber man but it doesn't
+00:32:31.650 mean that you have to use cucumber to
+00:32:33.450 use this technique but since I'm the
+00:32:34.860 cucumber man I'm going to illustrate how
+00:32:37.650 this works with cucumber but you can do
+00:32:40.170 this with any unit or whatever your
+00:32:43.530 favorite testing tool is so I've got one
+00:32:49.250 one scenario here for crating - duze
+00:32:51.770 maybe I should show you the to-do list
+00:32:55.559 as well it looks like this so it's a
+00:32:58.380 server running yeah all right so I want
+00:33:01.920 to test this application so here is a
+00:33:06.360 scenario it says given given there is
+00:33:09.360 already want to do when I add get milk
+00:33:11.550 then the second to do should be get milk
+00:33:13.530 right pretty simple except this test so
+00:33:18.480 let's run it maybe large that a bit so
+00:33:28.260 what I'm going to do now I'm going to
+00:33:29.309 run I'm going to run my test in all of
+00:33:31.260 these different assemblies or
+00:33:32.850 configurations that I showed you in the
+00:33:35.400 previous slides we're going to see how
+00:33:37.290 long it takes so what I'm doing here is
+00:33:40.890 I'm running exactly the same tests in
+00:33:44.820 different configurations and what's
+00:33:47.340 interesting here is to look at that how
+00:33:48.780 long they take so the one where I only
+00:33:51.840 have the Dom and the memory actually you
+00:33:56.700 know what I'm gonna run a bit more of
+00:33:58.620 them I'm just going to copy the same
+00:34:00.090 tests and run it many times so it
+00:34:03.240 becomes a little bit more go away one
+00:34:05.610 password so it becomes a little bit more
+00:34:08.550 realistic just uncomment this so we have
+00:34:12.750 20 tests they're all the same
+00:34:20.199 oh my god there we go all right let's do
+00:34:28.510 this again boom that was pretty fast
+00:34:33.339 boom boom boom boom
+00:34:34.270 you can see it's gradually slower as as
+00:34:37.989 I'm assembling more and more and more of
+00:34:40.329 the stack and running the fast ones
+00:34:41.649 first and now running through the entire
+00:34:44.319 stack with with the browser which as you
+00:34:48.609 can see is just painfully slow so I
+00:34:52.059 don't it's important to have those tests
+00:34:53.980 just to make sure that it works on
+00:34:55.210 Firefox and ie and Safari and so on but
+00:34:58.960 that's not where I need most I'm just
+00:35:01.119 going to stop it because it takes too
+00:35:02.380 long so if we look at this we have one
+00:35:05.920 configuration here which is the one
+00:35:07.299 where we don't have the UI we don't have
+00:35:08.650 the database we just have the domain
+00:35:10.000 logic incredibly fast right because
+00:35:13.690 there is no i/o and I ran 20 tests in 11
+00:35:18.400 milliseconds how long is that per test
+00:35:20.640 half a millisecond per test for my
+00:35:23.619 domain logic and I'm able to do this
+00:35:29.410 because I've designed the application
+00:35:32.410 with very clear contract between the
+00:35:36.910 different parts of the system it's it's
+00:35:40.720 well it's decoupled so I can plug
+00:35:43.450 components in and out just like Lego
+00:35:46.349 when I'm running the really really fast
+00:35:48.579 tests the to Do's are being stored just
+00:35:52.960 not in a database that be stored in some
+00:35:54.400 sort of fake to do store half a
+00:35:58.119 millisecond per test so I can run I can
+00:36:00.579 run 2,000 tests in one second I've got
+00:36:07.480 the the next one where I'm a plug in the
+00:36:09.190 Dom things are a bit slower here they're
+00:36:12.339 almost an order of magnitude slower so
+00:36:14.430 76 milliseconds for 20 tests so a couple
+00:36:18.069 of milliseconds still not bad here I'm
+00:36:20.920 running without a Dom but just with HTTP
+00:36:23.040 you can see that's even slower but it's
+00:36:27.099 still pretty fast and here I'm taking
+00:36:29.799 the Dom managed to pee together
+00:36:33.110 but you if you compare this with the
+00:36:34.550 first one right it is actually 40 times
+00:36:38.840 slower even though it's it's reasonably
+00:36:42.830 reasonably fast here but that's it's
+00:36:44.540 because it's a simple application but 40
+00:36:48.680 times slower is a lot even though in my
+00:36:50.810 little toy app it's fast and then
+00:36:54.860 finally we got the webdriver which I
+00:36:56.360 didn't even finish but that was going to
+00:36:57.680 take something like 20 seconds
+00:37:09.150 so I've got how much time do I have five
+00:37:13.200 minutes eight minutes Wow so I want to
+00:37:21.870 talk a little bit about how this how
+00:37:23.640 this what looks from the perspective of
+00:37:26.160 the test one most tests that I see are
+00:37:30.590 sort of hardwired to a particular part
+00:37:33.600 of the code which is fine but it makes
+00:37:38.160 it really hard to swap in and out
+00:37:41.150 different assemblies of the application
+00:37:44.240 so what I've done here is I've
+00:37:46.170 introduced a layer of abstraction
+00:37:47.640 between the test and the system under
+00:37:50.070 test and of call that layer abstraction
+00:37:53.340 and actor which is a poor name because
+00:37:55.890 people think about the actor model has
+00:37:57.750 nothing to do with the actor model well
+00:37:59.610 its actor in the sense of something
+00:38:02.280 representing a person right representing
+00:38:04.830 somebody an actual human being
+00:38:06.840 interacting with the system so the test
+00:38:10.580 only knows about actors and the actor
+00:38:13.320 acts as a facade for interacting with
+00:38:14.940 the system either through webdriver or
+00:38:17.730 through HTTP or maybe directly with
+00:38:21.000 method calls to the domain logic but the
+00:38:23.190 test doesn't know so you get two really
+00:38:28.260 important benefits from organizing your
+00:38:30.000 tests this way one is what I just said
+00:38:32.790 you can swap in and out different
+00:38:34.710 implementations and trade confidence for
+00:38:38.460 speed or different kinds of confidence
+00:38:40.170 for speed and that's really cool I can
+00:38:44.550 run the same test to get confidence
+00:38:46.320 about platform but I can also run the
+00:38:48.450 same test to get confidence about the
+00:38:49.800 main logic but they're different it can
+00:38:52.680 be run at different times the other
+00:38:54.480 thing which is more of banging the drum
+00:38:59.280 of BDD is that when you write your tests
+00:39:01.590 this way you cannot refer to things like
+00:39:05.670 buttons and text fields and so on you
+00:39:09.690 have to write the test in a technology
+00:39:14.790 agnostic manner because if I if my test
+00:39:19.080 said something about talking pressing
+00:39:21.410 buttons how could I possibly how can I
+00:39:24.770 possibly press a button in in the DAO I
+00:39:28.580 cannot possibly press a button in my
+00:39:30.980 domain logic doesn't make sense so and
+00:39:36.020 this is important because this allows
+00:39:39.100 this is really the whole promise of
+00:39:42.440 behavior driven development that the
+00:39:45.590 test can be read by non-technical
+00:39:49.340 stakeholders so this is kind of some
+00:39:50.930 like your bonus you get if you decouple
+00:39:52.670 your tests from the system on the test
+00:39:54.890 they become you forced to make them
+00:39:57.940 agnostic of the of the technology so
+00:40:01.280 they can be read by by anyone so the
+00:40:04.400 test here it can send some commands you
+00:40:07.430 can say I want to guess actually this is
+00:40:09.740 for a different example for a game but
+00:40:12.890 if you imagine this was for the to-do
+00:40:14.450 list it could be added to do and the
+00:40:17.780 other one could be get a list of to do's
+00:40:23.140 done the demo here is a list of some
+00:40:33.320 URLs you can go to to learn more about
+00:40:35.360 this I actually forgot to add there's
+00:40:42.110 another one which is better I apologize
+00:40:45.920 I'm going to change that URL now
+00:40:56.050 there we go sub-second thank you guy
+00:41:02.440 code no never do live coding in
+00:41:13.030 presentation or live slide editing there
+00:41:17.050 we go
+00:41:17.760 all right and I think I have maybe a few
+00:41:20.200 questions
+00:41:22.540 [Applause]
