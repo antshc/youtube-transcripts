@@ -1,0 +1,276 @@
+
+00:00:04
+[Music] thank you and it's and it's really not a joke I do have 85 slides so I'm going to talk really fast the worst thing is that before just before this session I was sitting outside and I was thinking I should look at this and see if I can trim it down and I added a slide so so the thing that really interest I've I've spent my career building software systems and mostly I tended to work at the slightly more complicated end end of things when I was Building Systems they were usually
+
+
+00:00:44
+bigger systems technically intricate for some reason high performance or whatever else and I spent much of my career thinking of what we do as a craft and in the latter part of my career I started to change my mind I started to think that what we do or at least how we ought to do it should be more like engineering I think that we should take that more seriously so I want to talk a little bit about that but specifically in the context of dealing with really complex systems and how we undertake that and
+
+
+00:01:15
+again specifically how we start to think in terms of architecture and design on an incremental basis for systems like that so that's what my what my Talk's about today and I'd like to start by just positioning what I mean when I'm talking about engineering as a a discipline engineering is how we as a civilization solve the hard problems Engineering in other disciplines is just the stuff that works if it doesn't work you change it until it works otherwise it's not engineering so that's important
+
+
+00:01:44
+the other take on this is that this is the foundation on which our civilization is built if you think about it if you look around this room everything even the clothes I'm wearing to some degree is an engineered artifact in the sense that I'm talking about and and so this stuff is important here's a graph of innovation over time and you can see there's something important H happens around there and Innovation kinds of explodes it's actually worse than that if you go back to the you know uh pre
+
+
+00:02:17
+prehistory we we've been around for about 200,000 years and nothing very much happened for then the wheel and agricultures only about 10,000 years old so what were people doing for all that time beforehand it's strange so what happened there is science so science is one of the things that revolutionized our ability to do new things and more complicated things it's our best problem solving tool and in software I think we get that so I I would argue that modern Engineering in any field not just
+
+
+00:02:51
+software modern engineering is really about the application of scientific style reasoning to solving problems in software and or solving problems anywhere else I think that's the nature of what modern engineering is about it's this kind of scientifically rational approach to solving problems and I think that's the core of what I think we ought to be thinking about in terms of Sol solving problems in software and I think we get that wrong all of the time I think often we just treat engineering as a synonym
+
+
+00:03:24
+for software development which I don't think is is good enough and so most of us most of the IND industry isn't doing engineering I think we ought to be but I don't think we are and then the other take on engineering is it's hugely bureaucratic and it's not so what's engineering really for engineering isn't a cookie cutter process that leads us to the precise right Solution that's not how it works ever engineering is about this it's about making sure we don't do the
+
+
+00:03:54
+stupid things it's about ruling out the dumb ideas so engineering is there to help us to avoid those bad ideas and that allows us then a spectrum of good ideas that we can choose from and when we start thinking about genuine this is this is a picture of uh spacex's Starship um which which is the spaceship that's supposed to take people to live on Mars one day um this is supposed to be aimed to be the first fully reusable spacecraft two orbit and further and back without discarding any
+
+
+00:04:34
+pieces and systems like this is this is the most complicated spacecraft that's ever been built and systems like this don't spring fully formed from a genius's mind that's not how it works that it's a process of exploration Discovery iteration learning and building on top of what we've learned and and what we understand and it's always that that's what engineering is always like and that's at the core of how we ought to organize to work in my view we should be thinking in in those sorts of terms
+
+
+00:05:09
+we should not be trying to be so preent that we can imagine the perfect solution ahead of time so the tools of our trade are not really things like languages and Frameworks those are just the nuts and bolts that we use to construct the things that we're building our the tools of our trade are problem solving and design that that is that I would argue that that's what we do for a living if we're building software and in particular what my theme today is about incremental design because if we need to be able to start a
+
+
+00:05:45
+project when we don't know the answer yet we've got to learn and we've got to explore and we've got to build our systems incrementally to the point at which we've got something good and that's not again not unique to us it's not special to software we have lots advantages in software that we ought to be able to take advantage of because software is more malleable Than Physical things but apart from that this is exactly the same as any other engineering discipline so the tools of our trade for
+
+
+00:06:14
+software engineering is design engineering I talk about this in some detail in my book which you can buy in the stand out there and I so I would argue that the power tools if you like of our trade are these things in the book we I kind of analyze these things and why they matter and how they matter but if we want to optimize for learning we need to work iteratively we need to gather feedback we need to build systems incrementally we need to treat each change as a little experiment that we can try out our ideas
+
+
+00:06:49
+and see whether they're good ideas or bad ideas and we need to be empirical we need to measure the reality of our systems in production in use and understand those things so that we can modify them and over time shape them to better fit what our users want of those systems whatever that might be and part of that if we're building complex systems is we need to deal with the complexity of those systems we are we are at the root of our profession dealing with some genuinely complex difficult
+
+
+00:07:24
+problems ideas like distributed systems and concurrency are out there they're at the limits of how complex information Theory and those sorts of ideas gets we're talking about genuinely first class complicated problems here two pieces of information in different places changing at different rates which one's true what's the state of the system that's a superposition that's that's that's that's a problem of quantum physics so we need to figure out ways in which we compartmentalize problems to
+
+
+00:07:55
+make change more safely and to do that we need to manage the complexity so we need techniques like modular cohesion separation of concerns abstraction and managing the coupling of our systems to be able to make progress safely in one part of the system without breaking the rest of it everywhere else I would argue that quality in software is measured by one thing there's one thing that's important that determines the quality of a system and that's our ability to change it of course we want secure systems of course
+
+
+00:08:25
+we want resilient systems of course we want scalable systems but how do you get those things without being perfect first time if you can't easily change the code so the sane thing to do is to organize our work in a way that gives us the freedom to get stuff wrong and change our code when we learn where it's wrong so I would argue that that's what that's another one of those things that we should focus on in order to be able to deal with these more complex systems so how do we design and architect
+
+
+00:08:58
+systems for ease of change what what do we need to do to be able to achieve that first I think if we're going to start talking about architecture we need to talk about what software architecture is so what do we mean by that and this is a kind of slippery idea I think this is this is wikimedia's um sorry Wikipedia's uh description software architecture is a set of structures needed to reason about Software System and the discipline of creating such structures and systems I think the interesting part of that
+
+
+00:09:26
+definition is this needed to reason about architecture again is not a constraining fixed set of rules or things like that it's a way in which we can reason about the system a good architecture is one where all of the team members would come to roughly the same kind of idea of a solution given the context of a new feature you know yeah we should think that would feature would live in this service over here or we should organize that this way or that one doesn't fit our architecture we will
+
+
+00:09:57
+have to think again more deeply those are the kinds of convers ations that you want from an architecture so I again I would AR argue that there's no big distinction between architecture design and code I see them as being on a Continuum and part of the reason for that is that I can make a change a tiny change in code that breaks the architecture of the system I can make a tiny change in the architecture that makes it impossible to write the code to to to fulfill something so there's this kind of feedback loop here
+
+
+00:10:30
+that that's in play and so the only sane thing as as far as I can see to do this is to adopt the practice of a kind of continuous approach to architecture architecture is not a static thing it's not a thing that a bunch of brilliant people in an ivory Tower doing isolation Before We Begin work and then we follow that those rules as though they were written written in stone for the rest of the project that's not how it works we need a more evolution approach to architecture and any real complex
+
+
+00:11:03
+system that you look at has changed usually dramatically at some point throughout its life it's evolved think of something as relatively straightforward as as an iPhone the first iPhone didn't have an app store it didn't have um it didn't have cameras it certainly didn't have an AI thing in it um all of you know all of these things were were novel and new they came later and I'm sure that the original designers had some vision of where it might go but I'm also certain that they didn't get it
+
+
+00:11:35
+exactly right I'm also certain that they didn't know what a modern iPhone would be like compared to the original products whatever they are evolve over time and get better over time if they're good products so architecture is less like this some kind of prescriptive model of what we're talking about and to my mind it's more like this a kind of tourist map this is not geographically accurate the the the topology is right but the the distance measures are going to be wrong but I can find my way to the
+
+
+00:12:13
+crocodiles so this this kind of idea of architecture as a sort of snapshot tourist map of our picture accurate in some directions but not precise in all I think is's a good one I think I I like this idea as a way of thinking about architecture perhaps one of the deepest most fundamental ideas to get good at this is this idea of iteration and I would argue that this is absolutely foundational and fundamental to almost any process of engineering we we're always talking about being able to make changes and
+
+
+00:12:49
+continue the changes and flow those changes through the system this is the uh the first heavier than air controlled powered man carrying aircraft all of those caveats are you need because there were versions of aircraft that had one or of those things but this is the first one that brought them all together flew in 1903 it's the right flyer and these things were death traps they were so dangerous that for about the next 20 years the pioneers of Aviation nearly all got killed by the things that they
+
+
+00:13:19
+were pioneering in so what happened in aviation in engineering was that after each accident or mistake or you know after each implementation of a new aircraft they learned things and they did better next time by the time of the second world war they they were building things like this this is a DC3 this is the first passenger carrying air airplane that looks vaguely like a passenger carrying airplane to us now um it has the the kind of the monocot fuselage the the windows in the side and the passengers
+
+
+00:13:52
+in a row in this tube um and then we get to something like this and in 2017 the equivalent of 2third of the population of the planet flew in commercial airliners and nobody died that's the first time that ever happened that's what engineering does that's iteration on a very slow scale but that's what engineering always does it makes things better and better and safer and safer over time because engineering is about doing the things that work and if they don't work we change things the idea of iteration is
+
+
+00:14:27
+important and it's vitally important to being build in building complex systems in software so the idea for for iteration is really that we're going to find some St some starting points and we've got some goal that we imagine that we'd like to achieve and to get to that goal all we need is a fitness function that's able to to determine whether our idea gets us closer to the goal or further away so we can try something out say no that's no good it's getting us further away so I'll discard that and
+
+
+00:14:55
+then we can try something else out and even if we do this at random them we can try stuff out and see what gets us nearer to the goal the keynote this morning was talking about artificial in intelligence and large and and deep neural networks this is how deep neural networks work this is how learning works this is an evolutionary approach to learning so we can we can use this as a tool for ourselves when we're talking about these these little experiments these little Fitness functions it's more difficult in
+
+
+00:15:25
+software to see what they are because it's not obvious what the measurements are but in this case we can use tests as those measurements we can specify what it is that we want of our software and validate whether each change moves Us in the direction of making all the test pass or not validating that we're getting closer to our goal or further from our goal so how do we use these power tools um I I'd like you to just pause for a moment and look at these 10 things imagine two versions of the system that
+
+
+00:15:59
+you're working on or one that you're very familiar with and imagine one in which there's no iteration no feedback there's no incremental development no experimental approach to learning things no empirical discovery about whether the product's working in production or not okay now imagine another version where you've got all of those things which project would you rather work on the second one right now imagine do the same thing with the things on the right imagine a system
+
+
+00:16:26
+there there's no modularity no cohesion no separation of concerns no abstraction really and terrible coupling we even have a name for those we call them big balls and mud now imagine the counter where you've got nice modular code where you can change it in one place and it doesn't infect another all of the bits that are relevant are together in the code so that when you're looking at one part of the code you can see what's going on in that narrow context each part of the system is divided up so that each part
+
+
+00:16:54
+is focused on doing one job and doing that well and that the lines between those parts are well abstracted so that we can interact with another part of the system without knowing or caring about the details of how that works these are all markers of quality in the design of systems and we work to manage and reduce the coupling where we can between those parts so that they're easy to change now imagine those two versions of the system as well the big ball of mud or the modular cohesive system with good
+
+
+00:17:23
+separation of curs which one of those would you rather working it's the second one again right so those are those are goals those are things if we have those characteristics in our systems those are the characteristics that will make it easier to change those systems and therefore markers of the quality of those systems there's a bunch of techniques that can help with those so we make work in small steps that allows us to be more iterative we prioritize testability architecture as a snapshot maintain the
+
+
+00:17:53
+tourist map and all of these things I want to go through each of these and just show how they map to the 10 things so I'm just going to whiz through uh we're doing all right for time so far so let's start with small steps so small steps enable all of these things if we make a small change it's going to it's going to work better if we if we're working iteratively that's going to encourage us to to to make a small step and evaluate where we are gathering feedback to understand where
+
+
+00:18:25
+we are working incrementally building the system on top of each each stable point that we've achieved with our small step so making progress in these small steps is profoundly important and allows us to learn more quickly and more effectively we're building on more concrete knowledge we know that this system works because all of our test pass and we haven't and our changes haven't broken anything that's a good thing taking small steps gives us the freedom to be wrong it improves our
+
+
+00:18:58
+feedback it gives us more opportunities to learn I said that increases our confidence in the system it also reduces risk because each change is Tiny and therefore lower risk so we can move much more quickly and much more effectively if we can do these things and it reduces costs because we're not risking I'll come back to that but we're not risking really expensive changes if we're making progress in smaller steps so big steps are a bad idea so you know if you're planning six months wor
+
+
+00:19:29
+worth of work what can go wrong well you could be wrong 6 months worth of work could be a waste so we could try something and we miss and we spend all of this money and then we could try something else and we miss and we spend all of this money and we end up spending lots of money and and taking lots of time and getting nowhere that's that's certainly possible I don't know about you but I've certainly worked on projects that felt like that on the other hand if we make Tiny Steps our investment is smaller so we we
+
+
+00:20:03
+we reduced our risk and if we're measuring against our fitness function whether we're closer to the goal or further from the goal after each one we can validate each one and understand where we are so we can try that that didn't work out so we spent some money but not very much we can try that and and so we we end up that's what I mean by reducing costs in terms of working this way this is a much more economically efficient as well as technically efficient way of building complex systems we increase the
+
+
+00:20:32
+visibility of our systems uh the change is simpler because each step is simpler and the reasoning about the system is simpler of course we need the big picture as well we need to be holding these models in our head and having our tourist maps to guide us to understand where we are in our architecture but that these small steps give us the opportunity to better control the variables and on it kind of not just give us the opportunity it kind of applies a pressure on us to encourage us to make sure that we better control the
+
+
+00:21:02
+variables and understand the impact of each small step so next in our list prioritize testability so this is a picture this is a picture that I stole from I think it's a Wikipedia picture again um but it's it's a description of the scientific method and a key part of the scientific method is this de testable predictions if my hypo hypothesis is correct then I expect this to be true if I if I want to be able to pay by credit card then I expect that if I go and select this book from the shelf and pay by credit card I
+
+
+00:21:44
+own the book at the end that that's that's a that's an experiment that's a testable prediction so if we organize our work around the testability of our systems we get loads of huge benefits again we improve the feedback we were allowed to work more incrementally more experimentally and we it tends to encourage us to build more modular more cohesive systems with better separation of concerns all of those good things here's an example of that kind of specification so this is this is taken from the
+
+
+00:22:23
+Cucumber website this is a a classic example I now I don't like this very much because um this is not really specifying what we want this is mixing together the specification in the implementation so I'd slightly change this I I'd change these to say when I add 50 to 70 the result should be 120 that's a simple specification it's hasn't lost any information at all about the the specification of the problem this is still accurate but now I can Implement that anyway I like I no longer
+
+
+00:22:54
+have to have a screen I no longer have to have buttons to push or any of those sorts of things because those things aren't mentioned so by specifying things in the abstract from the perspective of a user and prioritizing the use of a specification to Define what we want of our software then we now have a tool that we can use to evaluate whether we're making an appropriate small step if I make this test pass I've made a small step in the direction of something that's going to be valuable presumably to our users we
+
+
+00:23:22
+can we'll learn about that later probably this is a perhaps say more realistic kind of specification and you can see this is this is saying nothing at all about the implementation detail but everything about what we need to achieve what the user needs to achieve with the software that we're going to deliver to them and we're coming up with these specifications based on examples that would demonstrate that the feature that we care about exists here's another example so this is just as true for um what are commonly
+
+
+00:24:04
+called the non-functional requirements like lots of people I assume in this room I hate that term these aren't non-functional requirements because users care about these just as much as they care about anything else these are just requirements the reason the only reason I think that we bother to separate them from other kinds of requirements is because these are harder to plan and project managers therefore don't like them that's a problem because these are just as important as the ones that that
+
+
+00:24:28
+are easy plan but these things matter but we can use the same Technique we can specify the outcome that we want in this case we'd like our system to respond in a in a timely manner and this is for something like a trading system this is absolutely business critical this is not something separate this is not something distinct this is not a technical need this is a business need and that's true too and that's true of all non-functional requirements I would argue you can always find the real
+
+
+00:24:58
+requirement hiding in there somewhere next architecture as a snapshot architecture needs to be this kind of living thing so at the as the the the life of our software progresses we're going to say well that's our current architecture and then oh we we we need to scale up a little bit so we're going to change the things around a little bit and now this is our current architecture and then we need to scale that bit up as well so this is our new current architecture and that's how architecture always works if it's static
+
+
+00:25:33
+it's dead if we're going to build complex systems we're not going to get them right first time so we must have the freedom to be able to change them to evolve them to step by step incrementally build them up and and so architecture is always only a snapshot of what it was Amazon started out as a PHP application it's not that anymore it's very very very different indeed because it had to because it was limiting the scalability of the business it was limiting what they could do with
+
+
+00:26:06
+it that's true for all of the systems that we use that are successful so if we work using architecture as a snapshot that allows us to optimize for learning once again it allows us to amp up all of these properties that are that we consider to be of value evolutionary architecture then is important we need to think about it in these terms this isn't a nice East nice to have this isn't an esoteric thing that's on the edge this is at the core of what we do for a living or it should
+
+
+00:26:42
+be this is how we build great systems we allow ourselves the freedom to not get everything right first time and potentially to be wrong and the idea is is that we'll discover where we're wrong or where as we learn more we'll understand the problem better and be better able to Sol solve it so we allow ourselves the freedom to be able to do that so we make progress in small steps we the architecture is only ever true at a moment in time it's always this snapshot and if we can't change it as I
+
+
+00:27:13
+said it's already dead next on the list in order to be able to facilitate that we've got to maintain our tourist map at even though our tourist map is vague and imprecise there are going to be times when it'll still end up needing to change to be wrong so in in the case of our our tourist map of the zoo we could change things we could add things to it if we are able to do that that's going to amplify all of these things iteration feedback incremental and experimental working and it's going to
+
+
+00:27:45
+up modularity cohesion separation of concerns abstraction and coupling as as a side effect of being able to model the system and think about how it's organized at the level the high level of abstraction of a tourist map the value of the tourist map is that we want it to be a little intentionally a little bit vague so that we've got room to change without invalidating everything that we've written about it and everything that we described it with so prioritizing ease of change is really what continuous deliver is for so
+
+
+00:28:21
+so so deployment pipelines are were were designed to optimize the process of giving us that really fast feedback back and giving us this experimental platform where we can try out our ideas get fast feedback on them and see whether they're valid or not so continuous delivery is the best tool for us to be able to prioritize the ease of change of these systems that encourages us to do all of those things in terms of managing complexity because the easiest kinds of systems to continuously deliver are systems that
+
+
+00:28:51
+are modular cohesive good separation of concerns um nice clean lines of abstraction and minimize coupling because we can test them more efficiently continuous delivery gives gives the optimize for learning thing um and optimizing for manage complexity but that's via the testability so so that's it's kind of a s the modularity the sorry man the properties of managing complexity come as a kind of side effect of the way of working with continuous delivery continuous delivery just works
+
+
+00:29:29
+more easily with systems that work nicely separation separate concerns this is another one of those core ideas it's been around for a very long time if you look at the solid principles there's quite a lot of the solid principles that are really just are really talking about separation of concerns this is a big deal so if we've got something that's doing process and store it's going to be much better if we separate it out as process and store as separate pieces so this is going to up uh managing
+
+
+00:30:04
+complexity metrics and it's going to amplify feedback incremental and experimental working so optimizing our ability to learn if we've got those kinds of those those things in place adapt to the current context so this is again about working with the current version of the system not our imag imaginary Future Vision of it there's Kent Beck described it as yagy in in the extreme programming book but you ain't going to need it so we're going to work on what we know to be true now but we're going to design things
+
+
+00:30:41
+with a way where we kind of leave the door open so that we've got room to change things when when we find out what we really ought to be doing later on so if we start out with a simple story like this customer place order we can probably implement that with a simple system like this and then as the next story comes along add new products we probably need something new new now we need to add some admin facilities and the ability to have some inventory and all of those kinds of things to allow us to do that
+
+
+00:31:13
+and that's our new architecture and then we re architect again to be res more resilient in the face of failures when we're in use and we our user Bas is building and this what all the big web companies did they didn't start out with globally scalable system systems they started out with simple systems and then they made them globally scalable later on and this is so we need to adapt to the current context the problem that we have in front of us right now and we need to engineer to solve that problem
+
+
+00:31:41
+but we need to engineer to solve that problem in a way that maintains our ability to change the system in future if we do that that optimizes for Learning and all of these kinds of things and then that is enabled by designing using the techniques of managing complexity I hope that what you're starting to see there's this kind of Tangled nest of relationships between these ideas and practices and these properties that we value in software development practice the optimizing for Learning and software development design
+
+
+00:32:19
+techniques the the optimizing for complexity ideas these are not independent things they're all part of this ecosystem of doing a better job which is I I think a good description of what engineering might might be described as the other one of those things is that we don't want to be designing ahead um so if we start off with the same place order and we and we do this and build the whole system as we imagine that it would be that's a bad idea because we might be wrong we might never
+
+
+00:32:50
+get the users we might have spent a load of time building all of this complicated scalable system and we might end end up with five users I once worked on a trading system that was bu and we were brought in to speed it up and we started working to speed it up and said what do we think the user load is he said well we've got three at the moment so so what were we doing wouldn't it be better to be doing on something that would get more users so we start with the simple thing and then we we change the simple thing
+
+
+00:33:22
+we don't try and predict where we're going to be but we try and work in ways that don't close off the doors we're not going to build aead we're not going to design ahead but we are going to try and design carefully with the properties of modularity cohesion separation concerns and so on so that our system will be easy to change when we find out what we ought to be doing so once again the techniques of managing complexity enable our ability to design ahead when to avoid designing
+
+
+00:33:57
+ahead platform as abstraction there's a lot of stuff talked about platform engineering these days and I think that's both wonderful and risky that there there are some naive views about what platform engineering is so platform let's first just rule out the the some of the dumb ideas platform engineering doesn't mean offloading um how to talk to the cloud to some group of cloud Specialists that's not it so platform engineering is about taking cognitive load away from the teams that are
+
+
+00:34:33
+building features that are of value to users so as part of platform engineering you need to understand quite deeply the whole problem I would argue that platform engineering is just a modern way of talking about good design so platform engineer but it's also a great tool you don't want every person on the team worrying about the intricacies of building secure system or scalable systems or something all of the time for every feature but you do need the people that are building the platforms that we rely
+
+
+00:35:06
+on to make our systems more secure more scalable more resilient to understand the context in which they matter platforms should be focused primarily on reducing that reducing that cognitive load with respect to um stream aligned teams so platform is is best as an abstraction but it's kind of focused on on on that those those kinds of outcomes and again a platform as an abstraction when we get this right it does these things it helps us to manage the complexity better and it optimizes for learning more
+
+
+00:35:44
+effectively last in my list is managing coupling so we could write software like this where we have some complex thing and all sorts of different interactions with that complex systems h up everybody who's seen a system like this yeah it's very very common much better is to try and minimize the coupling to a sensible degree I don't mean purely abstract and completely divorced coupling is always going to be there if you want these pieces to interact so we minimize the coupling so that the conversations are sensible
+
+
+00:36:22
+conversations one of the techniques that I tend to use for that is that I I'm I'm I'm a big fan of domain driven design so I try to aim to make sure that the conversations between significant parts of my system different Services different modules of my system at a C scale are kind of recognizable as business level conversations if you showed the conversation map of the messages that flowed in the system to a domain expert they'd understand what was going on that's a decent level of
+
+
+00:36:49
+abstraction that kind of starts to move in the direction of a slightly more abstract conversation between these pieces and again if we start to ad those techniques and start to minimize the coupling in that way then we amplify our ability to do all of these things to change our software more effectively through the the managing the complexity and to give ourselves the chance to learn and to try things out if we get the cup if we get the the abstraction wrong the coupling wrong between two pieces of software we want to be able to
+
+
+00:37:19
+discover that quickly and then change it so I would AR argue that software development is exploration and Discovery and Engineering is the best way to explore and discover so software and architecture are best when engineered is my argument thank you very much I hope you have a great conference
+
