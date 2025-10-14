@@ -1,0 +1,243 @@
+(Transcribed by TurboScribe.ai. Go Unlimited to remove this message.)
+
+(0:13 - 0:28)
+This is a high cost test and high value test. Thank you for coming out here at the end of a long day and taking a chance on a talk that was not in the program last week, in case you were wondering whether that was a hallucination that it was suddenly here. Thank you for coming.
+
+(0:28 - 0:57)
+I just want to quick get a sense of the room here. How many people, what are the programming languages that you guys are using day to day? This is a Poly.conference. Just, sorry, okay, Java, hands, now show of hands, Java. So, okay, a lot of Java, PHP, C, Ruby, handful of JavaScript, okay, a lot of Java, JavaScript.
+
+(0:58 - 1:15)
+Am I missing something? C Sharp, okay, C Sharp, C++, okay. I will say right up front that my day to day is primarily Ruby and I will, hopefully this talk will wind up being general, but I'm a Ruby Rails developer. That's what I do, I make websites.
+
+(1:15 - 1:28)
+If you were here for the talk before that, Todd was talking about designing like astronaut, like NASA systems, that's really cool. I make like inventory management software small websites. That's less impressive, I'm sure.
+
+(1:29 - 1:44)
+But, you know, we will all work through it together. Talks are on, this talk is already online at Speaker Deck because I saw a previous speaker have an AV failure in the middle of it and I thought I would be prepared. So here we are.
+
+(1:46 - 2:01)
+Also, if I seem a little nervous, it's because one of the last times I was at a talk with a podium which slanted, this happened to me. Yeah, that's bad, don't do that. You can't, okay.
+
+(2:04 - 2:19)
+The best part about that is that you can't get it in the GIF, but in the actual video, there's this audible gasp from the audience. It was fine, the laptop was fine, the talk survived. And then I swapped it out, the laptop.
+
+(2:20 - 2:37)
+Anyway, so, we're gonna talk about testing here and I wanna start off by putting a little context around the kinds of decisions that I'm talking about here. I'm gonna talk a little bit about the specific piece of inventory management software that I worked on last summer. It's a very simple system.
+
+(2:37 - 3:16)
+It was written by basically one developer, me, over the course of about two months, but it's a good structural beginning for the kinds of testing that I'm talking about here. So, I get a request from my business owner. They want to have an individual, a person running a job site be able to confirm inventory against the, sorry, they want to confirm that the number of items actually on site matches the number in the system, so they wanna be able to edit a bunch of numbers in the system.
+
+(3:16 - 3:33)
+Very simple, relatively straightforward piece of functionality. The only complication here is that we have a number of different materials and a number of different sites that they might wanna try to update at once, but even that is not particularly complicated. But I do need to decide how to test this.
+
+(3:33 - 3:48)
+Like I said, I'm a Ruby developer and a Rails developer. I do a lot of test-driven development, but I do need to think about how I want to approach this particular problem. I can do what we call in the Ruby community, what other communities call outside-in test-driven development.
+
+(3:48 - 4:05)
+I start with an end, just to get a baseline, are people here basically familiar with the phrase outside-in testing? So, no, okay. That's fine. I just wanna make sure I don't wanna start throwing out things that turn out to be jargon that only I know.
+
+(4:05 - 4:32)
+When I talk about outside-in development here, what I'm talking about is starting off by writing an end-to-end test that starts with simulating the user interaction and ends with validating the resulting webpage that comes out. And then once I have that, that's the outside, I then move in in successively smaller and smaller layers and write smaller and smaller unit tests. Again, smaller and smaller pieces of the code until eventually I get to an individual.
+
+(4:32 - 4:48)
+In my case, there's usually about three layers. There's that end-to-end test, there's an intermediate test that's testing a full chunk of business logic, and then there are unit tests that test individual pieces of that business logic. And that's one methodology that's widely used in the Ruby community.
+
+(4:50 - 5:06)
+I can also just write integration tests. There are a number of people who would just stop, who would write that one end-to-end test and would have that be the sum of the testing that they felt they needed to write this feature. You could also not test.
+
+(5:07 - 5:15)
+Many people do that. I'm not recommending it, but it is an option. The lack of doing something is a decision in its own way.
+
+(5:15 - 5:48)
+So I'm making a decision here, and fundamentally what I'm trying to decide is whether a particular kind of testing will be worth it. Which kind of begs the question of what worth and what it means here. What does it mean for a programming practice to be worth the effort? And how can I decide that? So those are the kinds of questions that I'm gonna be talking about here from my own perspective in web development.
+
+(5:49 - 6:00)
+So my name is Noel Rappin. I work at a consulting company here in Chicago called TableXi. You can reach me on Twitter at Noel Rapp if you are interested in continuing this conversation online.
+
+(6:01 - 6:31)
+I also run a podcast of interviews with people who are developer and developer adjacent called TechDoneRight, which you can find at techdoneright.io. One particular piece of interest that I might mention is about a year ago, I interviewed Andy Slavitt who is a manager in charge of the healthcare.gov recovery. If you've ever wondered what that looked like from inside as the person responsible for making it work again after it had failed, he has some interesting stories. That's TechDoneRight.
+
+(6:32 - 6:42)
+Anything else you wanna know about me, you can find out at noelrappin.com. Good, we're good so far? Hi. I know it's late, but you can wave or something. Hi.
+
+(6:44 - 6:54)
+I have a friend who tries to train audiences that whenever she reaches for her water bottle, the audience applauds. And I normally don't do that kind of thing, but I'm really a little nervous. So, don't, really don't.
+
+(6:57 - 7:07)
+Ah, the legendary control I have over the audience. So, how do you measure cost and value? There are a lot of ways. This is, of course, an unsolved, impossible problem.
+
+(7:08 - 7:23)
+For the purposes of this talk, we're gonna, sorry. This is a difficult problem, particularly for tests, especially if you use test-driven development. Whether tests, what the cost and the value of tests is particularly complicated because tests are not just code.
+
+(7:24 - 7:36)
+Tests are also part of your process. And if you're doing TDD, they're part of your software design. So, you have multiple different axes and multiple different angles in which the test can cost you and in which the test can provide value.
+
+(7:38 - 7:57)
+For lack of better options here, we're going to use time as a metric, roughly. Time has the advantage of being actually measurable within the context of what I'm talking about. And we're going to assume that developer time here is roughly equivalent to business value, roughly proportional.
+
+(7:57 - 8:21)
+If it is not, you have much, much larger problems than I can solve in this talk, and you should start doing some project management kind of work. So, if you are writing tests, test-driven development kind of tests, the tests cost time, I think, in about four different ways. First of all, and the one that everybody kind of thinks of as most obviously, you have to write the test.
+
+(8:22 - 8:43)
+You have to physically think of what you're going to test, sit in front of your keyboard, key it in, and get it to work. That takes a certain amount of time that obviously you would not be spending if you weren't writing the test. A little bit, the other one, perhaps, that is most top to mind is the test runs.
+
+(8:43 - 9:34)
+If you are running a system where you have some sort of continuous integration build, where tests continually run every time there's a check-in, or if you are doing a process where developers are expected to run the tests as part of their normal development process, then this test that you casually add to the build system is going to get run over and over again, dozens, hundreds, thousands, tens of thousands of times, depending on the size and the longevity of your project. What can seem like a very small test, like you can start throwing around numbers that are not particularly meaningful, but even just adding one second to a build over the course of hundreds of tests, dozens of developers, months of development time that can add up. An ongoing cost is then the test needs to be understood.
+
+(9:34 - 9:52)
+Any future developer that interacts with this subsystem of the code needs to figure out what this test does and what it is trying to do and how it is actually working. And also the test will break from time to time, in which case it needs to be fixed. Those are costs.
+
+(9:55 - 10:08)
+Tests, I think, save time, at least in theory. It is a little bit harder to tell how tests save time just because of the nature. It's almost impossible to tell when you spent less time on something than you might have otherwise.
+
+(10:08 - 10:20)
+But I think that we can break this down in also four different ways. In theory, writing the test improves the design of the code if you're doing a test-driven development process, which lowers the cost of future change. That's one way.
+
+(10:23 - 10:56)
+Often, if you have an end-to-end test during development, it is faster to test your code by running the test than it is to manually recreate that site. Even as a web developer, if I'm working on a piece of code that requires a specific state in the app to log in, go to a particular page, set up the form, submit, like that can even take, even if that only takes 30 seconds to a minute, the test that I'm running will only take a second or two. So that is actually a genuine savings during development.
+
+(10:59 - 11:14)
+The test validates the code to some extent, depending on how you test it, that eliminates the need for future, or at least minimizes the need for future QA testing. I don't think it eliminates it. But it allows you to proceed with more confidence.
+
+(11:14 - 11:24)
+It allows you to make future changes with more confidence. And then, in theory, the test catches bugs faster. This is the one that actually can have legitimate dollar business value to your business.
+
+(11:24 - 11:48)
+If a bug gets caught in your automated test system rather than making it to production, like that can save you server downtime, that can save you customer anguish, that can actually, if you're running some sort of e-commerce site, it can save you actual real money. So that is another way that the test can save you. So I have four different kinds of costs and four different kinds of savings.
+
+(11:49 - 12:41)
+And another thing about this is that, and another thing that makes this sort of hard to tease out, is that the cost and the savings accrue to different people at different times. In a test-driven development process, when you are writing the test, you have to deal with the cost of writing the code, but you also get the savings of the improved design and the savings of the runtime of the end-to-end test if you're doing it that way. But once you're done with initial development, the test moves out of the phase of being useful in development, and it lives in the code base essentially forever, at which time you have the cost of the runtime, the cost of understanding it, the cost of fixing it, but also the long-term validation and bug fix value.
+
+(12:42 - 13:16)
+This makes it very, very hard to tease out whether these things actually save you time and money in the long run, and of course, there is no right answer. Different projects are going to come to different, have different optimal points on the scale of how much time to spend writing whatever different kinds of tests. One thing that I think is largely true is that the people who teach, particularly test-driven development, tend to focus on writing individual tests.
+
+(13:16 - 13:49)
+They tend to focus on it at a very tactical level, and so what I'm talking about here is a little bit more of a strategic level, how to think about your entire testing practice, what kinds of tests to write, why you would write a particular kind of test to solve a particular kind of problem. I have a little bit of data. I'm a little cautious about this because it is a very, very little bit of data, and I don't want to make too much of it, but I do want to talk about how this actually plays out in projects that I've worked on, and then more broadly a little bit within the Ruby and Rails community.
+
+(13:52 - 14:15)
+This inventory management system that I was talking about, which, as I said, was about 10 weeks of my time last summer, it has three different kinds of tests by and large. It has these end-to-end user interaction tests, which are written using a tool called Capybara that start with user input and end with HTML output. Very, very broadly, it takes about 30 minutes to write one of these things.
+
+(14:15 - 14:32)
+That's obviously incredibly variable depending on how complicated it is and whether you've just written another one that's like it. In this particular code base, they have a runtime on my laptop as I run it while I'm coding between a half a second and three seconds. That's actually a little bit on the fast side.
+
+(14:32 - 14:52)
+These can be much, much slower in more complicated systems. I have a number of intermediate tests, what we might classically call integration tests that test the integration of various subsystems, entire chunks of business logic. These typically start by creating one of these business logic objects and running it.
+
+(14:52 - 15:01)
+They mostly end by validating database changes. That's just the nature of the logic in the program. They're smaller, they're quicker to write, and they run about an order of magnitude faster.
+
+(15:02 - 15:11)
+They take between five hundredths and three tenths of a second. Again, in my setup. And then I have a bunch of true unit tests that call and validate one method.
+
+(15:11 - 15:22)
+These are often very, very quick to write, and they're very fast. They take between a millisecond and four hundredths of a second. These are all actual timed off of the code base.
+
+(15:24 - 15:35)
+Overall, like I said, this is a small program. There has 22 system tests, 119 unit tests. The 22 system tests have a runtime of almost 13 seconds.
+
+(15:35 - 15:57)
+The 119 unit tests have under two second runtime. You'll notice that I, more or less, because I, a little bit because I fudged the numbers, I spent about the same, the write time of the different kinds of tests is about the same. So they're about the same amount of effort on my part to write the 22 system tests as it was to write the 120 some odd unit tests.
+
+(15:58 - 16:31)
+And then those end-to-end system tests are 12% of the tests of my time writing them, and they're 75% of the runtime overall. So in particular, the slowest four tests in this, so the slowest, like less than 1%, are 40% of the runtime. Another thing that's interesting about this is that the range of cost in running them is a much wider range than the range of writing them.
+
+(16:31 - 16:47)
+The write time varies by a factor of about 30 from the quickest test to write to the slowest test to write. The runtime from the fastest thing to test to run to the slowest test to run in this code base is a factor of about 3,000. And as I said, the ceiling on this code base is pretty low.
+
+(16:47 - 17:01)
+That's gonna be about another order of magnitude more on other code bases. I'll tell you in a second what I take from all of this. Eventually, your eyes will glaze over from the numbers, but we'll stop first.
+
+(17:01 - 17:22)
+Very quickly, I have another project, a larger project, that I've worked on on and off for about five years. Many, many people have worked on this project, but I have probably a plurality of the testing code as mine. And it has a very broadly, it's a little bit harder to draw the boundaries, but it has a very broadly similar breakdown.
+
+(17:23 - 17:36)
+This has a somewhat higher number of system tests, end-to-end tests. I would consider it to have too many relative to the overall time. But again, the system tests are relatively small in number, but relatively high in cost.
+
+(17:36 - 18:05)
+They're 23% of the tests and 66% of the runtime. This suggests, among other things, that slow tests are slow, which is probably not the kind of insight that you were hoping to get here at the end of the day. But it does suggest that I have, in many situations, I have the opportunity to balance, to spend the time that I'm testing, spending writing tests in different buckets.
+
+(18:06 - 18:39)
+And that the immediate cost to me of writing the tests may not matter as much, but the long-term cost of running the test does make a big difference. In other words, I can choose to test a particular piece of functionality by writing an end-to-end unit, end-to-end test, or by writing a focused unit test. And there's not all that much difference in how much time it takes me, but there's a huge difference in how much time that is going to cost overall as that test lingers in the code base.
+
+(18:40 - 18:56)
+The end-to-end test will continue to eat up runtime. It will be more complicated, so it will fail more frequently, and it will be harder to diagnose when it does fail. So another cross piece of that, though, is as you write a number of tests that are similar, the cost goes down.
+
+(18:56 - 19:16)
+If all I was writing was end-to-end tests, I would start to take advantage of copy and paste. I would start to take advantage of similarities to build out my own little test methods for subsystems and things like that. So there's a little bit of a grain of salt that you have to take all of these numbers with.
+
+(19:16 - 19:48)
+They're a snapshot of a particular process, and not necessarily... To some extent, I think some of the conclusions are generalizable, but the specific numbers are gonna be different in your test. But I do think, though, that the short-term cost is not really related to what kind of test you write, but the long-term cost is. The short-term cost... The long-term cost is largely based on the runtime and the failure, which is to say that the long-term cost of the test is more or less related to how complicated it is.
+
+(19:49 - 20:36)
+And savings over the long-term come from writing tests that are focused, that run fast, and that fail in a way that is limited to a particular part of the code that you can understand. So because of that, because of all of that, and because of the idea that a small fraction of your test can be the bulk of your costs, there can be a very big payoff in avoiding the slowest tests. In some ways, the insight that the way to avoid a slow test suite is to avoid writing slow tests is, again, seems kind of dumb when I say it like that, but I see Rails teams that fail all the time because they just write a bunch of slow tests, and then they get annoyed when their test suite becomes slow and unwieldy and hard to deal with.
+
+(20:36 - 21:22)
+And to some extent, this is understandable, writing an end-to-end test, although this test itself is more complicated, because it requires less understanding of the underlying code, because it requires less design thought upfront, it can sometimes feel real easy to sort of throw in the end-to-end test and take the upfront cost of setting up all the state, rather than trying to think through the design in a more TDD kind of way, and to try to write the perfect focus test that will target a particular kind of failure. But I think that in the long run, that focus pays off. The problem here is that no individual test causes a slow suite.
+
+(21:22 - 21:53)
+The longer project that I worked on, which has something like 1,800 tests and about a 12-minute runtime, the slowest test in that is about 12 seconds. Most of the tests are under a second or under a half a second, and the difference between a two-second test and a two-tenths of a second test feels like nothing when you're developing until you have 150 of them, and then you really start to feel it. I sometimes think about test speed.
+
+(21:54 - 22:07)
+The speed of your test suite is either like, I can run the test suite without breaking focus. I can run the test suite without leaving my desk and break focus a little. I have time to go up and get a cup of coffee is the next phase.
+
+(22:07 - 22:20)
+The next phase is I have time to go to lunch, and the next phase is overnight. And there's not a whole lot of distinction. If you can get your test suite from one of those big chunks down to another one, you're going to get a tremendous amount of speed and a tremendous amount more value from the test suite.
+
+(22:21 - 22:48)
+But making incremental changes between the 30 seconds to 20 seconds, which are both kind of in the, I can go and get a cup of coffee phase, is probably not going to be as helpful. One interesting thing happened. I gave a version of this talk last November at RubyConf, and one of the interesting things that came out of that was the extent to which I was surprised to find how slow the test suites of the Rails developers in the audience were.
+
+(22:49 - 23:01)
+I'm not going to ask out loud here because I kind of wound up, I think I wound up embarrassing some people last time around as I kept going higher and higher and people kept saying, yep, us. Still us. Still us.
+
+(23:02 - 23:12)
+That's fine. Instead, I have data. This is from a company called semaphore.ci. This is a bunch of Rails applications.
+
+(23:12 - 23:36)
+This is the build time of a series of Rails applications, all of which are over 40,000 lines of code. Build time here potentially costs, potentially includes a ton of things, including possibly production deploy, but in practice, most of the bulk of this time is going to be test speed. You'll notice the median here is 12 minutes and the average is 16 minutes.
+
+(23:36 - 24:08)
+However, you'll also notice that the mode is about five or six, which indicates to me that the huge bulk of these projects are not actually testing at all and that the ones that they are are disproportionately having, you see here, 30 minutes, 35 minutes, 42 minutes, up towards 60. I guarantee you 60 is not the slowest test suite going in the Rails community. I don't know whether people, I'm not even gonna, I'm kind of shuddered to ask how many people here are working on projects that have over a 60 minute test suite or any kind of test suite at all.
+
+(24:09 - 24:57)
+I worked at Groupon several years ago and Groupon had a continuous integration test build server farm that was larger than most, than pretty much every other's actual, every other company that I've worked on had a production server farm that was smaller than Groupon's continuous integration test server farm and the test suite still took 40 minutes, so nobody ever ran it locally. And what was interesting about that is that when I was talking to people and I would say, doesn't it bother you that your test suite is like 45 minutes? Like if, by historical standards in the Rails community, that's like an eternity. I understand that those of you who come from like embedded system or big C projects, like that's like a blink of the eye and we're talking about the difference between individual lifetimes and geological lifetimes, I suppose.
+
+(24:57 - 25:10)
+But that's a big, a long test suite in the Rails community and they kind of went, you know, like eh, we don't care. Test suites just get longer as the code gets more complicated. They said there's no way around it, it just happens.
+
+(25:12 - 25:46)
+And the other thing that they said, which was really interesting to me, was the only place that the tests run as an entire suite is on our continuous integration server and we just throw hardware at it and parallelize it and we don't care. And they said as long as like the very small subset of tests that I'm working on right now runs reasonably quickly, I'm good. And I thought, as a quick sidebar, it was kind of interesting to me as like a interesting evolution of the Rails community and the way it deals with testing, which I will spend two minutes on for a second here.
+
+(25:46 - 25:59)
+The first set was, testing is great. Those of you who may have been around when Rails came around in the mid-2000s, the ability to do automated tests was a major feature, a major selling point. The way that it built in support for automated testing.
+
+(26:00 - 26:16)
+Eventually, about five years later, as large-scale, relatively large-scale Rails apps started being built that were at, had significant amounts of business complexity. Everyone went, oh, testing is slow. And the initial response was, let's try and make testing faster.
+
+(26:16 - 26:45)
+And if you're familiar with the sort of Rails fads and fashions in Rails development, there was an attempt to do things like write tests that don't require Rails to run, stub out various parts of the Rails subsystem in different ways. So that your business logic does not require Rails, and therefore your tests run faster using test doubles and mock objects to make the test run faster, that kind of thing. That turned out to be hard.
+
+(26:46 - 27:04)
+So apparently, like, phase four was, well, we'll just throw continuous integration and parallelization at it. I note, somewhat not coincidentally, that Rails 6, when it comes out in the next year or so, will have support for test parallelization as default. Because apparently, like, that's just what everyone needs right now.
+
+(27:04 - 27:18)
+That said, I still think there's a cost to a long test suite in this context. And even more, I think that there's a cost to giving up. I think that there's a cost to saying, like, there's nothing we can do about it.
+
+(27:19 - 27:27)
+Our tests are just gonna be slow. And it's just, we're just gonna keep writing slow tests. And eventually, there'll be enough straws, and that camel's gonna be in trouble.
+
+(27:27 - 27:55)
+But until then, we're just gonna keep throwing straws on him. And I think that when you give up, is you give up the ability to use the tests in a way that improves, or improves the design of the code. If you've worked in systems that were, like, where, like, there was one person that really liked TDD on the system, or that kind of, like, half-assed TDD on a system, you know that it is actually very, very hard to half-ass TDD on a system.
+
+(27:56 - 28:46)
+That it is very easy to get into a situation where you have the worst of both worlds. Where you both have a long, complicated, expensive-to-maintain test suite from the people who like TDD, and courtesy of everybody else, you have code that has, you have enough untested code that you are not getting any value from the test in the sense that you do not feel any more confident about changing the code than you would have without the tests, right? That is a very easy situation to get into. And I think that as soon as you sort of, it's very quick to get into that situation as soon as you start to slide on the idea that the tests are not just an indication of, the tests are not just, a failing test is not just an indication of a fault in the code, but also the idea that a hard-to-write test is an indication of complexity in the code that can be refactored or dealt with, that needs to be dealt with.
+
+(28:55 - 29:34)
+So, what I kind of, what I mean about this is that if you look at this, the feature that I was talking about at the beginning, like I face a number of different decisions here. I'm gonna skip around this, because I think this is gonna be less, some of the details of this are gonna be less interesting to a non-Rails, to a not-Rails-invested audience. But one of the first serious decisions that I need to make when I test this is having written a happy path test, a test that, like having gotten the basic thing to work, written a test that checks from end to end, having gotten my whole test thing running.
+
+(29:35 - 29:47)
+The next thing that I normally do is start writing failure mode tests, tests for bad input. Some of the answers, not a number, you enter negative three, which is an invalid inventory, that kind of thing. And I have a choice at that point.
+
+(29:48 - 29:59)
+I can write an end-to-end test, where it would be just like the end-to-end test where the person enters 10, except they enter negative three, and I expect a different result. I can write that.
+
+(This file is longer than 30 minutes. Go Unlimited at TurboScribe.ai to transcribe files up to 10 hours long.)
