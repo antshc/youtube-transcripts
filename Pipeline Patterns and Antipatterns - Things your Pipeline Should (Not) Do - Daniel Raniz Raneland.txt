@@ -1,0 +1,372 @@
+
+00:00:12
+All right. Um, I hope everyone is here for the pipeline talk. Uh, because we switched rooms. So, if you expecting a GM development talk, you're going to be thoroughly disappointed. Uh, my name is Ronis. I am a software consultant, coding architect uh at a consultancy called factor 10 where I uh get to work with other people's code most of the time and during that I see a lot of of uh build automation pipelines which uh is why I'm doing this talk because a lot of companies neglect them
+
+
+00:00:48
+which has a detrimental effect on your lives as a software developer makes your workday say harder, more frustrating. Uh, and there's a lot of little things we can do with our pipelines that make them a lot better, that makes our workday better and and life goes smoother and makes us happier people. So, that's what I'm going to talk to to you about today. A few patterns and antiatterns that I've encountered that other people have done and that me myself have done over the years.
+
+
+00:01:21
+Um, we're going to start out with why and we're going to try and reduce three things today or focus on three things uh to improve. And number one is frustration. No one likes a frustrating pipeline. And I think like the epidome of this is like how many people in here have had a pipeline failure that was fixed by hitting retry? Yeah, that doesn't make anyone feel good. No one likes the retry button. So, we're going to try if we can avoid the retry button. Uh, and the next thing we're going to try and do is we're going
+
+
+00:01:57
+to try and reduce boredom. No one likes sitting waiting around for the pipelines. Uh, long running pipelines means you either are unproductive because you're just sitting there waiting, refreshing the page, waiting for the pipeline uh to spit out more log uh and see if it finishes anytime soon. or you go do something else which uh improves or or increases the working progress and we've known for quite a while that work in progress is something we should reduce not increase but if if you read extreme programming
+
+
+00:02:35
+Kent talk about the 10-minute build uh so how many people in here have a build that runs in 10 minutes or less if you think about your main software pipeline buildh that's good how many people have a a a software builder runs in more than one hour. Yeah, more than four hours. I can barely see hands because the lights are so tall, but if you go above four hours, that means you have two shots a day of getting code into your main branch. You can get two changes in every day. That's not productive. That means your
+
+
+00:03:11
+work in progress is going to skyrocket. So, we're going to try and reduce the time our pipelines take so we don't have to wait for them so much. So, we don't get bored, we don't get more work in progress, and we get more things done faster. And this is where the business side comes into all of this because more productive developers more means more productive features, which means better business. And if you don't trust me on this one, go read the accelerate book. uh they have science that proves it more or
+
+
+00:03:42
+less. So better pipelines means more productive uh developers. Of course, that's not the only thing. Uh you can't magically fix your pipelines and your business performance goes through the roof, but it definitely improves. So better pipelines means more productive developers, happier developers, which means more business. So this is what you should tell your your business manager when you get back that they should definitely spend some money on the pipelines because it will pay off in the
+
+
+00:04:09
+business. And there's one more thing we can do. Um we're going to focus on the the time and the frustrations. But if we have the opportunity, we're actually going to try and do something for the environment as well because longunning pipelines and running pipelines unnecessarily burns CPU time and CPU time burns carbon dio creates carbon dioxide and that's bad for the environment. So we're going to try and say save the environment when we can. So before we get into all the pipeline patterns and antipatterns
+
+
+00:04:40
+is one more thing to talk about and that's the big elephant in the room and that is every one of you in here are probably representing every pipeline CI platform out there and they all work differently they all have different terminology. So when I say pipeline in some platforms that's a workflow in other it's um job in other it's a stage uh wild varies wildly I hope you can understand what I'm talking about even if I'm not using the specific words that you're used to in your daily work and if
+
+
+00:05:14
+we go into examples I only have a few of them um I'm going to use GitHub uh actions yaml syntax because that's what I was using when I developed this talk, but all of the techniques I'm going to talk about today are applicable to all of the platforms I work with and I've encountered most of them. So unless you're using some really strange esoteric build system, you can probably use everything I'm talking about here today. So uh let's get into it. Let's start off with anti pattern
+
+
+00:05:46
+number one, the ritual. And this is where you're doing everything all the time. Your pipeline is a ritual. You do one thing then one thing then one thing then one thing all the time. So it might look like this. Uh this is a typical ritualistic pipeline and typically it develops organically. You start out with a new project. You create a pipeline because you need a build automation pipeline for your project. You write it simply. You have some backend code, some frontend code. So you write tests for those. You
+
+
+00:06:16
+run the tests in the pipeline and then you run the integration tests at the end. All well and and and done. But then even if you run this uh before you merge your changes into your main branch on a pull request or something, bad merges can happen that doesn't result in a merge conflict. You can rename a file and someone else uses that file in their change. And then when you merge them, well, someone's just using a file that doesn't exist anymore. This won't be discovered as a merge
+
+
+00:06:47
+conflict. So this will actually merge and then well the build will break. Uh but if you don't run your pipeline after merge someone else will find out once they start checking out the code and building uh locally. So now we run the same pipeline after merge as well to make sure that we didn't have a bad merge and then something else changes something outside of our control changes uh outside system that we are integrating with another team's software changes and um the build suddenly breaks
+
+
+00:07:20
+again. So now we want to know that we want to know that proactively. So we run the same pipeline every night just to make sure that everything's still working with the outside world as well. And now we have a another problem. Along comes our our product manager and says well I I want to run the application that you've written. I want an installable artifact that I can run uh whenever I want to. So let's build one. So we just tag that on at the end and we publish an artifact. We build
+
+
+00:07:47
+everything. We test everything and then we publish the results. So now we have three three pipelines running or we have one pipeline running three times quite a lot that does all the things all the time. If we look at this, we can see that there's a lot of things we do here that are not quite useful. Uh we don't really need to publish an artifact off of our pull request. That's a bit unnecessary. We don't really need to run the uh backend front end linting and unit tests every night because we already ran that
+
+
+00:08:21
+when we merged to MOS to to the main branch and that code can't change. If it changes, we rerun the merge job. So whenever we run the nightly job, the backend linting, front end linting and tests should always pass. Otherwise, you have flaky tests and that's another problem. We only really need to run the integration tests every night. And we definitely do not need to publish an artifact because that exa exact same artifact has been published the previous night unless the code changed. and
+
+
+00:08:52
+especially the last time we merged to main. We published the exact same artifacts. We don't need to do that. So what we need is we need the right pipeline for the right job and that is pattern number one. Here we have one PR pipeline that does everything except publish an artifact. Uh we have merge domain which runs all the tests doesn't really lent because that shouldn't change even in a bad merge. And then we have the nightly job which just runs the integration test and then it's done.
+
+
+00:09:22
+Now there are a few ways of achieving this and that brings us up to pattern number two which is conditional pipeline steps and this is if we take the original PR pipeline. If if you want to implement this, we can have three different pipeline definitions. One for the pull request, one for merge domain and one for nightly. Or we can use conditional pipeline steps. And there are a few ways of using this. Um you can have checks for what branch you're using on what event started the pipeline and pick what you're using
+
+
+00:09:54
+based on that. It's it's a maintainability thing. Uh less code, dry, uh kiss, all that. But what we can also do is we can be a bit clever when it comes to changes. So we had the PR pipeline. Let's focus on that one. We have the back end linting, testing, and we have the front end linting and testing. And then we do an integration test at the end. But what if we only change the front end? So let's say we change uh something in the settings menu. Do we really need to rerun all the
+
+
+00:10:30
+checks for the back end? because we haven't touched the back end. We only touched the front end code. There's no need to rerun the backend tests. And the same goes if we do a backend only change. Maybe we added a database index, then we don't really need to rerun the front end changes because shouldn't be affected by the back end only change. So instead, we can have a pipeline that looks like this. If we have a change that only touches the front end, then we don't run the backend tests. We still
+
+
+00:10:57
+need to do the setup because we want to run the integration tests at the end. So we need the back end to be compiled and ready to run but we don't actually need to test it and vice versa for backend only changes. Now there are few ways of accomplishing this depending on what platform you're using. The most common approach I take and even this I usually end up here even if the platform has some sort of support for this is uh in this case it's a readym made action for GitHub actions. But it what it does is it checks the git
+
+
+00:11:31
+commits for what files have been touched and then we set flags based on the files touched. So in this case we define two filters or two patterns that say if any of the files under the backend folder has changed we set the backend flag to true and vice versa for the front end. We can then export these out of the job so we can use them in other jobs or other steps even. And then we can say that our PR pipeline now depends on this pre-step of ours. And we just check if it has set the backend flag to true then we run the
+
+
+00:12:06
+backend tests and and linting. If not, well, we just skip them. And that's how we achieve conditional pipelines. And you can do this depending on platform. You can do this on entire uh pipelines or workflows or stages all depending on what files files have changed or or uh what branch it is or what event has caused uh the the pipeline to run. An example is if if you only change readme.md don't really have to do anything just skip the entire pipeline. So, anti pattern number two, hoarding.
+
+
+00:12:45
+And this is where you make a bunch of artifacts. I mean, I've already told you you should make a bunch of artifacts all the time, but if you do, you keep all those artifacts forever because you never know. We might need that build we did on late Tuesday night 16 years ago. No, who knows? I've never seen anyone actually go back and use an artifact older than like two weeks, but people keep them around and we produce a lot of artifacts. Maybe you should only keep the ones that actually make it onto production if you really
+
+
+00:13:20
+really really want to keep them. But this is mostly a problem of you need to buy more hard drives. Uh if you're doing this on prem, someone needs to buy and install the hard drives and reconfigure the servers. But it's also a discoverability problem. If we look at GitHub actions, uh this is a open source repository. I think this screenshot is now one and a half years old. So it's grown considerably since. But at the time they had more than 7,000 images in their uh their Docker registry
+
+
+00:13:58
+and you can search in the GitHub docker registry. So, if you want to find a specific image here, you need to binary search manually over 63 pages to find the one tag you're after. And you don't need these because no one's downloaded these for four years. And since everyone everything has been downloaded 211 times, that's a script that does something after they published and then they never touch it again. Complete waste of space. So, please just have a cleanup script. remove everything
+
+
+00:14:31
+once you're certain you won't need it anymore, which is a lot sooner than you think. Yeah. Antipatter number three, the aet, which is where we use natural ordering instead of practical ordering. And I fall for this one all the time. But let's let's take a simple pipeline. We have a setup stage. We have a linting, compiling, unit testing, integration testing, and then we do end to end testing at the end because this feels very natural. It's it's how the testing pyramid is built up. We have the
+
+
+00:15:04
+unit tests at the base, then we have integration test and when they have the end end to end test because those are more expensive ones. We have fewer of those, but they typically have the longer run times. But see, I when I develop, I do test-driven development. So the unit test stage, it never fails because when I uh develop, I run a unit test and then I develop and then I run a unit test again and I continue doing that until I'm done and then I check in. Often times I also remember to run the
+
+
+00:15:34
+integration tests but I kind of forget that at times like I only do the I focus on the integration tests or I focus on the unit tests and then I run integration tests but sometimes I forget and sometimes I break the integration test because I've changed something. I've updated the unit tests, but I forgot to update the integration tests, so they fail in the pipeline. And that's what this looks like. We have the setup, the linting, compiling unit tests, and integration tests. And that takes almost 14 minutes
+
+
+00:16:02
+before it fails. But since I know that the lenting and the unit tests will probably succeed, I want a quick feedback loop, right? We go want to go down to having feedback as soon as possible. So what if we put the integration tests first because I know this is what will fail most of the time. So let's do them as quickly as possible. Now we can't skip the setup and we can't skip the compilation because we can't run the integration tests on uncompiled code. But we do the setup, we do the
+
+
+00:16:33
+compilation and then we run the integration tests. And now I get the feedback almost four minutes earlier that I've messed up. Now, you need to do this with care because it depends on the project on on what steps usually fail. And you can figure that out by looking at your pipeline failures and then reordering steps. Put whatever is failing the most at the front. Move everything else at the back. If you never have linting failures, do it at the end. Moving on to pattern number four, the one pipeline. One pipeline to rule them
+
+
+00:17:09
+all. one pipeline to bind them. And this is where you have just one pipeline that does everything for you in sequence. Might look like this. Uh this is a example pipeline for a um No, it's not actually. This is an an example pipeline for any project. Might be a Rust project, but we have a back end. and we have a front end and we do some integration tests. So we do the back end first, then we do the front end and then we do the integration test. And if we time it, it might look something like this.
+
+
+00:17:52
+Takes almost 25 minutes to finish. That's not a 10-minute build. Definitely not. But there are some independent parts in here, right? We don't need the back end to compile the front end. So let's split it up. Let's have one backend pipeline, one front-end pipeline and then one integration test pipeline. So we do the backend tests, the back end linting, compilation and testing in one pipeline and in parallel we do front end linting compiling testing and then at the third pipeline
+
+
+00:18:28
+we do the backend compilation, front end compilation and then we run the integration tests. Now we get the feedback after 14 minutes instead of 25. So, we already saved ourselves 10 minutes waiting for that green check mark. The problem with this is that the total runtime for this is 32 minutes. So, we've kind of made the environment worse. But wait, there is more. We can actually use some features of our build systems to make this better. Now, we can publish artifacts and we can use those artifacts
+
+
+00:19:05
+later in another pipeline. So if we restructure it and we make the third pipeline depend on the first two pipelines, we can have this. So we have the backend pipeline and after we run the tests, we publish the backend artifact. And the same with the front end, we publish the front end artifact and then we tie these together in a dependent job that runs after these jobs that runs the tests. Now we're up to 16 minutes. So it's not as fast, but the total run time is a few seconds more than the original
+
+
+00:19:39
+case. So we we've shaved almost 9 minutes and we're not wasting any time. But we can do even better than this because we don't really need to run the backend tests before we publish the artifact. So here we do the publish the minimum we have to do before we publish the artifact and then we run all the tests in parallel. And now we're finished after 12 minutes and the runtime is essentially the same as the original single one pipeline. But we got the feedback 13 minutes earlier, which means that we probably
+
+
+00:20:16
+don't need to start another task. We can go bug someone about reviewing the code instead. So anti pattern number five, gift wrapping. And this is where we use wrapper tasks instead of actual tasks or command line tools. This is most common on Azure DevOps. Uh not calling any names by the way. Uh but Microsoft is very happy about creating wrapper tasks for all the tools you can do. When I wrote this talk, there wasn't actually a cargo task for compiling Rust applications on Azure DevOps. There is now. uh please don't
+
+
+00:20:58
+use it because the problem is that you have no idea what goes on in these uh wrapper tasks. If you want to run net build, well run net build in this case uh we have a task that runs cargo build for us and it supports all the the command line parameters. Uh it looks nicer with formatted jaml even. But the problem is that if it doesn't have support for the specific feature you want to pass, maybe there's a new version of the tool and whoever wrote the task hasn't updated yet. Then if you're lucky, there's an
+
+
+00:21:39
+escape hatch where you can just throw on arbitrary arguments. But now you have a mix of nicely formatted YAML and sort of like a command line at the end which is just confusing. And if you're out of luck, it don't have an escape hatch and you can't add on your arguments. So instead, just run the command. You can even use YAML multiline syntax to structure it. And uh if you don't know YAML multiline, there's a website for it because it's so complex. It's called jaml multiline.info.
+
+
+00:22:15
+But you can structure it. It looks good. It's readable. And most of all, there's no hidden magic in this command. It does exactly what you tell it to as if you were running it locally because we I did have an issue with the net task on Azure DevOps where it did some magic when we published our package and then we couldn't find the package on disk. it wasn't where it's supposed it wasn't located on disk where it was supposed to be. We switched out the task for the actual command line
+
+
+00:22:46
+command and well everything started working. I'm not saying don't use tasks. There is specific tasks like setup tasks. In this example, here's a setup task for Python which installs the desired version of Python. And then we use a task to set up poetry which is a build tool for Python. But then we run the actual command line tool instead of using a task for running it. So use tasks for setting up stuff for for complex stuff. But if you're just going to run a command, just run the command.
+
+
+00:23:22
+All right. Anti pattern number six. It's complicated. And this is where the pipeline is actually a software project of its own. Uh I think the worst case I've encountered with this was a a client. They had a 5,000line Groovy repository. Uh they were running Jenkins that they published uh packaged into a jar file uploaded to the Jenkins instance and then all their pipelines look like this. They even had an XML file in the repository that was configuring the pipeline telling their own pipeline
+
+
+00:23:58
+library what it was supposed to do. I needed to change something which mean that I had to change the Groovy code packages as a jar file upload it to Jenkins update the version in this file and then hit try and if it wasn't working I had to redo all of that again it's extremely slow the code was really confusing and they wanted to move from Jenkins to GitHub fun times so the problem with this then is that it's very hard to work with and it's trying to do everything. As you can see
+
+
+00:24:38
+here, they're trying to they even supported different test frameworks. Uh they tried to do too much with one solution instead of having different solution. It's it's sort of similar to the the first antiattern where you have one pipeline that does everything instead of having specialized uh things. So what I think you should do instead is pattern number five, a composable pipeline library where I I I think you should treat your pipeline as software and where we should try and not repeat ourselves. We should
+
+
+00:25:11
+try to keep it simple and the way we do that in modern pipeline is we we rewrite small reusable steps that we then can compose into larger pipelines. So in this case we have some predefined rust steps where we compile rust we test rust we publish an artifact and then we can uh tie this together into one step further. So this is low-level separate steps we can do that we can compose a larger pipeline of this where we can say well this is the entire pipeline but it consists of all these steps. So if
+
+
+00:25:45
+someone comes along and say well we have some weird compilers things that we need to set well they can make their own compiler step but they can reuse all these steps. So they can just take this definition instead of this definition and reuse 80% of the task instead of doing everything uh themselves. So composable pipeline libraries where you can decompose them into separate steps if you need to. And you need to take care care because even if you end up with 5,000 lines of YAML code instead of Groovy code, it's a
+
+
+00:26:24
+problem because now you're entangled. So antiattern six and a half, how do you get out of here? because chances are in five, six, 10 years, you're not going to be using the CI platform you're using today. So if you have a huge software project built in YAML on Azure DevOps and then you want to switch to GitHub, you have some work to do. Uh fixes a sample. just check how many pipeline files you have, how many lines of code are in your pipeline definitions. So what should you do instead? Well, use your pipeline tool as
+
+
+00:27:07
+little as possible and do something else instead. So here's an example that I have in um this is a Python startup template from of mine where this is the entire pipeline. So we use uh the actions for checkout and then we set up Python as I showed you before and then we just run make. So we run make in it and then we run make CI and the actual pipeline is defined in the make file. Now if you don't know make is a ancient tool from the 60s I think and it's available everywhere except Windows but you can install it on
+
+
+00:27:46
+Windows as well. So essentially whatever platform you're using you can have make and you can run your pipeline in make and you can have make on your laptop. So the nice thing about this is that before you check in and commit make CI and it runs all the same checks as your pipeline is going to make. Because one of the major problems we have with modern pipelines today is that they're practically undebugable. What you need to do when you work with your pipeline it's misbehaving. You make a commit, you
+
+
+00:28:16
+run the pipeline, you wait for 15 minutes, then you find out if it worked or not. And if it didn't work, you make a new commit, you push a pipeline, and you wait another 15 minutes for it to run. If you can run all of this as much as as much as possible locally, your feedback loop loop is a lot shorter and you will be a lot more productive. So, you can definitely use other tools. There are more modern tools than make. As I said, make is 60 years old. Um, it's got a bit of a aged syntax to it
+
+
+00:28:50
+where it's significant if you use spaces or tabs. And I know that will trip someone up, trips me up all the time, but you can use there are modern tools. You can use just or or task files or you can even use shell scripts if you want to or PowerShell scripts if that's your uh your cup of tea. just do it in something that isn't tied to your um your pipeline platform so you can actually remain movable. All right, antiattern number seven, Groundhog Day. And this is where we start from scratch all the time.
+
+
+00:29:28
+Uh it's a movie reference for those of you who haven't seen the movie but it like in the old days when we had mostly Jenkins actually we checked out the code and then the next time someone came around and had a build the code was already there so we just started the build from the existing code all the dependencies were there the code was checked out we only needed to check out the small changes that someone had made but today we have ephemeral builders And that just means that we start a new
+
+
+00:30:00
+server, we check out all the code, we install all the tools, we make the build, and then we throw all that work away. So the next time we make a build, we do the same thing. We shake out all the code, we install all the tools, we make we run all the all the things, and then we throw it away. So to illustrate this, we have a Rust pipeline. Now, this is an actual pipeline for the crates.io io site which is the dependency manage dependency repository for rust packages. So I write a simple pipeline there.
+
+
+00:30:35
+Actual pipeline is a bit more complex but it's uh it's got a setup. It it fetches dependencies. It has a linting step, a compilation step and then when you run the tests. So pattern number seven, caching. How many people in here have caching in their pipelines? Not that many. The first thing people cache or the first thing people think of when they cache things in their pipeline and oftentimes the only thing people think of of caching is dependencies. So the idea here is that instead of
+
+
+00:31:11
+downloading everything from the internet, we have a cache on a server that's very close to our build server. So we replace the fetch dependency step with three steps. One where we restore the cache. we have some uh some cache key where we use it's typically the hash of the file describing all our dependencies and then we do the fetch dependency step again because maybe something has changed we got an old cache so we need to make sure that we're up to date and then we update the cache
+
+
+00:31:40
+at the end to make sure that if there were any changes the next job gets those changes. The problem with this is that if you're building on speedy servers, they have good internet connections. Fetching dependencies is fairly quick. So this Rust application has around 80 dependencies. It takes 7 seconds to download everything from the internet. I mean, even if we could save all those seven seconds, we've only saved seven seconds. That's the that's all you can do in this in practice because we're still
+
+
+00:32:15
+downloading all of the same files just from a server that sits in the same data center and not from a a server across the internet. But then of course creates.io has a CDN. So the server is probably very very close even if it's not in the same data center. So in practice we saved around one and a half seconds by caching everything. There are other upsides to caching your dependencies uh especially if you're running stuff uh on premise where you might have a um a local repository mirror of whatever
+
+
+00:32:54
+defenses you're using. Using caching can reduce the load on that server which could be a source of flaky builds and you're also not as dependent on a stable internet connection. But if you're doing your builds on a cloud provider or uh on a like on GitHub actions or or GitLab CI or or Azure DevOps like the public major services, they have speedy internet connections. So there won't be much time saved. However, we can use caching in better ways. We can cache something much much much more
+
+
+00:33:30
+important and that is build output. So the the idea here is that we do the exact same thing as we did with dependencies but instead of caching dependencies we cache the compilation step. So we surround the linting compilation and testing step with restoring the cache linting compilation testing because still we need to do that in case the code has changed. Then we update the cache. So what we are caching here is the build output. In Rust, this is the target directory. Innet this is the object and bin
+
+
+00:34:10
+directories of all your uh projects. In Java, it depends on your builder, but it's typically the target or bin directories. If you're using TypeScript with incremental compilation, it's the TS build info files. It depends on the language, but we cache those, we restore them, and then we compile again. So the compiler essentially works as if you're doing this locally because CI builds are a lot slower than local builds because they don't have the incremental compilation. That's what we're restoring here. We're
+
+
+00:34:40
+giving them incremental compilation. So if we look at the timings for the Rust application here, the linting step took two and a half minutes, the compilation step took five and a half minutes, and the tests took 3 minutes to run. Now when we restore the cache, we restore the cache in 30 seconds. That's about 2 GB of data. The linting step now takes 24 seconds. The compilation step takes two and a half minutes instead of three and a half minutes. And the tests, well, we still need to run all the tests, so they still
+
+
+00:35:12
+take 3 minutes. Now they actually take longer because this change added tests. And updating the cache was also very quick. So we saved 4 and a half minutes by spending 30 seconds restoring some data from a cache server. If you have very large projects that can save you massive amounts of time. There's also more things we can cache. Um how many people in here run their software in container images? So when you build container images locally, you have a cache. you change something in your Docker file
+
+
+00:35:50
+or you change something uh that's pulled into your Docker container and Docker runs or Podman or whatever build tool you're using and it checks well this is cache this is cache this is cache this has changed and then we redo from there right but when you're on a build server it doesn't have the local cache because the server is brand new there is no history so we have to redo every step from the beginning but there is a way of doing this and getting the approximately the same behavior behavior has when we're running
+
+
+00:36:20
+locally and that is by using remote caches. So if you're using docker you need to use build x to build your uh your images also called build kit. If you're using podman uh podman does this by default you just need to give it the uh the arguments. If you try doing this without using build kit docker will tell you that it doesn't support this but just set up build kit and it will work. So what we do is we point to another image, another registry or repository because we can't reuse the same image
+
+
+00:36:53
+because the cache image works differently. So I usually just tack on a dash cache at the end of the image name, give it a tag and then you use that as the cache from and cache two. And what happens is that it will call out to the registry and see is this step cached and if it is it just downloads the image instead of doing the step. So in this example we have a uh build image for a uh rust application and we are installing two build tools. One of them is cross and one of them is Leptos and both of them take around six
+
+
+00:37:29
+minutes to install. But if we look at what happens here when it's cached, we run cargo install and then docker finds that well this was already cached, downloads it and it takes 7 seconds. So that saved us six minutes and then we change the version of cross so it actually needs to install cross and as usual with docker files you can only cache up until one point. So everything once you get a cache miss everything from there on is redone. But this can save you lots of time especially if you structure your docker
+
+
+00:38:05
+files in a cache friendly way by not doing things in the natural order but in the practical order of how often does does thing change. And once we have this, we can use container images to remove the ephemeral issues of modern build system by using pattern number eight which is tooling images. So here we build an image as a pre-step in our pipeline. We publish that image to a registry and then we use that image to run the back end and integration tests. Now this doesn't really say look like it
+
+
+00:38:46
+saves us time because we build the image and then we use the image. So if we have a cache it will speed things up. But what we can do with this is we can use this with pattern number two conditional or is that pattern number three? No it's pattern number two conditional pipeline steps where on the main branch we build a tooling image. We publish this at latest and when a change comes around we look have we actually changed the tooling image. No. All right. Let's you reuse the latest tooling image that we built
+
+
+00:39:18
+on the main branch. And if a change comes around that actually changes it. We build a new image. We publish that as a temporary image. We use that for the rest of the build. And then when it's merged, main will rebuild the image, publishes at latest and all the steps after that will use the the latest image. Again, this can save you a lot of time, especially if you're installing some heavy tooling in your uh builders. And it also helps you if you're running on prem and you need to prep your build
+
+
+00:39:54
+servers with all the tools you need, you can put these into a container image and then you move the control over the tools you use from someone who probably does it manually whenever you buy a new build server to a Docker file that's controlled by the team in their own repository. So it's a lot more ergonomical if you want to change the tooling. If you want to upgrade a version, you make a pull request. You make a change and it will be in the repository as opposed to creating a ticket in some ticketing system and
+
+
+00:40:28
+hoping that the IT system team picks it up within the next two weeks. But we also need to take care when we do this because this opens this opens us up for antiattern number eight which is interference. And this is when our pipeline run collides with other concurrent pipeline runs. And you can do this with uh with docker images. Uh so let's have a a simple simple pipeline. It runs in three parallel or three let's see here we have four steps. One where we build the image. Then we publish that image as the latest image.
+
+
+00:41:10
+Then we have a backend and a front-end pipeline. And then we have an integration test pipeline once those have finished. So what happens when we use the latest tag for our image? Well, this happens. We build the image, we publish it, the front end and backend jobs start using that image. Then another build comes around. Build number two. It builds the image. Publish that as the latest image. And now once the back end and front end jobs finish from the first build, the integration tests start with the wrong image.
+
+
+00:41:46
+So the integration tests for build one are now using the tooling image from build two, which might cause build issues, which means you have to hit retry. Build number two will go perfectly fine because we're using that image. So in this case it's very important that you use a unique tag until the image is merged to the main branch. And I typically use the short uh git sha because that is unique always even if you force push to the branch and overwrite all your changes you will get a new shaw.
+
+
+00:42:21
+So it's it could also be a build number or something but I typically just use the shop because it's it's readily available and it's unique. And this also goes if you have any shared resources. So let's say um you're using a test database. I would encourage you to use something like test containers instead instead of using physical databases or persistent databases. But some databases aren't available as containers. So if you're using let's say Oracle, this is actually
+
+
+00:42:52
+what you need to do. You need to have a test ser test database running in your CI environment. So make sure that you're not using a static database name because then you might have concurrent runs writing to the same database causing build failures or test failures which means again retry. So in this case I would also use a temporary database with a unique name either something that we generate using a temp name function or again just use the git shop. Just make sure to clean up after yourself because if you don't in short
+
+
+00:43:26
+while you will have a million test databases and your database admins will complain because they ran out of disk space. So antipattern number nine. We're closing in on the end actually. Uh overloaded which is where you're running your CI builds on underpowered machines. And I really hope that no one in here is running their builds on Raspberry Pies because that's not a good idea. But this is even if you're not running on on Raspberry Pies, I frequently see companies using cheap servers, running
+
+
+00:44:02
+builds, and they try to use as few resources as possible. So you have developers running water cooled laptops with 24 cores and uh hundreds of gigabytes of RAM and then the builds run on two cores and four gigs of RAM. And then they have build failures and they wonder why. So, I have a few rules of thumb for build agent sizing. And number one, if the build is slower on the build agents than on the developer machines, well, beef up the build agents. If the build fails because of a lack of resources,
+
+
+00:44:34
+again, beef up the build agents. It's a lot cheaper to give the build agent a bit more RAM than to try and figure out why the test container running SQL Server is using up all the RAM and there's nothing left for the build. So you can't actually compile. And if you have issues with Q times, that is if you have any cues at all in your build system, get more servers because it doesn't matter if you have a two-minut build if there's a one minute one hour queue. You will still wait for
+
+
+00:45:08
+one hour and then your two-minute build starts. So regardless of how fast your build is, if there's a queue, get more servers. uh because cues are the worst thing in in uh build systems. And if the available build agent configurations aren't sufficient, consider rolling your own. So should you run your own agents? Well, maybe. So pro, you get full control of your build servers. If you need five cores and uh 31 and a half gigabytes of RAM, you can get that. On the other hand, someone needs to
+
+
+00:45:49
+maintain them. If you have an IT department that are willing to do this, it's probably not that much of a deal. They're fairly low maintenance. But if you're just a developer team without a dedicated IT system, uh this might actually take some time and that time is taken out of product development and that's doesn't really always go well with the management right sizing. You can get just the amount of service that you need but you also need to manage scaling otherwise you will have cues.
+
+
+00:46:27
+So if you run this on the cloud on a public hosting uh like GitHub or GitLab or Astro DevOps, they will actually scale the servers for you. You just throw builds at them and they will manage the scaling. You wouldn't see it. You will likely not have issues with cues. But if you do this manually, you either need to buy as many servers as you're expecting to have at peak load, which is probably sometime before launch, or you need to have some sort of dynamic system that can have a baseline
+
+
+00:47:00
+and then autoscale up and down depending on the current load. You can even go really really advanced and have on-prem servers that offload builds to a cloud provider when there's uh when cues start to build up, but that requires development time that isn't really producing features. So, it's a trade-off. And then there's the cost. Um, which is both a pro and a con, which is interesting, right? Well, if someone can manage this for you without that much overhead, you can get a lot of build hours for a
+
+
+00:47:42
+lot less money than you pay GitHub or GitLab for build minutes. So, when you run out of of you get some included build minutes in your subscription to these uh providers, and when you run out, you need to buy more. And last time I checked, GitHub actions costs about a euro per hour. And the same with GitLab, they're actually a bit uh more expensive. They cost €1.1 per hour. Whereas if you buy an ondemand server on a Swedish provider, uh it costs10 cents for an hour. So you get 10 times as much build for the same money if you
+
+
+00:48:22
+self-host. And that's on a cloud provider in Sweden that definitely isn't one of the cheapest. If you buy the service yourself, you can get a lot more build minutes for your money. But at the same time, someone needs to maintain them and people money are a lot more expensive than server money. So what's next in the space of pipelines? Well, this ties into six and a half, right? Entanglement. So, if you have 6,000 lines of Yamble code, this might not be that interesting for you. But there's
+
+
+00:48:58
+two tools that I have my eyes on, and that's Dagger and it's Earthly. They're both based on build kit, which is what we used for the Docker image caching before. And they work the same way in that you define your pipeline, and then it checks the local cache and sees, have I already done this? Have anything of the inputs changed? No. Okay, then just fast forward, reuse that from the cache. So your build turns sort of into a Docker file, Docker build where uh if your dependencies haven't changed, you
+
+
+00:49:31
+tell it where your dependencies are. You tell it to like you move the dependencies from disk into your build and you tell it what file specifies the uh dependencies and if that hasn't changed, it just uses the snapshot from where you had downloaded all your dependencies. So it's pretty much instant running from where your dependencies are already available. In the case of the backend front end, if you do the back end first and then the front end and this a front end only change, it detects that well the back
+
+
+00:50:00
+end hasn't changed. We'll just fast forward and use the cached backend image. So everything up to that point takes a few seconds. The problem is the same as for the Docker builds. Once you get a cache miss, you redo everything. So if you do the back end and then the front end and you change the back end, you also have to redo the front end because that goes after the back end. You can fix this by doing parallel builds and and tying together. But it's it gets more complex writing these files
+
+
+00:50:32
+than it does in in typical pipeline YAML. But if you spend some time with it, you can get really efficient builds. And the best part is that these are not only platforms. They have you can run their build, you can run the builds on their platforms in the cloud, but they also have local runners. So whatever you do in their platforms in the cloud, you can also do locally. And that's much better than most of the other because I still haven't found a reliable way of running GitHub actions uh pipelines locally and debug them and
+
+
+00:51:04
+try them out. But there is a tool for it. uh I just haven't gotten it working with any actual pipeline and if you look at GitLab or Azure DevOps or Jenkins there's even there's no way of doing it not even trying it whereas these are local first so the way you use these is you either use their cloud service or you take their uh running command and you use that in your existing pipeline so if you were using Azure DevOps you would install the Dagger tool you would point Dagger to your Dagger file and you
+
+
+00:51:39
+just say Dagger run my pipeline and you would do that in Azure DevOps instead of the pipeline definition. So this sort of replaces make or or bash but it's a very more potent tool. So that's the similarity between them is they're both built on Docker build. So they have both the advantages and disadvantages of that. The main difference between them is that Dagger is using programming languages. So, it's an SDK for last time I checked it was JavaScript, Python, Java, and I think Go. And Earthly is
+
+
+00:52:15
+using their own markup language or or it's probably a DSL, which they call Earth files, which is a mashup of make files and Docker files, which isn't nearly as horrible as it sounds. So, pick your poison. If you want uh new syntax, you go with Earthly. If you want to use programming languages, you go with Dagger. Just make sure you don't write as huge software project because you do have access to a proper programming language. And I know what happens when programmers get access to programming languages.
+
+
+00:52:50
+So to sum things up, uh I think we're going good on time, right? So don't have ritualistic pipelines. Don't hoard all your artifacts. You won't need them. Uh don't do things in natural ordering. Do it practical instead. Don't have one pipeline to rule them all. Don't wrap your command line tools in uh gifts. Don't have super complex software projects instead of your pipelines. And don't entangle yourself in your build platform. Uh don't start over from scratch. Use caching, but use it
+
+
+00:53:26
+intelligently. Don't just cach your dependencies and call it a day because it won't save you any time. Uh don't interfere with all your other pipelines.
+
