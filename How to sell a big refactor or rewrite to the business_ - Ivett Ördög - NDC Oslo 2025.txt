@@ -1,0 +1,292 @@
+
+00:00:10
+Hi everyone. Uh I'm Evette and um hopefully you came to talk about big refactors and rebrights. Uh just a a side story uh to begin with. Uh NDC was the first developer conference I ever attended in uh 2012. That's 13 years ago and ever since I have taught I think at least at 50 different conferences and but never at NDC. So it's interesting things come full circle. Uh so yeah it's a special one for me uh returning to the place where I first experience conference. Okay. So, uh, rewrites. First question I have for you
+
+
+00:00:56
+is, are you happy at work? Like, put your hands up if you're happy at work. Like, oh, that's good. Like, this is this is much more than I usually get. Uh, because the thing is, uh, people are engineers don't tend to be happy at work. uh there is a survey done by stack overflow uh and what they found was that only 20% 1/5if of engineers are happy. Um the rest uh there is 32% who are unhappy at work and are actively considering alternative care car careers among others goat farming. Uh but there is also a
+
+
+00:01:43
+substantial chunk of people who are like technically just meh that like not terrible but not great. And they also try to answer the question why why are people unhappy at work? Uh any guesses? Well, one of the main uh things is bad code quality. Um and actually it was the top uh reason and like who who who has code qual code who has a code base that is really hard to work with like put your hands up if you really feel like okay this is a nightmare to work with. Yeah, like most people, right? And um and here's the
+
+
+00:02:29
+interesting thing uh that I I recently kind of started thinking about. Okay, but when I code these days with AI assistance, one of the things that I do most is refactoring because uh the AI is tends to be really bad at generating easy to maintain code. But also what I found is that if I refactor my code to be easy to maintain, the AI becomes much more powerful. So it turns out that my one of my most important skills these days is refactoring and particularly automated refactoring. So just keeping our code quality good.
+
+
+00:03:13
+And of course I can't uh I have to take a stab at these kinds of claims. uh couple of like it was already a year ago when Google said that their their like 25% of their code base is written by AI. Uh I'm tend to be skeptical of these things. Uh but specifically this one I I really found really funny because if you think about it, autocomplete can also write 25% of the lines. Uh this is a code that was written by hand. uh and autocomplete. These are the lines that were written by autocomplete.
+
+
+00:03:50
+Uh that's about 25%. So yeah, maybe I'm not I'm not super convinced. And there is also kind of a uh sorry uh yeah, this is the site. So I also I also want to um point to another research. Now with this issue search, I want to uh take it with a want you to take it with a pinch of salt. Why? because it's been done by a company that is building uh quality assurance software. There is some bias there and I want you to be aware of that bias. But what they found and and there are other researches this
+
+
+00:04:28
+is the one that I like the methodology seem to be okayish. Uh the others I I could find very easy ways to debunk it. But the interesting thing is that they found that 75% of lines were rewritten within two weeks. Uh there was a 39% year-on-year churn. Uh and like 25% more duplication uh and this is one that's more interesting is 41% increase in failure rate. So these these numbers are concerning uh because this these all kind of increased uh as AI assistance entered the workforce. Um yeah, one more
+
+
+00:05:15
+thing you see these uh little QR codes there. Uh this is more for people who are watching it from recording. Uh for those of you here uh in the Slack channel for this room, there will be a post that will have all of the links that I have in my talk. Okay. Uh so we have a clear code quality crisis, right? Because code bases are in a horrible shape. They have always been uh with the increase of AI assistance. This is just getting worse for now. Uh so what do we do about it? And here I think there is kind of a a a
+
+
+00:05:59
+point where people kind of want to go for like a kind of a a rewrite and here is something that Joiski said. So they did it by making the single worst strategic mistake that any software company can make. they decided to rewrite the code from scratch and Joski said this about uh Netscape losing their market share and essentially going bankrupt. Now I need to add that Joski was working at Microsoft and there might have been other factors at play when it comes to Netscape's uh failure for some
+
+
+00:06:37
+of which uh Microsoft was sued. Uh but still there is some truth in what Joski says there. Doing a rewrite can be really uh like can can lead to problems when it comes to a a company's competitiveness. specifically uh I when I was uh much younger I always wanted to rewrite things and I learned the hard way that it is actually causing problems. So we are going to talk about why that is but uh there is also something I want to distinguish here and that is a refactor or rewrite. Uh refactor is a thing that you do during
+
+
+00:07:25
+test development. It's small, it's localized, you don't even have to tell anyone what you're doing, right? And then rewrite is when you basically rearchitect the system without changing its behavior. Um, and uh sometimes people call use the term big refactor which is kind of meant which is more of a rewrite but like it's uh done in steps. uh I suggest mostly using rewrite uh for this but the point is that this talk is about rewrites specifically when should we rewrite because here's the thing engineers do
+
+
+00:08:07
+want to rewrite code from time to time and uh and I want to address that topic so I'm going to start by saying why or telling you why we consider rewrites a bad idea this is going to be like third of the talk we will go into a reasoning for that. After that I will show you case studies where that completely ruin my uh reasoning that I will have in the first third and these case studies are the things that changed my mind about rewrites. For a while I was like never rewrite and these case studies were the
+
+
+00:08:45
+things that started set me off on a a trip to understanding okay if these successful rewrites work after all I need to understand what's the difference between the cases where it's not successful and the cases where it's successful and then uh once I had I I started collecting these case studies and once I have a bunch I found a way to make a decision on that basically a framework for rewrites and that's going to be the last third of the talk. So let's start uh with with with why do we
+
+
+00:09:20
+consider rewrites a bad idea. Okay. So here is something interesting that Martin Fer talks about and that's a design stina hypothesis. It's a hypothesis because it's not proven but it is something that most engineers especially more senior engineers will find uh compelling as an argument. uh and also like the chart is completely just pseudocience. But what I want to use this for is not to prove more like uh the whole argument is going to be falsified in the second part. Right? So it's not real science. Uh but I want you
+
+
+00:10:00
+to to see the the thinking process behind the the people who say that we shouldn't rewrite. So we have investment over time and we have commulative features. The claim is that if we do no design at all then we are going to slow down. That sounds reasonable right? If you if you have a very hard to maintain codebase it's going to be slow to work on it. Alternatively, if we um do good design, then at the beginning we are going to be slow because we are spending time on design. But once we got through that
+
+
+00:10:40
+initial period, then we are going to speed up and we will be super fast. That's the theory at least. Okay. So, what's the problem with this? You might notice that there is a point where these two curves meet. We don't know where that two those two curves meet but there is a point where they meet and this is called design payoff line. Now let's assume that we are a small startup and uh we have a minimum viable product. Now a min who knows what what's a minimum viable product right so this is
+
+
+00:11:17
+the smallest thing that we can build in order to to get go to market and test that our startup is going to survive now I deliberately drone this below the design payoff line this might not always be the case but anecdotically I can confirm that most of the cases this is this is true your design payoff line is going to be above of your minimum viable product. But that that also has an implication because if that's true then when we are starting out and we want to test our uh product there is a huge difference in in
+
+
+00:11:57
+investment risk. So as a startup I am being responsible if I'm coding irresponsibly uh or put in a less dramatic way. It's part of our technical excellence to know when we don't need to uh do design and when actually getting this work done quickly has more merit than planning for maintainability. And that is why almost every successful company has a horrible legacy code base. This is the reason because those companies who don't have a horrible legacy code base, they didn't make it,
+
+
+00:12:40
+right? It's simple evolution. Okay. So that's interesting because that means that there is a difference between a responsible technical adapt and what Kevlyn Henny calls a technical neglect. So if you don't know Kevlyn Hani, I really recommend watching some of his talks online because he's a verge geek and goes like he he renames things in software engineering in ways that make more sense. And one of these renamings that he he did was calling tech technical depth technical neglect
+
+
+00:13:16
+because your problem isn't that you have taken on depth. It's that you neglected that depth. is that it didn't pay it back in time. Uh so what do we do about technical nick debt? Well, the idea is that okay, we do need to make that uh minimum viable product work. Uh but after we have the minimum viable product, uh if the com company was successful with this release, then we can start doing some work to pay off that depth. If it wasn't successful, we can just delete the code and and our technical
+
+
+00:13:51
+depth is gone. That that's the easiest one, right? But if we were successful, that means that we can start paying back some of our depth. But how do we do that? Is that a rewrite? Maybe, maybe not. It depends. Uh and at this point, I do want to make kind of a small distinction. Until now I was uh calling this c commumulative features but in reality what we care about is product attractiveness. What what I care about is is my product more interesting for the for people than the competition's product. And this is
+
+
+00:14:36
+something I I really learned at one of these Limpoker events. So, for those of you who don't know, Limp Poker is kind of a one-day coding challenge where each team has poker bots. The poker bots are playing from the first minute, like there's a starter bot that does something simple and then every team can make changes and deploy it at any time. The point is that as the games go on, like every few seconds there's a game, the teams are either collecting points or losing. So every time that those
+
+
+00:15:11
+black dots are deployments, every time I deploy something, they can see the effect. And what matters in this game isn't if you can uh play poker really well. Turns out it's enough if you can play poker slightly better than your competition, which might be still horrible. Okay. So what I want you to take away from this is that it doesn't matter if your product is bad. It just has to be less banned than your competition. Uh and and that's kind of um the point because here is what's going to happen.
+
+
+00:15:49
+Let's suppose that we are done with our uh MVP and we start uh rewrite. Uh the problem is that while we are doing the rewrite that that of course made makes us slow down for a while. While we are doing the rewrite, the competitor is actually going to catch up with us and take over because their product is slightly uh better now. So all of the users are are starting to migrate over to their product. That's a problem. We are losing market share. And what's going to do what's the CEO is
+
+
+00:16:28
+going to do at this point? Shut down the rewrite. So, but if if if if he shuts down the rewrite, that means that we lost all this time for nothing. Now, we are back at square one. We started a rewrite. Our code is still horrible. We slowed down and now we are even behind the competition. That's horrible news. So, that's why people say never rewrite. But here's the thing. in this argument there were two implicit assumptions and for the for the but I'm going to start talking about the case studies and
+
+
+00:17:13
+what what I want you to think about while I'm talking about the case studies what are the two implicit assumptions that I made in this argument this float argument that are not true for these case studies for none of them there are two such implicit assumptions and I'm going to tell you at the and but try to figure it out yourself. So let's move on to the case studies. First story is one that I really like uh because it has to do with uh flash uh Adobe Flash. Who remembers Flash? Okay. A lot of people actually I
+
+
+00:17:52
+expected less. Uh of course Flash was discontinued, right? uh and there is a company uh who is making a presentation software and they built their entire product on flash. That's bad news for them, right? Because now they don't have a platform to run on and they need to somehow find a way out of it. Turns out that this company tried to tried a few things. First, what they tried to do is write a compiler from Flash to uh HTML 5 JavaScript. That didn't work. Then they tried to uh write one from
+
+
+00:18:37
+uh Flash to C++ then JavaScript didn't work. Uh then they tried a bunch of other things including uh just trying to reimplement the same thing in JavaScript. Didn't work. In the end, what they did was to at some point they decided, okay, it's fine. It's not going to be the same product. We are going to build a better product, but at first it's not going to be better. At first, it's going to just have the simplest functionality that a business needs. Because here is the thing, Adobe Flash
+
+
+00:19:14
+were running on consumer PCs for much longer than on uh business PCs. like companies banned Flash much sooner. So business users, their actual paying customers were most at risk. So what they did is they built the minimum feature set that a business needs and released it as a separate product aimed at businesses and they actually asked for a higher price. That was a really like they had a worse product in at first but they were charging more because it was for businesses and then they caught up eventually they
+
+
+00:19:52
+reimplemented most of the things they couldn't migrate between the two automatically but they figured it out and today they have just one new product that that works for everyone and it's in JavaScript. So that's the first story. The there's a second to story uh is the catastrophic failure and this was this is a very personal story be for me because this is something that I was personally involved in uh and there is a YouTube video that details the this uh story more and that's the link there. Uh
+
+
+00:20:27
+but the the story is this. We had um a monolyic system that was kind of like a um email marketing system. Okay. And uh we had this tool that like if if you know Zapier or N8N or make some of these no code tools where you can just create a workflow. Now we had that built in our into our system. Uh but while it was a monolith, it was easy because every one of these boxes uh could just call local functions. But then we started to like we had a monolith. So we wanted to uh make things better and we started to
+
+
+00:21:07
+introduce microservices and also we wanted to make sure that other companies can build plugins for this workflow engine. So, so we needed a way to to actually call outside and well the way the system was built actually result in in unhandled errors that really caused horrible uh problems. And then what we realized is that the way we were calling outside and and the way we were handling uh these little boxes was fundamentally flowed and we had to remake every single one of these boxes. Uh so what we did we simply looked at
+
+
+00:21:48
+the most problematic is uh cases. We fixed those first and one by one we replace every single one of these boxes until our old code was gone. But during this period I was waking up uh to p your duty every other night because we had ton of these errors unfortunately. Uh so this was an also an interesting one where we basically just took these boxes one by one and reimplemented them. Another personal story is that of an import. So this import uh was importing CSV files of our customers and it was
+
+
+00:22:28
+then loaded into their customer database. Problem was this uh this was meant to be a daily import for one of the customers. The daily import took 25 hours. That doesn't sound like a daily import. There is one day in the year when it worked. Who can guess what was it? What it was? Sorry. Sorry. End of the year, beginning of the year. No, no, it was uh No, it's it's like the 25 hours in the day. Daily saving. Yeah, exactly. Daylight saving time change. That was the only day when it worked. So, we needed to fix
+
+
+00:23:10
+that. And uh here is the thing like it was taking that CSV file and reading it field by field and for every field it was uh generating a SQL query running the SQL query and then and then going on to the next field. This meant round trips between the server and the and the database for every single field. That's very unefficient. problem was that this import had lots of settings and or customers could customize it in any way. So what we couldn't do is just replace it with a single query. But what we
+
+
+00:23:48
+could do is replace it for this customer with a single query. Like this one customer that had 25 hours, we wrote one query that could handle that specific case. Okay, can you guess how long that take? how long the the query took to do the same job that the 25our import did. 5 seconds. Like that's a huge difference, right? So what what did we do? I mean that's not great, right? Because now we have a an if user ID equals user ID uh in the code. We don't want to keep that there. How do we fix this? Well, what we did
+
+
+00:24:30
+was to Okay, now now this worked for this customer. Are there any other customers that have the same settings? Yes, there were. Okay, so every every customer that has these settings are going to through going through this new import. Great. Uh what do how many customers do we have left? We're a lot. Okay. Uh is there uh what what features do we need to implement for which customers? We created kind of this map of which feature uh like we could uh at any point we could tell which feature if you implement that would enable the most
+
+
+00:25:06
+new customers. Okay. And then what we did we had like this in the middle we had like a router that could tell okay is this configuration setting handled with the new import? If yes we just ran it with the new import. If no then we ran it with the old import. took us about half a year but we replaced almost all all of the old import. We had couple of exotic cases and about 10 customers who were still using the old import. At that point we just uh stopped and waited until those 10 customers turned.
+
+
+00:25:41
+Uh but in the end we could delete the oil import. Okay. Another interesting story, uh this is a company that had uh a kind of service that like um where where where they wanted to enable like outside collaborators to to build plugins for their service like build uh they wanted to become a platform essentially and their problem was that when they they told the the engineers that hey we are already uh uh using microservices is uh how about we just expose the APIs uh of our core system that our microservices use. Uh the engineers
+
+
+00:26:27
+freaked out like are you crazy like this like no one is going to understand this API it's it's just absolutely put together we need to refactor it before we release it. Okay then now how do we do that? Well, the way we did that is we basically looked at which are the most useful API endpoints that we would implement and then we did two things at the same time. One, we implemented the new API endpoints for every single use case. Uh but as we were implementing that, we were immediately refactoring
+
+
+00:27:04
+the microservices to use this new new API. Why? because we didn't want to m maintain two APIs long term and the other reason was do dog fooding we wanted to find out if it is actually useful as an API uh so we we kind of migrated over our existing microservices to to these new new APIs okay next case study uh who uses VS code lots of people. Uh so the interesting story about VS Code is that Microsoft already had uh an ID. It was called Vis Visual Studio. Who is using Visual Studio? Ah actually a
+
+
+00:27:50
+lot of people. Okay. Um so but they had a problem. Uh web developers hated Microsoft at the time. Absolutely hated them. Uh I was one of those developers. Um, and they wanted to kind of convince or or or lure the web developers towards themselves. And they came up with this idea of reimplementing a really simple streamlined uh ID uh code VS code using node NodeJS with the libraries that were already there and it worked out pretty well. it's became a very well uh widely used um uh IDE and I would say that uh web
+
+
+00:28:37
+developers don't hate Microsoft anymore because which is a big win for Microsoft. Uh so that was interesting but the the key here that I want you to notice is that they didn't implement the whole of Visual Studio. No, they created a new product that was addressing a new market, right? they didn't try to convert everyone to uh VS code and as you can see there were actually a lot of people in this room who who are using the Visual Studio. Uh having said that I'm surprised because at most
+
+
+00:29:12
+conferences like two hands go up. Uh so yeah last example uh this is actually a my own product uh my business's product and uh the way I started that uh business is I had an idea for a hobby project I started building it I hacked it together and then I organized this is actually the limp poker events and uh I organized the first event And when I still didn't finish the the platform and then like 3 days before the uh event I realized that I haven't sing written a single line for the front end. I just had the back end
+
+
+00:29:57
+and I was like okay I need to find something out. So I basically built a single 5,000 line code in three days. Uh that was like write once and forget it. like after that I couldn't really modify it because it was so messy. Uh but but it did get the job done. Uh but of course eventually I I wanted to get rid of it mostly because until I reimplemented the front end uh people had to refresh manually to see new data and that kind of broke the experience right and now I have a beautiful React front end. But how did I how did I did
+
+
+00:30:39
+that do that? Actually, I don't have a beautiful uh React front end. I just have one single page that has reactive elements and that is reimplemented. The rest of the uh front end is still the old front end because it works. But I replaced that one part because functional I couldn't implement the functionality uh with the old one. Okay, so these are the the case studies that I wanted to show you. Let me check on time. Okay, I'm still good. So let's talk about the takeaways because what I started out with is that
+
+
+00:31:18
+we have implicit assumptions here and then I showed you shown you all of these examples. Now I'm curious if anyone can give me ideas on what those assumptions were. What was different about these than the reasoning that I gave you at the beginning? Any ideas? Yeah. Uh yeah, that yeah, that was one of the things that some some of them like you would you didn't have an option but to rewrite. Yeah, that's like you needed to to extend the product you needed to uh rewrite. Yeah. Any other ideas?
+
+
+00:32:03
+Sorry. Yeah. Yeah. But but in this case like you mean okay so you said that competitor would do better um that was something that was a consequence of our assumptions like we yeah competition has no technical depth oh that's also an interesting yeah that's that could be a that the competition has no technical depth uh I would say yes that might be an assumption there but I would say that even if the competition has technical deping would still work. Uh okay. So I'm going to tell you uh the
+
+
+00:32:45
+two reasons. First reason uh during the rewrite we don't deliver value to the business and this is the first one that you mentioned. Uh so good job. Uh what was different about all of these cases is that we didn't do a rewrite for the sake of the rewrite. we did a rewrite to implement a new feature or to get off a platform that we we needed to get off. Right? So that was a very important point there. The other important point is that the rewrite is an all or nothing project. That was also kind of the the argument
+
+
+00:33:27
+there because like I said if you remember back I said like the revise get shot down and we are back at square one. This is not necessarily true because if I make the rewrite in a way that even uh during the rewrite I'm improving on the code and even during the rewrite I can I'm I'm already having advantages of of that rewrite then this is not not uh not true. Okay. So, so these are the assumptions and and then how how do we sell actually it should say rewrite not refactor sorry. So how
+
+
+00:34:09
+do we sell this whole idea to the business and the trick is that you don't sell it to the business. You don't tell the business that you're doing a rewrite because you shouldn't be telling you shouldn't be doing a rewrite. You should be implementing features and the way like that should be the implementation detail that you are implementing that feature by rewriting parts of the system. Okay, this is a very important point. You can actually if if you have a more technical leadership that
+
+
+00:34:40
+understands this, it is okay to tell them and it's okay to to be open about it. if they probably wouldn't understand anyway, it's probably not no point in telling them. Uh but basically the what I want you to understand is that we need to keep delivering uh value and there is a way to keep delivering value by doing a rewrite. Indeed, in some cases doing a rewrite is the faster way to deliver that value and we should be taking advantage of that. Uh so and this basically comes back to
+
+
+00:35:21
+to the first principle of the agile manifesto. Our highest priority is to satisfy satisfy the customer through early and continuous delivery of valuable software. Uh everyone just remembers the the first page of the manifesto. This is below the fold. There are 12 principles. This is the first one and I think this is the most important one. uh so much so that it is basically uh if you go on my LinkedIn page on the like at the top the banner I have that quote in there. This is this is the the one quote I live by. uh and and and
+
+
+00:35:58
+basically when we when we do rewrites like this, we ensure that we are still uh prioritizing value uh or value of a software and also kind of also justifies the rewrite, right? Because if you rewrite just for the sake of the rewrite, then you you don't really know which parts are important to rewrite. don't really know what would be a better design because you don't see the future. But in this case, you are you don't need to see the future. You know what you what you need to implement and and then
+
+
+00:36:33
+you know what structure fits better to implement it. So going back to to our original case studies, I basically want to show you two or or explain two main ways you can uh do this kind of rewrite. The one uh solution is creating your own competition. So this is this is the case of the flash like getting off of flash, right? they they had a product that they created a new product for a different market and and uh that was their own competition in house. Uh with VS Code they had Visual Studio but now
+
+
+00:37:19
+they had another IDE. Uh with my product Limp Poker I had a front end but now I have a better front end for certain very specific use cases. not for the entire front end but for one use case I simply created competition. You can switch still switch to the old uh front end by the way there is a button there uh for people if they want to switch back uh but at this point there's no uh need to. Okay, so this is the first strategy. If you ever feel like you are kind of use this strategy when uh your product
+
+
+00:37:59
+manager comes to you with different product ideas and you keep giving your product manager like really big estimates and and he or she just walks away set every time. because that means that your big estimates are a clue that your codebase is not uh built in a way that enables these uh true requirements. And that's a point where you can think about okay dear product manager what would you think about us building a new product for a separate market and and getting out of this cycle of you going away. So
+
+
+00:38:34
+this is actually a a a really great conversation to have with a product manager because you're not telling them hey uh we can't do this either. You're telling them okay I noticed that recently we often gave you large estimates and the reason is that we have this bad codebase. How about we try and find a set of features that solve like address the market that you are trying to solve now and and let's build a new product for them. Uh the next strategy is incremental replace with user value and these are
+
+
+00:39:10
+more useful for backend stuff. So you have uh high failure rates, you have performance issues. These are the stuff where where you can use this strategy because in this case you're not going to add new functionality. You are not going to uh release something new into the wild. you are just going to make sure that your system in the back end works well. And the way you do that is you try and find spe uh small use cases where you can improve and sometimes you actually need to keep the two systems running in parallel but
+
+
+00:39:51
+you're going to incrementally replace the old system with a new system. This is also called strangling fake pattern. Uh there are these uh in the rainforest there are this strang strangling figs that first grow on the top of trees because they don't have enough light down there. They grow on the top of the tree and they start growing downwards and they slowly strangle the the tree that's inside and then you in the end you end up with these uh strangling fig trees and you can still see the the the
+
+
+00:40:26
+tree inside. Well, the place of the tree inside because the tree inside dies and and disappears. But that's that's kind of the strategy that you can use there. Okay. So now you have two specific strategies to to do these kinds of rewrites. But there might be others. And I also uh at when I first gave this talk uh that was the end of the talk and then I got a question from the audience that was pure genius. So so I had to add the answer to that question. The question was that I mentioned two uh criteria right? One
+
+
+00:41:08
+criteria was uh that the rewrite has to add user value and the other criteria was that it has to be incremental. And the audience member asked what about the the cases where you only have one or the other? Is that a viable rewrite or do we need to have both? uh and then I thought a bit about it and actually at the same conference there was a talk that convinced me that that one of those quadrants is actually useful. So we have the two options uh or the two criteria and then uh what I want to do is
+
+
+00:41:47
+uh on one one axis we have the customer value on the other on the incremental delivery and then I want to figure out what what's what's with all these cases. So what I told you at the beginning, I think that's true. That's that's that's true that if you if you have no customer value and your project is all or nothing, you're almost definitely going to favor your rewrite because you are going to fall behind your competition and the CEO will be justified in shutting down the rewrite.
+
+
+00:42:18
+I also talked about this other uh corner when it's usually successful. you can actually uh do rewrites like that. Now, how about no customer value and incremental delivery? And my gut reaction would have been no, that's not going to work. Uh but then I saw a case study uh by Shopify. Uh it was a talk by Kristen Wester. I should have included that link. Uh and she's working at Spotify. And what they did was they created a dashboard, a leaderboard for teams uh that showed uh how far they are with migrating to the
+
+
+00:43:02
+new structure. Like they had an old structure and they wanted to introduce a new structure. So they migrated over one by one that was incremental and they had a clear motivation for the teams because they wanted to win the race to be the first team to uh replace all of the old structures. Okay. So that that can work. I would say it's more challenging than if you actually have customer value. And I encourage you to aim for the for that option. And then uh all or nothing and and uh customer clear customer value.
+
+
+00:43:39
+I would say that's probably going to fail. I haven't seen a case study where it worked. The reason I think is the same as with startups. like you you basically at this point you are uh you have a a customer value but you are acting as a as a startup that is trying to build a huge big MVP right it's probably going to fail so I would recommend not to do that uh and then a few words on coding assistance so another question I got uh from another audience was Okay, Evette, but how about coding assistance? Surely it
+
+
+00:44:22
+is much easier to write code with coding assistance. And that's true. I would say that's true, but you be you need to be very careful because it's not enough for you to actually translate the code from one to the other. Uh I actually uh partially did that with the uh front end rewrite that I mentioned. Um, and the thing with that is the AI is going to generate code that is almost as bad as the original and you need to still refractory. So you need to be very conscious about doing this rewrite in in a responsible way
+
+
+00:45:01
+where you're actually improving on the design. I would say that probably you can like in general I don't think that AI assistants are giving that much of a productivity boost. I would say it's probably uh about 30 to 40% that we are working faster with them. Uh but with specifically rewrites this might be a much higher number because we already have all of the functionality. So we just need to uh kind of translate from one to the other but still you need to be very careful with the refactoring. So
+
+
+00:45:35
+I would say that right now we are in a historic moment where we can do rewrites faster and we create haven't created uh that much legacy uh with AI that that it's again invisible because my guess is that the AI generated like we we are going to build much more things with AI and it's not going to be better quality. uh it's more like going to be even more AI slop. Um but that's of course an opinion on my part and not everyone might agree. Okay, two quick plugs at the end. One plug. I
+
+
+00:46:17
+have a YouTube channel and I need one more subscriber to hit 14K. So whoever is among you subscribes, thank you. Uh and I also have um a group coaching program if you enjoyed this talk. Uh I give lots of talks and I teach people how to give talks specifically technical talks. So if you are thinking oh I don't don't know I I don't like to be on stage or I it's sounds scary or I just want someone to give me feedback on my talk. Uh it's €40 a month really cheap. So uh sign up. It's it's it's a a good opportunity to
+
+
+00:46:59
+get better at speaking and honestly speaking engagements got me a lot of jobs. So uh and then uh just my personal website and yeah I guess that's it. Um do we have any questions or time for questions? Yeah, we have a bit of time for questions. Any questions? Maybe some other genius question I can add to the next talk. Yeah. Yes. That that was a Shopify case. So I think that's that's the that's the if you can actually make sure that there is developer experience uh improvement and
+
+
+00:47:42
+you can quantify that, make it clear, motivate your teams towards it. Good. Just make sure that it's incremental. Any other questions? Yeah. If there is no competition, have you ever seen a company that doesn't have a competition? Okay. Well, if if if you if you don't have a competition, genuinely don't have a competition. U maybe I don't know. Uh but if you don't have a competition, likely you will soon have Yeah. Okay. Okay, by the way, uh if you are uh if you see me walking around aimlessly, I'm
+
+
+00:48:30
+horrible at initiating conversations, okay? So, I usually hide in the corner or or just walk around aimlessly. Feel free to to talk to me. Actually, I ask you to talk to me because it's much more fun to get to know people. Okay. Uh I guess thank you for for your attention then. [Applause]
+
