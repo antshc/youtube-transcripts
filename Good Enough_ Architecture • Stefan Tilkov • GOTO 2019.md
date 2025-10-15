@@ -14,6 +14,8 @@ Software **architecture** is often misunderstood or undervalued, sometimes dismi
 
 - The session promises a critical look at **architectural failures and challenges** across multiple real-world cases, with an eye toward extracting lessons that can guide better architectural decisions.
 
+<img width="1869" height="576" alt="image" src="https://github.com/user-attachments/assets/6da73347-eb73-444b-b484-fd3d844f4dc8" />
+
 ---
 
 #### Section 1: The Perils of Over-Extensibility – When Customization Becomes a Burden
