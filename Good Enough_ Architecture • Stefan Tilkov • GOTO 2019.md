@@ -143,6 +143,7 @@ A bank replaced a large proprietary commercial off-the-shelf integration product
 - **Lesson:**  
   - Sometimes less is more: a simpler architecture focused on core responsibilities is more effective.  
   - Favor modular, programmable adapters over complex, monolithic integration platforms.
+<img width="1926" height="1053" alt="image" src="https://github.com/user-attachments/assets/375ad140-6678-4463-a402-bbe13b19127c" />
 
 ---
 
