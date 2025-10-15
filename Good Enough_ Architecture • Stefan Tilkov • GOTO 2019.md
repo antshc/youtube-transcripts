@@ -35,7 +35,6 @@ A global e-commerce company built a **highly customizable, multi-tenant platform
 - **Lesson:**  
   - Overextensibility can lead to complexity overload and poor user experience.  
   - It is often better to focus on specific client needs with dedicated solutions rather than trying to create an all-encompassing configurable system.
-
 ---
 
 #### Section 2: The Dangers of Excessive Fine-Grained Microservices
@@ -50,6 +49,7 @@ A very large multinational enterprise attempted to replace legacy systems with a
 - Organizational structure clashed with architecture: as teams grew, the assumption that one person could own one service failed, leading to “service sprawl” and architectural chaos.
 
 - The solution involved **modularizing and refactoring** the monolithic microservices into team-owned bounded contexts, aligning architecture with organizational boundaries.
+<img width="1728" height="306" alt="image" src="https://github.com/user-attachments/assets/3a664b02-bced-4b31-b796-c0ee9cffce73" />
 
 - **Lessons:**  
   - Small is not always beautiful; overly fine-grained services can create complexity, dependencies, and coordination overhead.  
@@ -106,6 +106,7 @@ A recent large European online retailer built a new system with **self-contained
 - **Lesson:**  
   - Extreme autonomy without coordination leads to architectural chaos.  
   - Effective architecture requires **governance**, not micromanagement—a few clear rules maintained by architects or senior devs foster independence without disorder.
+<img width="1833" height="1020" alt="image" src="https://github.com/user-attachments/assets/474b0cd3-d673-497e-adcd-a1d4fb0353a7" />
 
 ---
 
