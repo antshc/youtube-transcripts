@@ -1,0 +1,102 @@
+= AWS EBS Snapshot & AMI Features — Quick Recall Cheat Sheet
+
+== 1. Amazon EBS Fast Snapshot Restore (FSR) — "Instant Full-Speed Volumes"
+
+=== Problem It Solves
+Normally, EBS volumes created from snapshots suffer from lazy-loading. Until blocks are read from S3, performance is degraded.
+
+=== What FSR Does
+FSR makes restored EBS volumes fully-initialized immediately, delivering maximum provisioned IOPS and throughput from the first I/O.
+
+=== Key Points
+|===
+| Feature | Description
+
+| Instant readiness | No warm-up, no I/O penalty
+| Full performance | Max IOPS/throughput from the start
+| Per-AZ feature | Must be enabled per snapshot per AZ
+| Higher cost | You pay hourly for FSR-enabled snapshots
+|===
+
+**Use when:** DR restore, production-critical workloads, low-latency boot, rapid failover.
+
+
+== 2. Time-Based Snapshot & AMI Copy — "Finish Replication Before a Deadline"
+
+=== Problem It Solves
+Compliance and business rules requiring that AMIs or snapshots be copied within a specific timeframe (e.g., cross-region within 60 minutes).
+
+=== How It Works
+You define a completion duration. AWS then adjusts snapshot throughput dynamically so all snapshots finish before the deadline.
+
+=== Example
+|===
+| Snapshot | Size (MiB) | Duration | Required Throughput
+
+| Snapshot 1 | 200,000 | 60 min | 55.56 MiB/s
+| Snapshot 2 | 500,000 | 60 min | 138.89 MiB/s
+| Snapshot 3 | 450,000 | 60 min | 125 MiB/s
+|===
+
+=== Why It Matters
+* Predictable copy time
+* Meets SLA / compliance
+* Supports both snapshots and AMIs
+
+
+== 3. Snapshot Archive Tier — "Cheap Long-Term Storage"
+
+=== Use Case
+Store snapshots for years (compliance, retention) at the lowest cost, without requiring fast recovery.
+
+=== Benefits
+|===
+| Benefit | Description
+
+| Low cost | Up to ~75% cheaper than standard tier
+| Long-term retention | Built for multi-year storage
+| Same snapshot | Just a different storage tier
+|===
+
+=== Trade-Off
+* Slower and higher-cost restore
+* Not suitable for fast RTO scenarios (DR, HA)
+
+
+== 4. EBS Direct APIs — "Work with Snapshots Without EC2"
+
+=== Capabilities
+|===
+| Capability | Description
+
+| Write directly to snapshots | No need to create a volume or EC2 instance
+| Read snapshot blocks | Faster verification, selective reads
+| Detect incremental changes | Identify changed blocks between snapshots
+|===
+
+=== Why It Matters
+* Faster backup workflows
+* Lower EC2 and storage overhead
+* Ideal for backup/restore vendors and automation pipelines
+
+
+== 5. One-Line Recap (Memory Aid)
+|===
+| Feature | Think Of It As
+
+| FSR | "Warm from first I/O — instant full performance"
+| Time-based Copy | "Copy must finish before deadline"
+| Snapshot Archive | "Cheap long-term cold storage"
+| EBS Direct APIs | "Snapshots without volumes"
+|===
+
+
+== 6. When to Use What
+|===
+| Scenario | Best Feature
+
+| Instant DR restore | FSR
+| Need SLA-backed copy timing | Time-based Copy
+| Long-term retention with lowest cost | Archive Tier
+| Efficient incremental backups | EBS Direct APIs
+|===
