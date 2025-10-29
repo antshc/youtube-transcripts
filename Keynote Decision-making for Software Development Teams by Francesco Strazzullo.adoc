@@ -1,0 +1,141 @@
+= Decision-Making for Software Development Teams – Francesco Strazzullo (NDC 2025)
+:toc:
+:toclevels: 3
+
+== 1. Executive Summary
+
+Francesco Strazzullo’s keynote explores the *hidden art and science of decision-making* in software development.  
+Developers make countless choices daily—languages, frameworks, architectures, cloud vendors—but often do so unconsciously and without structured reasoning.  
+His central argument: **technical excellence requires disciplined decision-making just as much as coding skill.**
+
+He highlights how teams often practice coding but not *decision-making*, leading to arbitrary or biased choices that impact long-term maintainability, scalability, and cost.  
+To fix this, Francesco introduces a structured, *shared decision-making process* — involving the right people, gathering data, identifying non-functional requirements (“the -ilities”), and comparing solutions analytically.
+
+The talk advocates visualization tools such as *interest-power maps*, *architecture compasses*, and *weighted ranking charts* to make reasoning transparent and collective.  
+He stresses that decision quality depends on *context awareness* — business priorities, team skills, software lifecycle stage (explore, expand, extract), and user characteristics.
+
+Finally, he emphasizes clear delegation: who makes which decisions and how reversible they are.  
+Teams must align on *authority levels* (e.g., consultative, democratic, or autonomous) to avoid confusion and endless debates.  
+His conclusion: **mindful, transparent decision-making turns technical discussions into strategic engineering.**
+
+== 2. Core Theses
+
+=== “Developers make decisions constantly — but rarely practice decision-making.”
+*Main argument:* Every code change is a decision (choice of framework, pattern, or architecture). Yet few teams deliberately train this skill.  
+*Explanation:* We train for syntax, algorithms, and testing—but not structured choice-making. Without awareness, we default to habits, biases, or “what we know best.”  
+*Example:* Choosing microservices because “it’s trendy,” without evaluating team maturity, leads to maintenance chaos later.
+
+=== “Define and share a decision-making process within your team.”
+*Main argument:* A repeatable process reduces chaos and emotional bias.  
+*Process steps:*
+1. Involve the right people.  
+2. Gather relevant data (business, user, technical).  
+3. Define critical non-functional requirements.  
+4. Generate and compare options analytically.  
+*Example:* Before selecting a cloud provider, ensure that architects, DevOps, security officers, and cost owners are all included.
+
+=== “Visualize decisions — pictures outlive meetings.”
+*Main argument:* Humans remember visuals, not meeting notes.  
+*Example:* Use charts, diagrams, or Miro boards summarizing architectural trade-offs. Visuals keep alignment even months later and prevent “decision amnesia.”
+
+=== “Involve the right people — but know who they are.”
+*Main argument:* Many teams don’t even know their stakeholders.  
+*Method:* Map roles on an *interest-power grid*:  
+- High power, low interest → e.g., CTOs (need periodic input)  
+- High interest, low power → e.g., customer support (need constant feedback)  
+*Example:* If changing cloud providers affects cost and uptime, include finance and operations early.
+
+=== “Decisions depend on context — business, users, and lifecycle.”
+*Business needs:* Understand the *why* of your product.  
+Example: If your app’s key value is “speed and usability,” allocate budget to UX and native mobile performance.  
+*User context:* Elderly users treat bugs as “broken devices,” while teens expect glitches.  
+Example: For older audiences, prioritize reliability over new features.  
+*Lifecycle:* Apply *Freaks Model* (Explore → Expand → Extract).  
+- In “explore,” speed and validation matter more than scalability or polish.  
+- In “extract,” optimization and quality dominate.
+
+=== “Non-functional requirements (the ‘-ilities’) guide architectural choices.”
+*Main argument:* Functionality tells *what* to build; non-functional requirements (NFRs) tell *how* to build it.  
+*Example:* “Process payments in under 2 seconds” influences architecture, performance, and language choice far more than the functional spec “add checkout button.”  
+*Method:*  
+- Pick 4–6 most critical NFRs.  
+- Define a shared meaning (e.g., “Scalability = handle 2× traffic with ≤20% latency increase”).  
+- Visualize using an *Architecture Compass* — showing trade-offs among usability, maintainability, scalability, etc.
+
+=== “Compare options analytically, not emotionally.”
+*Two methods:*
+- *Visual comparison charts* (quick shape-based trade-off mapping).  
+- *Weighted ranking matrix* (quantitative scoring of options by NFR importance).  
+*Example:* Compare “Spring Boot,” “Phoenix,” and “Laravel” frameworks. Each is scored on performance, maintainability, learning curve, etc. The result justifies the final choice transparently.
+
+=== “Decisions need ownership and delegation clarity.”
+*Main argument:* Conflict often arises not from *what* we decide, but *who* decides.  
+*Tool:* *Delegation Board (E. Appelo)* — defines levels from “Tell” (leader decides) to “Delegate” (team decides).  
+*Guideline:*  
+- Use “Agree” (consensus) for high-impact, irreversible decisions.  
+- Use “Delegate” for reversible, low-risk technical choices.  
+*Example:* Architecture changes → collective decision. Logging library version → team autonomy.
+
+=== “Reversibility defines urgency and authority.”
+*Main argument:* The more reversible a decision, the more decentralized it can be.  
+*Example:* Choosing a new color scheme → reversible → delegate to team.  
+Choosing a database vendor → irreversible → needs higher-level alignment.
+
+== 3. Easy-Recall Section
+
+=== ✅ Best Practices
+- Define a *shared decision-making process* with steps and roles.  
+- Always identify who’s impacted before deciding.  
+- Use *visual tools* — charts, maps, diagrams — to document outcomes.  
+- Choose 4–6 *non-functional requirements* and align on their meaning.  
+- Compare options with *quantitative scoring* or visual trade-off maps.  
+- Match decisions to *business lifecycle* (don’t over-engineer in the explore phase).  
+- Revisit decisions when context changes — process is iterative.
+
+=== ❌ Don’ts
+- Don’t make architectural choices in isolation.  
+- Don’t skip user or business input — code exists for outcomes, not elegance.  
+- Don’t confuse speed with progress: a quick wrong decision costs more later.  
+- Don’t let every meeting end in “agree” mode — define authority upfront.  
+- Don’t assume “high quality” is always the goal — context matters.
+
+=== ⚖️ Rules of Thumb
+- *Decision quality > decision speed* (except in explore-phase experiments).  
+- *If everything is a priority, nothing is.* Pick few NFRs.  
+- *If a decision is reversible, make it fast; if irreversible, make it slow and deliberate.*  
+- *The bigger the ripple, the broader the stakeholder circle.*  
+- *Visual artifacts outlive memory.*
+
+=== 💡 Pros / Cons of Structured Decision-Making
+|===
+| **Pros** | **Cons / Challenges**
+
+| Clear accountability | Requires facilitation effort
+| Shared understanding | Initial overhead in setup
+| Objective comparisons | Harder in rapidly changing projects
+| Easier onboarding for new devs | Can feel bureaucratic if overused
+|===
+
+== 4. Key Points with Timestamps
+
+|===
+| Time | Insight
+
+| *00:03–02:18* | Developers make constant decisions, often unconsciously — from frameworks to deployment models.
+| *02:58–04:17* | We practice coding, not decision-making — most choices are implicit and habitual.
+| *05:05–06:38* | Start by defining a shared decision-making process; tailor it to your organization.
+| *06:45–07:25* | Visualize outcomes — drawings and diagrams retain collective memory better than meeting notes.
+| *07:33–09:48* | Identify stakeholders via “interest-power” mapping to ensure proper involvement.
+| *10:02–12:58* | Gather business context: use “elevator pitch” and “trade-off sliders” to align on priorities.
+| *15:31–17:22* | Apply Freaks Model: software evolves from *explore → expand → extract*; match decisions to lifecycle.
+| *19:04–21:16* | Team skill mapping prevents unrealistic technology choices.
+| *21:28–23:38* | UX research reveals tolerance to bugs — older vs younger users differ dramatically.
+| *24:05–26:04* | Non-functional requirements define *how* software should behave — the “-ilities.”
+| *26:36–29:23* | Adding a simple performance constraint (“in <2 seconds”) transforms a vague story into a concrete engineering goal.
+| *29:37–31:31* | Choose only 4–6 NFRs; define shared meanings (“ubiquitous language”).
+| *31:37–33:31* | Use an *architecture compass* to visualize trade-offs (durability, extensibility, usability, etc.).
+| *34:06–38:17* | Compare solutions visually or with *weighted ranking* for transparency and traceability.
+| *39:38–41:45* | Clarify decision ownership using Delegation Board (levels from Tell → Delegate).
+| *41:09–42:17* | Map reversibility vs impact; use “agree” only when truly necessary.
+| *42:18–43:09* | Wrap-up: mindful, structured decision-making transforms technical debates into professional collaboration.
+|===
