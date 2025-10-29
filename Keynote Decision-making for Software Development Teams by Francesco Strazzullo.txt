@@ -1,0 +1,405 @@
+00:03 okay perfect good morning and welcome to this keynote uh called decision making
+00:09 for software development team and but before we start I would like to make a disclaimer to you I will break
+00:16 this morning my first rule about public speaking it's the first time the first rule of public speaking is to never
+00:23 undermine your own presentation when I was
+00:29 speaker I started my presentation Cell saying
+00:34 I'm not an expert in react or whatever you want but when you do that people
+00:40 start losing interest in your speech because you're not an expert while you're talking to me but today it will be a little different
+00:47 I will not say that I'm not an expert I will say that it's very hard to be an
+00:53 expert on this topic and it's very hard to condensate this
+00:59 topic in 45 minutes so I'm sorry for you but probably you will leave this room
+01:06 with one question that answer but you can talk with me during the coffee break
+01:11 I will try to answer to all your question um the second rule is to present
+01:17 yourself at the end of the speech because you uh if you don't have time to present yourself you can just go away
+01:23 so the second the second ruler will keep true today so let's start with why why you should
+01:32 listen to me today why decision making for software developer
+01:38 it's a very very important topic today oh okay so let's imagine a scenario it's
+01:45 Monday morning you are you are sitting on your desk you are taking your laptop
+01:51 and you start programming at your office at your room whatever you want
+01:56 what we think we do when we code is actually to type on our keyboard uh I'm
+02:04 actually I'm working a lot with copilot so I speak with copilot a lot they'll tell me help me solve this stupid array
+02:12 in JavaScript because I can't remember how to do that but apart from that um
+02:18 you make a lot of decisions where you work as a programmer as a developer I
+02:24 can make you examine example from another point of view monolithic versus microservices
+02:29 public Cloud versus on-premises talking about public Cloud AWS versus
+02:35 azure talking about AWS Lambda or standard SC2 instance with a
+02:43 Docker image or going on molar scale languages Java
+02:48 versus Scotland Frameworks spring versus Quakers or whatever you want or no framework at all
+02:55 um haven't driven architecture versus classic rest API graphql
+03:02 also smaller scale test driven test after no test at all
+03:08 unit test end-to-end testing what I want to say with that is that
+03:14 today we have a very very high number of options and choosing between this option
+03:20 is something that we we do every single day of our developer life
+03:26 and the point is that uh as a developer we know that practice is the key to
+03:32 mastery okay we borrowed the Kata method from Karate in our development we know
+03:39 that we do code cata to become better developer in some languages okay
+03:45 um because we know that we are what we repeatedly do Excellence is not an act
+03:52 but an habit we actually we know this stuff very very deeply in our
+03:58 developer existence but do you have a practice decision making as a developer
+04:05 no usually we don't practice decision making the point is that
+04:11 usually we work with making decisions without knowing that we are making a decision
+04:17 there are a lot of decisions hidden in plain sight all the stuff that I said to you before
+04:23 okay from Frameworks to Cloud sometimes it's just okay I need to actually code
+04:29 so I want to do that in their fact at the time coding there
+04:34 are a lot of decisions that I made without ever thinking about it so we are not practices we are not practiced as a
+04:41 community decision making so uh for the continuing of the talk
+04:47 let's focus your head on some critical technical decision
+04:53 what I mean with critical uh something that actually changed the curse of your
+04:58 development experience in the next year or six months okay so
+05:05 languages Frameworks architecture monolithics versus microservices and so
+05:10 on the first thing that you should do
+05:16 if you want to practice decision making is to Define a shared process with your teammates
+05:24 uh this is a very very simple almost stupid decision making process it's uh
+05:30 just to involve the right people to be sure to have all the right people on board we are making a decision
+05:37 get us some data choose some non-functional requirement and on that we'll do a focus later
+05:44 and then after that you choose some on function requirement bring up some
+05:49 solutions and compare them in an analytic way
+05:55 we will focus on the on this process better during the talk but what I want
+06:01 to be extremely clear here is that you should design one and you should
+06:08 adapt to your organizational needs okay if you are for example a very flat
+06:13 organization you may not have some kind of approval from a c-level if uh if you
+06:19 are a more structured um hierarchical organization you may have
+06:24 some kind of approval so you have some kind of loops on the decision that you make it's your choice I'm not judging
+06:32 your process what I'm judging here is that you you should have a processor you should have a defined process and share
+06:38 it with all the people in your development team the other thing is that everything that
+06:45 is related to a decision making process should be made as visual as possible
+06:52 uh because this is okay uh we know that a photo is more valuable than 1000 words
+06:59 okay but being practical a visual content made after an hour meeting helps
+07:06 all the people in that meeting to remember what we're talking about more of some
+07:13 kind of email or some kind of document okay or some kind of recording of your
+07:18 meeting every artifact that you create should have some kind of visual
+07:25 no feeling okay so let's focus on the first uh topic
+07:33 involve the right people the funny thing is that it's imp it's
+07:39 impossible for most of development things that I help on my career to involve the right people because they
+07:45 don't even know the people around them what I mean is that if you make some
+07:51 exercises like this one this is a very very stupid exercise it's called meet your neighbors that is something that I
+07:57 do I work for a consultancy company so when I go to a client I make a map of
+08:04 the people around the development team that we are helping and the position of
+08:09 the postage actually can help you understand some you know
+08:15 sand in the wheels of the company but it's a it's not related to this topic
+08:21 after you have this map you show you should position the people in the map
+08:26 on this other map it's called This is an interest power map so for example in this in this scenario
+08:34 the CTO have a very very low interest in the product but a very very high power on the product that we are developing
+08:41 on the other hand customer support has not so much power okay then they are not
+08:46 sea level but they have a very very high interest in the product
+08:53 this map can help you understand how what are the people to involve when you
+08:59 are making a decision how you can do that well um you should
+09:06 focus on the impact of your decision okay choosing an Emmy convention for
+09:11 your variables as a very very small impact choosing to change from premises or to
+09:17 public cloud ever very very huge impact in other words try to imagine a pond or
+09:23 if you want a lake you are a Lugano and throw a stone in the pond the bigger the stone
+09:30 the bigger the waves and that's the point if you are launching a big Stone so you want to change a framework during
+09:37 development probably the people to involve are a lot more if we want to
+09:43 just change a feature in your backlog that's the point
+09:48 so let's go over with the second phrase gatework data what kind of data do you need to make a
+09:56 critical technical decision while I usually [Music] um
+10:02 I usually focus on three main areas the business needs of the company the users
+10:08 that will actually use the software that we're building and the more in general I try to build the context
+10:15 where uh this company is actually living okay the
+10:20 the market the people that are working within the company and all the stuff
+10:26 so uh let's start with uh business needs
+10:31 when I help uh the consultant I sometimes I help teams
+10:37 to make critical technical decisions and the first thing that I ask is do you know the reason why of the product that
+10:43 you are building you have two kind of answers here no or
+10:50 yes but when you ask okay yes you know it tell me you have a lot of different uh
+10:57 answers from sea level to uh developers it's very hard to have a common view of
+11:03 the reason why of your product so a simple exercise that you make is called elevator of pitch it's just to um
+11:12 fill the gaps okay it's not so easy okay you need some facilitator perhaps to do
+11:17 that but you need to feel the customer type they need the desire the product or feature Market category and most
+11:23 importantly the key benefit I just show you an example for young students with no steady our
+11:29 own income who want to measure money Acme easy bank is a mobile app that helps you navigate back in complexity
+11:36 I can assure you that just with this phrase you can get a lot of technical
+11:41 informations that are useful to you and now we're making a simple example if
+11:47 your key benefit is to navigate banking complexity you need to invest a lot in
+11:53 two things ux research and the second one is a top-notch mobile
+12:00 application with top-notch I need I didn't say that is to be Flawless okay
+12:05 so probably you do you have two information the first one if that if you
+12:10 need some kind of budget for ux research so if you know that you have I don't know one million dollars to do the bid
+12:17 to do the project you know that the part of the budget should be go on user research the second one the second
+12:26 thing that you can extract from this is that you probably need a native mobile application because if
+12:33 if it needs to be top-notch and performant you and this is your key
+12:38 benefit follow my follow my fourth year it's your key benefit so the fact that
+12:43 your app is working well is why people are choosing your product so probably you can't rely on anything that is not
+12:51 true actually different code bases for IOS and Android
+12:58 and what consequences are there are consequences on the ironing side but there are consequences only on the
+13:03 technical side because your budget as a ux part and your budget has a huge
+13:09 mobile part so what is telling you about your back end you have not so much budget as you
+13:16 probably thinking on the other hand if your
+13:21 um okay a key benefit is something else for example that uh it's not to navigate
+13:29 complexity but it costs very it has not even it didn't cost for example well you
+13:35 may say okay I can rely on um it's okay I can't rely on some framework
+13:43 for mobile application like react native I can lose performances for example if needed
+13:48 and then I have more budget for backend development this is something that it's very hard to
+13:54 spot at the beginning but after a while you became accustomed to this kind of reasoning based on business needs of
+14:01 your company another simple exercises it's very very very easy to do and it gave you gain a
+14:08 lot of value from it is called trade-off slider it's simple at words just sort the four items in the
+14:17 list it's easy okay then try to make this list with a
+14:25 CO CTO and a development team do you will have a very very different point of view but the point is that
+14:32 imagine that you have two companies that need to make the same software okay same
+14:38 functional requirement same user base okay and same budget but
+14:45 the first one as the budget as a first and the
+14:52 most important thing so I have one million dollar and I cannot move up I
+14:59 can't spend anything more I want a good level of quality
+15:04 and I can I can I can say sacrifice scope and
+15:11 deadline okay I can work with that now you imagine the same exactly
+15:17 software and switch disorder I have a very very strict deadline the
+15:24 scope is I choose the scope and I cannot move it but I can't sacrifice quality and I can sacrifice budget if needed I
+15:31 can spend more if you make into judicial contacts the same
+15:36 technical decision you are making a mistake because you are not getting in
+15:41 consideration all these important stuff in your reasoning
+15:46 okay this is another simple exercise this is
+15:53 the freaks model from canterbeck that I think he created during the first years
+15:58 in Facebook when it was I don't know if it's still working in Facebook but after no okay after the first years in
+16:05 Facebook he created this model um and this says he says that a software
+16:12 uh is like you know a living thing okay so you have a life cycle so all software
+16:18 start in an Explorer phase where you don't know if you will survive the next
+16:23 week or not usually uh the 10 percent of new features or new company
+16:32 Will Survive and then we'll enter the expand phase so gain Market traction
+16:37 gain user gain money so your focus on expand is on scale up okay then after
+16:46 some years or months I don't know you arrive to your market cap you can't gain
+16:51 more users Facebook campaign it's possible to gain more users it has
+16:57 I think a billion of users okay so if you if you remove
+17:03 um I don't know people that don't have actual access to Internet I think that it then you can't have more users so
+17:10 Facebook is in the extract phase I can get more user so in order to get
+17:15 more money I need to optimize my internal processes code infrastructure and so on I need to make more money with
+17:22 the same user well I will tell the same thing with other
+17:28 words in explore phase 90 of companies or features of existing software fail
+17:36 so if you are in the explore phase
+17:42 uh you have nine possibilities for 10 that your code will die
+17:48 so why invest too much time in quality for example
+17:53 this is something that we actually don't talk from an engineering point of view okay our code
+18:00 is related to the success of a company so if the company has a 90 of
+18:06 possibility fail our code is 90 possibility to die too so to invest too
+18:12 much time or build something Top Notch at the beginning it's not so useful
+18:19 um came back when it talks about the freaks model is also the a triathlon
+18:25 metaphor okay so in triatron you uh if I remember correctly you run you go to the bicycle
+18:32 and you swim and his point is that if you take a bicycle while you should swim
+18:38 you will drone that's the point so if you are using uh wrong tools methodologies and so on
+18:45 in your face you probably will drown too okay the point is that you if you focus too much
+18:52 on quality while you are in the slower phase probably you are losing money and you never know and you even don't know
+18:59 it okay or sorry if you invest in scaling when
+19:04 you're in explore phase okay when you prepare to have one million user after a week after launch you're probably not
+19:11 doing the right thing and another important thing to know is
+19:17 uh the skills of your team this is a screenshot of the skill Matrix that we use in clarinet to make our portfolio
+19:24 decisions okay but I can assure you that when you have a large team okay A Team large larger than a room for
+19:33 example probably teammates doesn't know the skill of
+19:39 other teammates so to have um some kind of visual tool that can tell
+19:45 you that I am really strong in uh JavaScript front-end quite strong in
+19:51 JavaScript background not so strong in C sharp and so on it's very helpful to
+19:57 also uh not take you know some kind of
+20:03 exciting decision exotic imagine this scenario and I'm talking
+20:08 about real stuff that happened in our of our customer teams
+20:14 you have a lot of developers with a Java background then a new CTO arrives and
+20:19 they said you need to work with functional programming because we work with banks and we need to be top-notch
+20:26 on the data that we manage we should work with Alexa
+20:33 it doesn't go well usually the point is that um
+20:39 knowing the background of your developers it's quite important what you are making a decision uh
+20:46 because you need to know the background of your developers okay we know we we
+20:51 call them programming languages because they are deeply tied to our way of thinking okay
+20:57 I was talking yesterday during the speaking dinner to work in JavaScript is completely different to work in Java uh
+21:05 by because you think in a different way and I worked with both languages during
+21:10 my career so to know that the current status of your
+21:16 um of your team it's quite important before making a critical decision
+21:21 and then you have your extra search the one of the main topic that you need to gather together of data to is ux
+21:28 research what kind of information you can make you can take from your exercise I can make a simple stupid
+21:35 example but it's both funny but also I think
+21:40 can give you some talks about it imagine that you have a software and you your ux
+21:46 search says that the main users of your software are some other people like my
+21:53 grandma I can say to you that my grammar can actually use WhatsApp to watch the photo
+21:59 of my newborn son that I sent to her she can't answer me but I know for sure that
+22:05 she can look at the photo okay so it's that kind of user well Elder people
+22:11 doesn't not understand bucks what I mean is that if something is
+22:18 broken from in their point of view they need to be fixed so when WhatsApp is not working uh she
+22:25 thinks that she need to take the tablet and go to some kind of store to solve
+22:30 that they don't understand the existence of a bug for for them bug is something that is
+22:36 broken instead you work with young people
+22:43 okay a teenager for example they know that Facebook could be down
+22:49 they know that software breaks because software breaks all the time this simple subtle but important
+22:56 difference can tell you the importance of having not having Bank in production for example so what I mean is that if
+23:04 you are working with people that are very you worked with a bank and you know
+23:09 that the people are not willing to trust computers because of their age or whatever you
+23:16 can't have any kind of bug in production if you're working with teenagers they know the stuff breaks go on with that
+23:23 okay that's the point if you of course if you have some kind of continuous deployment Pipeline and you can fix back
+23:30 in production in small time but if you have that you can be a little more relaxed on some
+23:38 stuff and this is something that you can get actually from your exercise search and on that topic a colleague of mine
+23:46 Antonio I don't see him I think that is here we'll give a talk this afternoon about ux research and collaboration
+23:53 between designer and Developers
+23:59 so if you are interested go to see the talk we know the people that we need to
+24:05 involve We Gather some data to back up our options we need to choose the most
+24:11 important non-functional required that we need to keep in consideration
+24:17 while making options I don't want to I think that you know that but I don't want to uh I want to be
+24:25 sure what is a non-functional requirement while I'm quoting Wikipedia here and the
+24:30 non-functional requirement is a requirement the specified criteria the tech can be used to judge the operation
+24:37 of a system rather than the behavior Okay so
+24:42 the difference between non-functional requirement and functional requirement is that function requirement tells us
+24:49 what a software should do I need to recreate an e-commerce blah blah blah I need to create a chat system blah blah
+24:56 blah non-functional requirement tell us how a software should be
+25:02 this is a non-comprehensive list that you can find on Wikipedia of non-functional requirements you have
+25:08 accessibility accountability Effectiveness portability they are also called more informally
+25:15 illitus the first time that I listen to illitus was on a clean code by
+25:22 Uncle Bob I I can't get what was meaning at the time they are called illitus because like you can like you can see
+25:28 they almost all stuff we finish with LED flexibility credibility and so on so
+25:33 they're also called illitus I am I will also give you
+25:41 some insight about them this stuff it's more important the function requirement
+25:47 where you are making technical decision making it's more more important
+25:53 uh and you know the funny thing when you need to create a software what do you usually have in the in hand to
+25:59 understand the problem a bunch of functional requirements uh
+26:04 if you're lucky they are in some form like user stock if you are not like you have just a bunch of paper that says
+26:11 what software should do but how the software should be always a gray area okay they say it
+26:19 should be performant it should be easy to use okay but they are not so specific
+26:24 sometimes I want to make an example about how much
+26:31 more important the non-functional requirements are to make a decision
+26:36 let's use these user story template to define a feature okay so we believe that
+26:42 impact by doing deliverable will lead to Gold okay I think that this structure is
+26:47 taken from Impact mapping from glyco hydrage I'm not sure but I think that it
+26:53 comes from that School so okay this is just an example okay we
+26:59 believe that showing the platform by letting Max invite his friend will lead to having more user so we have some kind
+27:06 of platform I don't know e-commerce a bank whatever you want and we want to let Max to invit his
+27:14 friend in using the platform and we believe that doing that will need to have us more paying user okay
+27:23 let's transform this Post-it a little bit
+27:29 we believe that showing the platform by letting Max invite his friend will need to have more paying user in less than
+27:36 two seconds in less than two seconds
+27:43 a party has no sense okay at all it was just it's something that I want to force
+27:49 on you um but if you think about it the last part of the phrase it's a non-functional
+27:56 requirement it's not telling me what I have to do is tell me how I have to do
+28:02 that is giving me much more information about how I have to do that what decision I
+28:09 have to make I'm not sure what kind of information I can take from that I have perhaps performances perhaps user
+28:16 experience uh I don't know or easy to use okay something like that but it's actually
+28:23 giving me a lot of information and now I have a question for you do you ever have this kind of
+28:30 information in your backlog probably not so an exercise that you should do is
+28:38 also this one uh okay you have that huge list of non-functional requirements and
+28:44 that as I said before is not comprehensive there are a lot more if you look for non-functional required at
+28:51 least you can have hundreds of non-functional requirements and now you have to choose
+28:58 some functional requirements to follow during your architectural decision
+29:04 if you let developer to decide gather or stakeholder to the site you will have 20
+29:10 or 50 function requirements because the application should be performed of course it should be performant it should
+29:16 be easy to use everyone every software should be easy to use it should have some kind of wow
+29:22 effect but it also should be cost effective um I don't know it also should be we
+29:29 should have enact velocity so our two our Technologies should have a good learning curve and so on well
+29:37 it's not working like that the first thing that you have to do is to create
+29:42 some kind of meeting facilitated by someone but you
+29:49 need to choose just four to six non-functional requirements
+29:54 and when I facilitate this stuff this is a this is taken from a real Workshop
+29:60 that I facilitator this is a DOT voting okay we meet with mirror something like that I don't remember yes it's mirror
+30:07 you need to choose from four to six to six non-functional requirements because
+30:12 the more non-functional requirement that you made you put inside your architectural decision
+30:19 the less information you have okay if you have a if you have 12
+30:25 non-functional requirements and one of them is performances
+30:30 yeah okay it should be performant okay thank you but guys it's not saying to you any real
+30:36 information about making decisions more importantly when you choose your
+30:44 non-functional requirement you need to Define an ubiquitous language here I'm taking I'm borrowing a concept from DDD
+30:52 okay but what I mean is that when you talk about Effectiveness every people in
+30:58 the room for the C Level to the LA to the junior developer should have in the
+31:05 head the same meaning of Effectiveness this is very very important because when you talk with a
+31:12 managers of sea level they probably have a very different
+31:17 um perception of some of these words so it's important to create a small
+31:23 table where you have your five home functional requirements and a small definition shared between all the people
+31:31 in the room and then you create this artifact this
+31:37 is an exercise that I created some years ago it's called architecture Compass chart
+31:42 it has some rules to fill the graph but I will not bother you right now what is important here is that you should create
+31:50 some visual artifact that can link together the most important non-function
+31:57 requirement and the most important thing is that you should be able to create a
+32:02 story from this graph 10 story I can take from this graph okay I should tell
+32:09 something like I'm improvising here okay all our technical decision from now on
+32:15 should let us have the maximum level of interoperability a very good amount of
+32:20 durability and usability and if needed we can sacrifice extensibility and
+32:25 testability also even if they are important because they
+32:31 are one of the five non-functional requirements that we decided to uh keep
+32:38 in consideration this stuff is very powerful I if you
+32:44 have an office I have some clients that they still have printed on the wall
+32:49 because they say okay every decision that I make should um
+32:55 match with this Compass it's called compass for this reason
+33:01 and it's very useful because it help us remember the discussion I can
+33:08 assure you that the discussion that leads to this graph are very very harsh sometimes okay because uh if everything
+33:16 is important okay imagine a graph where everything is five if it's five point it's not giving you information the
+33:23 information is between these in the differences it's in the shape of this kind of graph
+33:31 Okay so let's review the process we know that we have the right people on the table
+33:37 We Gather the data that we need to make some kind of sense making of our problem
+33:42 of our context of our the people that we are trying to help with our software
+33:48 we distilled this data in a bunch of non-functional
+33:53 requirements we are ready to compare a solution to create some options and to
+33:58 compress solution uh I can make an entire talk just about this topic so I will just give you the
+34:06 two extremes of compare Solutions okay you can use a quick
+34:13 hey I don't know please
+34:21 just try to yes
+34:26 more than 80 percent okay
+34:32 okay you can make some kind of visual
+34:38 comparison okay do you remember the chart from before okay that is some kind of compass this is your perfect solution
+34:46 then you create some option you generate some option and then you create
+34:52 uh I don't know the chart of the specific option so we say that for example option A the first one it give
+34:60 us a lot of extensibility but not so much performances then the second one give the right
+35:07 amount of performances and a lot of flexibility the last one give us more
+35:14 um more portability but then performance is and so on this is called visual
+35:20 comparison so we use the same tool before the chart the before and we apply
+35:27 some kind of analysis of the proposal solution and we compare them visually
+35:32 this is very very easy to do it's quick but it's not always a
+35:40 f so efficient okay you know you know why
+35:47 because sometimes you need some kind you need more deep analysis of that but most of the time this is useful to make a
+35:55 first cleaning you have 20 option use this stuff to select the most important
+36:01 three or five and then you can make another exercise it's called gold
+36:09 called wave it weighted ranking so what you do you this is an Excel file okay a
+36:15 spreadsheet you with some I don't know formula from
+36:20 Excel what you do is that you you have some um options in this case for example you
+36:27 have kotlin and spring you have Alexa with Phoenix or you have PHP with lagavel okay so I'm choosing languages
+36:33 and web framework and then what you do is that on the weight column you put the volume from
+36:40 the chart okay so it goes to one to five then for every
+36:45 non-functional requirement you analyze the performances for for example cotton spring
+36:52 and you see how much they fit with the fitness function written in the first
+36:59 row so for example I want to say that cutting a spring if we measure
+37:05 end-to-end execution time on the main user task it has a uh a very very high
+37:11 level of performance five and then we say that we see that okay also Alex PHP
+37:16 they have a very very uh good amount of performance is for our use case uh
+37:23 I want to be clear about that we are not the creating the most performant here we
+37:29 are just decorating how much performance they are given uh our uh Target okay so perhaps it's
+37:38 probably that cotton and spring it's more performant at the PHP allowable perhaps but the point is that
+37:47 over some Target is not important okay it's uh it's just a rumor it's just
+37:53 noise about in our analysis and then you you do the same thing uh with all the uh
+37:59 other uh non-functional requirements learning curve maintainability reusability integrability
+38:06 so you make a weighted ranking because you uh simply you know you multiply five
+38:11 for two blah blah blah and then you have a number the
+38:17 the item with the highest number is your decision it's your it's your option
+38:23 this is usually more useful because you know you need some kind of POC to test
+38:29 some um some solution so what I can suggest to
+38:35 you is to use a very very uh you know simple tool to just remove all
+38:41 the options that are out of scope and then I use some deep focuses to Tool
+38:48 like this one to choose when you have two or three options and to be sure that everyone is on board on why we are
+38:55 choosing that because if we have this uh this file or it's some some other form I
+39:03 will put them a link to them in the GitHub repo because everyone should remember why we choose a carton of
+39:09 spring so they can't say if we worked with Alexa Phoenix it was
+39:15 better no it was not better because we decided based on this stuff that we
+39:21 agreed upon that it was important thing then we can also we can be wrong it's
+39:26 not the point the point is that we made a a mindful decision with the standard
+39:33 defined process okay okay
+39:38 the last thing I want to say is that I tell you uh the process of making a decision much well I I haven't say to
+39:45 you who should make the decision the boss or the team for example
+39:51 there is not so there is not easy answer I will very very quick the main the most important thing here is to be clear on
+39:58 who should make the decision and this is a tool called delegation board by Eugen
+40:03 Apple and apple divides the decisions on
+40:10 several level of Delegation in this case it's from the CTO that has the power to make all the technical
+40:17 decision in the company I'm talking about an hierarchical point of view
+40:24 and then you have several level of Delegation um the first one the first three sorry
+40:29 tell cell and consult are three different in one sense of uh the city or the site then you have
+40:37 the fourth the level four is agree it's we all have to agree in a democratic way
+40:42 and then you have five six or seven where the team decide and the CDO is
+40:48 less and less involved while we are going to the seven so you this is a map of our team should
+40:56 relate to a CTO when working on making a decision sorry
+41:04 another way to see this stuff is that you can actually map your decision on
+41:09 this kind of chart you have the impact to your decision do you remember the ripple effect
+41:15 and then you have the reversibility of your decision so the higher level
+41:21 reversibility it's easier to reverse okay the lower level accessibility is that we cannot change after we choose
+41:28 uh you can divide that in these five areas and what I can suggest you is to define a level of uh
+41:38 delegation for every area and the one you have to make a decision you can just position it on this chart to say okay I
+41:45 should go with agree on this stuff and talking about the green
+41:53 wheat is another another topic because uh this meeting we had when we all agree
+41:59 and probably it will never end so don't underestimate agree level and make some
+42:06 talk about it uh when you start the meeting when everybody everyone should
+42:11 agree but I will not talk about that because it's another very very interesting but very very long topic
+42:18 I just uh scratched the surface here of the topic and I wrote a book about it is
+42:24 the same title of the the same title of the of the talk decision making for soft development
+42:30 team and I asked I wascuperta my Editor to bring to you a 30 discount for this
+42:38 week for voxel days so if you are interested you can just scan the career code and uh you can have the discount
+42:46 like I promised I will present myself at last slide I am Francesco sasula I'm Chief Operating Officer at clarinet
+42:53 Italy if you want you can contact me on LinkedIn for this stuff or any other
+42:58 question that you have about me or the talk thank you very much uh if there you have
+43:04 a question you can just follow me at the coffee meeting or now so thank you very
+43:09 much it's been a pleasure
