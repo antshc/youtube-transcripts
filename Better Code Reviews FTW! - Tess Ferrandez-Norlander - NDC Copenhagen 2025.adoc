@@ -1,109 +1,129 @@
-= Better Code Reviews FTW! – Summary of Tess Ferrandez-Norlander (NDC Copenhagen 2025)
+= Better Code Reviews FTW! – Tess Ferrandez-Norlander (NDC Copenhagen 2025)
+:toc:
+:toclevels: 3
 
 == 1. Executive Summary
 
-Tess Ferrandez-Norlander’s *“Better Code Reviews FTW!”* reframes code reviews from a bug-hunting exercise into a collaborative, feedback-driven learning process that improves both code quality and team culture.  
-Effective reviews are not about argument or ego but about *shared ownership, empathy, and structured communication*.  
+Tess Ferrandez-Norlander, a Microsoft developer and data scientist, explores how to make *code reviews more effective, constructive, and human*.  
+She challenges the myth that productive reviews require arguments, asserting instead that *great reviews are rooted in feedback, empathy, collaboration, and clarity* — not confrontation.
 
-Code reviews serve multiple goals:  
-- Finding issues and preventing regressions  
-- Sharing patterns and team knowledge  
-- Maintaining consistency and readability  
-- Building psychological safety and collective code ownership  
+She frames code reviews not merely as a defect-finding process but as a *vehicle for knowledge sharing, code ownership, mentorship, and collective improvement*.  
+Machines can and should catch the mechanical errors; humans should focus on design intent, readability, maintainability, and team learning.
 
-Ferrandez highlights the importance of tone and empathy in feedback. Many teams treat code reviews as confrontations rather than opportunities to learn together. By automating trivial checks and focusing human attention on meaningful discussion, teams can produce cleaner code and stronger collaboration.
+Ferrandez introduces *ten key practices* to improve reviews, including:
+- writing reviewable pull requests (PRs),
+- settling style arguments with automation,
+- prioritizing PR reviews over new work,
+- framing comments as questions,
+- focusing on main issues first, and
+- resolving stalemates quickly through direct communication.
 
-Her key lessons include:
-- Be open to feedback and specify where you need it.
-- Write small, clear, self-contained pull requests (PRs).
-- Automate “boring bits” like linting, formatting, and testing.
-- Settle stylistic arguments with a written style guide.
-- Give feedback as *questions*, not *orders*.
-- Avoid perfectionism and overwhelming nitpicks.
-- Reinforce positive behavior through encouragement.
-- Resolve conflicts early with human conversation.
+Her talk blends psychological insight and engineering pragmatism, showing how *tone and empathy* directly influence team culture and long-term productivity.  
+Effective code reviews, she concludes, make the code better *and* the team stronger.
 
-Ultimately, **better code reviews mean better teams**. A respectful, communicative review process strengthens trust, accelerates delivery, and improves everyone’s craft.
+== 2. Core Theses
 
----
+=== “If you’re arguing in code reviews, you might be doing them wrong.”
+*Conflict and defensiveness reduce effectiveness.*  
+Arguments stem from ego, not engineering value. The goal is consensus and clarity, not victory.  
+Example: Instead of insisting “my way is better,” ask “Can we try this alternative?” — this fosters collaboration.
 
-== 2. Core Thesis
+=== “Once code is in the repo, it’s not my code — it’s our code.”
+*Encourage shared ownership over personal pride.*  
+This mindset prevents territorial behavior and encourages collective improvement.  
+Example: Developers who treat the repository as shared focus on collective learning, not defending “their” code.
 
-> “If you’re arguing during code reviews, you might be doing them wrong.”
+=== “Code reviews are feedback — and feedback is communication.”
+Code reviews are *text-only, terse, and mandatory*, which makes tone matter.  
+Written comments can easily sound accusatory.  
+Example: Instead of “You put this in the wrong class,” write “Can we move this to the user repository for consistency?”
 
-The central thesis:  
-**Code reviews are not just defect detection—they’re about communication, collaboration, and shared ownership.**
+=== “Write PRs you’d want to review.”
+Authors should make code easy to read and context clear.  
+*Small, focused PRs* are much easier to review.  
+Example: Instead of submitting a 2,000-line PR, split it into smaller logical chunks with summaries, test evidence, and reasoning.
 
-When reviews turn adversarial, teams lose the chance to teach, learn, and align. The goal is *not to win debates*, but to make the codebase and the team better together.
+=== “Settle style arguments with a style guide.”
+Don’t waste human energy on formatting.  
+Automate style enforcement using linters, formatters, and pre-commit hooks.  
+Example: Avoid “tabs vs spaces” debates by using `.editorconfig` or Prettier.
 
-=== Extended Explanation and Examples
-- A reviewer asking *“Wouldn’t this be cleaner if we used this API?”* invites collaboration, not compliance.  
-  A constructive reply like *“Nice, I haven’t used that before”* keeps the feedback loop positive.
-- Instead of flooding a PR with 100 nitpicks, focus on one significant issue first. Developers are more motivated to address big issues than endless small ones.
-- When disagreements persist, switch from comments to conversation — a short call often resolves what 20 comments cannot.
+=== “Automate the boring bits.”
+Let machines catch trivial issues; let humans review intent and quality.  
+Example: Use CI tools to check for typos, code style, and secrets — freeing reviewers to focus on design or security.
 
-**Real-World Example:**  
-Teams that treat reviews as mentorship rather than policing see better morale, faster iteration, and fewer regressions. For example, using linters and Git hooks for style consistency frees reviewers to focus on design and logic — the parts that require human judgment.
+=== “Treat PRs as high priority.”
+Review promptly. Delayed feedback causes branching chaos and discouragement.  
+Rule of thumb: *Before picking new tasks, review open PRs.*
 
-*Code reviews are communication, not inspection.* When teams automate the mechanical and humanize the creative, both code and culture thrive.
+=== “Don’t overwhelm the author.”
+Avoid laundry lists of minor issues; focus on the changes that matter most.  
+Example: Instead of 20 nitpicks, leave one structured comment like:  
+“Refactoring this function per our pattern will fix several smaller issues.”
 
----
+=== “Don’t chase perfection.”
+Ship *good enough* code — perfection can wait.  
+Over-polishing burns time and morale. Incremental improvement is more sustainable.  
+Example: Approve code that works and is readable; refine later instead of blocking delivery.
+
+=== “Resolve stalemates proactively.”
+When disagreements arise, *communicate directly*.  
+Talk it out or involve a neutral third reviewer.  
+Example: If tone escalates in PR comments, stop typing and have a 5-minute call.
 
 == 3. Easy-Recall Section
 
-=== Best Practices
-- Treat PRs as *collaboration*, not confrontation.
-- Review PRs *before* taking new tasks to shorten feedback loops.
-- Write PRs that you’d *want to review*: clear, small, self-contained.
-- Automate “boring bits” (linting, formatting, tests, secrets).
-- Use a shared *style guide* to end stylistic debates.
-- Phrase feedback as *questions* (“Can we…?”) rather than commands.
-- Give positive reinforcement — acknowledge good solutions.
-- Approve when only trivial issues remain.
-- Resolve conflicts early, preferably via voice or face-to-face conversation.
+=== ✅ Best Practices
+- Write clear, small, and self-contained PRs.
+- Include test results and reasoning in PR descriptions.
+- Automate linting, formatting, and build checks.
+- Review PRs before starting new work.
+- Praise good patterns explicitly to reinforce them.
+- Frame suggestions as questions, not commands.
+- Use examples in feedback (`Use F-strings, e.g. f'{var}'`).
+- Pick up the phone when tension rises.
 
-=== Do / Don’t
-[cols="1,1"]
-|===
-|✅ **Do** |❌ **Don’t**
-|Focus feedback on key issues |Overwhelm with nitpicks
-|Provide examples and context |Make it personal (“You did this wrong”)
-|Encourage discussion |Enforce perfection
-|Automate trivial checks |Repeat style debates manually
-|Reward positive behavior |Ignore emotional impact of tone
-|===
+=== ❌ Don’ts
+- Don’t argue to “win.”
+- Don’t leave massive PRs unreviewed.
+- Don’t nitpick style inconsistencies manually.
+- Don’t write accusatory comments (“You did…”).
+- Don’t block merging over minor issues.
+- Don’t overwhelm authors with dozens of low-value comments.
 
-=== Rules of Thumb
-- *Award ties to the reviewer* — they bring fresh eyes and unbiased perspective.  
-- *Focus on one major issue per PR* — prioritize clarity over completeness.  
-- *Once merged, it’s “our code,” not “my code.”*  
-- *Automate the trivial; humanize the meaningful.*
+=== ⚖️ Rules of Thumb
+- *If it compiles but confuses → fix readability.*
+- *If it works but isn’t perfect → approve, then improve later.*
+- *If tone escalates → switch to voice chat.*
+- *If the reviewer and author tie → reviewer wins (fresh eyes rule).*
 
----
+=== ⚙️ Automation Ideas
+- Use Git hooks or CI to enforce formatting.
+- Run static analysis, unit tests, and secret detection before review.
+- Integrate AI copilots for pre-review suggestions.
+- Automatically assign PR reviewers after daily stand-ups.
 
 == 4. Key Points with Timestamps
 
-[cols="1,3,6", options="header"]
 |===
-|Timestamp |Topic |Summary
-|00:51–02:00 |Arguing ≠ Effective Review |Arguing harms collaboration and code quality.
-|02:40–03:40 |Purpose Beyond Bug-Finding |Reviews spread knowledge and foster shared ownership.
-|04:00–06:00 |Feedback is Communication |Tone, empathy, and clarity define useful reviews.
-|07:30–10:30 |Be Open for Feedback |Ask for targeted feedback; respond with appreciation.
-|11:00–13:00 |Write Reviewable PRs |Keep changes small, readable, and self-contained.
-|15:00–16:30 |Style Guides |Resolve style disputes once; automate consistency.
-|17:00–18:30 |Automate Boring Bits |Let machines catch typos and style errors.
-|19:00–20:30 |Prioritize Reviews |Review before new tasks; maintain momentum.
-|21:00–22:30 |Don’t Overwhelm Authors |Highlight one key issue; avoid endless lists.
-|23:30–25:30 |Don’t Chase Perfection |“Good enough” moves teams forward faster.
-|26:00–28:00 |Be Generous with Praise |Positive feedback drives better habits.
-|29:00–31:00 |Frame as Questions |Questions create collaboration, not compliance.
-|31:30–33:00 |Avoid Personal Tone |Say “Can we…” not “You should…”; keep code impersonal.
-|34:00–36:00 |Resolve Stalemates Early |Talk instead of typing; involve a neutral reviewer if needed.
-|37:00–38:00 |Conclusion |Arguing in code reviews = doing them wrong. Focus on empathy and teamwork.
+| Time | Insight
+
+| *00:21–01:27* | Tess introduces herself (Microsoft developer, AI & data science). Notes that arguing in code reviews is *not* a good practice.
+| *02:20–03:50* | Code reviews should be more than finding defects — they’re about shared learning, ownership, and patterns.
+| *04:00–06:00* | Feedback in PRs is tough: impersonal, text-based, and often overly negative.
+| *07:36–10:16* | First principle: *Be open to feedback.* Ask specific questions and respond appreciatively.
+| *10:26–11:04* | In a tie, the reviewer wins — they have a fresh perspective.
+| *11:06–14:17* | Authors: write PRs you’d want to review — small, clear, tested, and readable.
+| *15:02–16:32* | Settle style disputes with style guides; automate enforcement.
+| *17:02–18:48* | Automate boring bits (linting, formatting, secret scanning).
+| *19:00–20:19* | Treat PRs as highest priority — review before new work.
+| *20:56–22:37* | Don’t overwhelm authors; focus on key issues.
+| *23:27–24:55* | Respect PR scope; don’t expand it with unrelated changes.
+| *24:56–26:31* | Avoid perfectionism. “Good and readable” beats “perfect but late.”
+| *27:06–29:36* | Give positive feedback generously to reinforce good behavior.
+| *29:39–33:06* | Use examples and questions in feedback; avoid accusatory tone.
+| *34:45–36:17* | Handle stalemates via communication, third opinions, or letting it pass.
+| *37:26–38:10* | Summary: “If you’re arguing, you might be doing it wrong.”
+| *44:47–48:20* | Q&A: commit-level reviews, automation tooling, teaching review culture.
 |===
 
----
-
-*Summary Note:*  
-Better code reviews are about communication, empathy, and collaboration — not perfectionism or authority. Automate what machines do best, and let humans do what only they can: teach, learn, and build together.
