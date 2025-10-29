@@ -1,0 +1,3073 @@
+00:01 Hello,
+00:03 
+
+00:03 good morning. Having an excellent start
+00:06 
+
+00:06 to the conference.
+00:09 
+
+00:09 Very interesting keye it's in my area of
+00:13 
+
+00:13 work. I do a lot of AI these days as we
+00:16 
+
+00:16 all do I think. But apart from that, I'm
+00:21 
+
+00:21 I'm test and I'm a developer at
+00:22 
+
+00:22 Microsoft. So I do a lot of software
+00:25 
+
+00:25 engineering and data science.
+00:29 
+
+00:29 And one of the things I do as a side
+00:32 
+
+00:32 quest is I keep this open source repo
+00:36 
+
+00:36 that's kind of like a lot of learnings
+00:39 
+
+00:39 from different engagements and projects
+00:41 
+
+00:41 that my organization runs. It's about
+00:44 
+
+00:44 testing and security and all sorts of
+00:47 
+
+00:47 things. And among other things is about
+00:49 
+
+00:49 code reviews.
+00:51 
+
+00:51 Eh, how many people in here do code
+00:53 
+
+00:53 reviews on a regular? All of us. Great.
+00:57 
+
+00:57 How many here think they do very
+00:60 
+
+00:60 effective code reviews?
+01:03 
+
+01:03 Ok, great. I think that's Well, no, I
+01:07 
+
+01:07 will say I don't always think I'm doing
+01:09 
+
+01:09 very effective code reviews, but I
+01:13 
+
+01:13 always been kind of interesting
+01:15 
+
+01:15 interested in this area and another
+01:17 
+
+01:17 engineering fundamentals areas. And I
+01:19 
+
+01:19 had a discussion with one of my friends
+01:21 
+
+01:21 who works at a startup and he said if
+01:24 
+
+01:24 you're not arguing during code reviews
+01:27 
+
+01:27 you're doing them wrong.
+01:29 
+
+01:29 Mm. So few things on that. Very happy
+01:33 
+
+01:33 that I don't work at his company.
+01:37 
+
+01:37 Because the the only super bad
+01:40 
+
+01:40 experience I had with codews I've had a
+01:43 
+
+01:43 few medioc ones where I haven't felt
+01:45 
+
+01:45 like they've been very useful but
+01:49 
+
+01:49 the worst one I've had has been one
+01:51 
+
+01:51 where we where we argued and it wasn't a
+01:53 
+
+01:53 good experience for me. It wasn't good
+01:56 
+
+01:56 experience for the other person
+01:57 
+
+01:57 involved. And generally it did not
+02:01 
+
+02:01 result in better code.
+02:04 
+
+02:04 worse environment
+02:08 
+
+02:08 [Musik]
+02:11 
+
+02:11 sort of like why he thought that you had
+02:15 
+
+02:15 to argue during code reviews to make
+02:18 
+
+02:18 them effective and it got me wondering
+02:21 
+
+02:21 well I talked to him about that and he
+02:24 
+
+02:24 said because if you're not arguing
+02:26 
+
+02:26 you're not invested enough to find all
+02:29 
+
+02:29 the defects like you reviews and you
+02:33 
+
+02:33 know like looks good to me and you just
+02:36 
+
+02:36 move on
+02:38 
+
+02:38 and I think that you need to be invested
+02:40 
+
+02:40 in the code reviews to find the defects
+02:42 
+
+02:42 of course but I think that code reviews
+02:45 
+
+02:45 is a lot bigger than just finding errors
+02:48 
+
+02:48 or bugs in the code that we're looking
+02:50 
+
+02:50 at in fact I think machines are
+02:53 
+
+02:53 sometimes a lot better than us at
+02:55 
+
+02:55 finding bugs and errors in the code.
+02:58 
+
+02:58 [Musik]
+02:59 
+
+02:59 But to me it's it's also about a lot of
+03:01 
+
+03:01 other things like sharing patterns or
+03:04 
+
+03:04 sharing knowledge eh or having an
+03:07 
+
+03:07 increased set of ownership in the in the
+03:10 
+
+03:10 code. So that the code that I add to the
+03:14 
+
+03:14 repo is not only you know my doing and
+03:18 
+
+03:18 and with being my code also comes sort
+03:22 
+
+03:22 of like the stigma of if someone changes
+03:25 
+
+03:25 it they've changed my code. Instead code
+03:28 
+
+03:28 reviews kind of like hopefully faster
+03:31 
+
+03:31 sense of that our code together and that
+03:35 
+
+03:35 we're allowed to all change it. Once
+03:37 
+
+03:37 it's going into the repo, this is one of
+03:39 
+
+03:39 my kind of like major things. Once it
+03:41 
+
+03:41 goes into the repo, it stops being my
+03:43 
+
+03:43 code and it's our code. And if we w to
+03:47 
+
+03:47 change it, then we change it. I I have
+03:51 
+
+03:51 no ego around the code that is in the
+03:54 
+
+03:54 repo.
+03:56 
+
+03:56 to find better solutions and all of this
+03:60 
+
+03:60 may except for the finding defect
+04:04 
+
+04:04 actually around feedback
+04:07 
+
+04:07 eh and feedback is communication so how
+04:12 
+
+04:12 can we give better feedback
+04:15 
+
+04:15 in code reviews unfortunately code
+04:18 
+
+04:18 reviews is um kind of like the worst set
+04:21 
+
+04:21 of feedback you can get because it's the
+04:23 
+
+04:23 gear to award
+04:33 
+
+04:33 If you do it in PR in
+04:37 
+
+04:37 whatever you call PR depending on where
+04:39 
+
+04:39 you work eh you also do it sort of like
+04:43 
+
+04:43 in text and short sentences and it's
+04:47 
+
+04:47 kind of like impersonal whereas other
+04:49 
+
+04:49 type of feedback if I were to ask for
+04:52 
+
+04:52 feedback on this presentation for
+04:55 
+
+04:55 I'm quite sure that you wouldn't come at
+04:57 
+
+04:57 me with like 50 things I did wrong and
+05:00 
+
+05:00 nothing I did right instead hopefully it
+05:03 
+
+05:03 would be sort of like I liked when you
+05:05 
+
+05:05 did this do more of this maybe you
+05:08 
+
+05:08 should change this that kind of feedback
+05:11 
+
+05:11 but we like the way we would normally
+05:13 
+
+05:13 give feedback about someone's work is
+05:15 
+
+05:15 very different from how we do code
+05:17 
+
+05:17 reviews and code reviews is a lot you
+05:19 
+
+05:19 did this wrong and you spell this wrong
+05:21 
+
+05:21 and you you know kind of like makes it
+05:25 
+
+05:25 such that asking for code review is not
+05:28 
+
+05:28 necessarily a pleasant thing
+05:31 
+
+05:31 and we're often forced to ask for this
+05:33 
+
+05:33 feedback. This is not voluntary
+05:34 
+
+05:34 feedback.
+05:37 
+
+05:37 PR and PR
+05:40 
+
+05:40 [Musik]
+05:43 
+
+05:43 to that little afraid of not following
+05:47 
+
+05:47 orders something like that
+05:50 
+
+05:50 [Musik]
+05:52 
+
+05:52 concept of like
+05:54 
+
+05:54 why this is a bad way to to do feedback
+05:57 
+
+05:57 kind of like haunted me and I was
+05:59 
+
+05:59 looking for a lot of research around
+06:01 
+
+06:01 this and I found a number of years ago
+06:05 
+
+06:05 This guy Michael Lynch who wrote a
+06:09 
+
+06:09 number of blogs and I will say this is
+06:13 
+
+06:13 if you don't get anything else out of
+06:15 
+
+06:15 this it should be to go and read his
+06:17 
+
+06:17 blogs because he's written some
+06:20 
+
+06:20 excellent blogs on on the topic and part
+06:23 
+
+06:23 of what I'm going to talk about today is
+06:24 
+
+06:24 is taken from that and a lot of
+06:27 
+
+06:27 learnings from different projects and
+06:30 
+
+06:30 engagements I've been on both open
+06:32 
+
+06:32 source
+06:34 
+
+06:34 [Musik]
+06:35 
+
+06:35 internal ones.
+06:38 
+
+06:38 [Musik]
+06:39 
+
+06:39 So he also had the same concept of when
+06:42 
+
+06:42 you give feedback you don't normally eh
+06:45 
+
+06:45 okay that's a weird sound in the
+06:47 
+
+06:47 background sorry eh when you give
+06:49 
+
+06:49 feedback you don't normally like another
+06:52 
+
+06:52 context you don't normally kind of
+06:54 
+
+06:54 expose the other person's faults without
+06:57 
+
+06:57 giving them something
+06:59 
+
+06:59 eh so I have 10 different kind of like
+07:04 
+
+07:04 groupings of learnings and I will say
+07:08 
+
+07:08 I'm of course only one person. We're all
+07:11 
+
+07:11 doing code reviews. We all have a lot of
+07:13 
+
+07:13 learnings. So eh your learnings may not
+07:17 
+
+07:17 be the same as mine. And I very much
+07:19 
+
+07:19 welcome like if you want to shout out
+07:22 
+
+07:22 that you know I think differently. I'm
+07:24 
+
+07:24 not offended. That's good. So please do
+07:28 
+
+07:28 that if you if you have something to say
+07:30 
+
+07:30 and I think we all are kind of experts
+07:32 
+
+07:32 in this in this area. But my first
+07:36 
+
+07:36 learning is be open for feedback.
+07:39 
+
+07:39 And this is a weird thing maybe to say
+07:41 
+
+07:41 on code reviews because as I mentioned
+07:45 
+
+07:45 code reviews are not necessarily
+07:47 
+
+07:47 voluntaries. So how can you actually be
+07:49 
+
+07:49 open for feedback and why is that
+07:53 
+
+07:53 making a difference? Anyways, one of the
+07:55 
+
+07:55 ways that I try to is I try to ask for
+07:60 
+
+07:60 very specific feedback. So eh you know
+08:04 
+
+08:04 is this the best way to do I don't know
+08:08 
+
+08:08 eh whatever the small task might be. Um
+08:12 
+
+08:12 I would love some feedback. Saying that
+08:14 
+
+08:14 I would love some feedback allows people
+08:17 
+
+08:17 especially maybe those earlier in career
+08:19 
+
+08:19 to actually give you feedback. kind of
+08:21 
+
+08:21 like where they might not have otherwise
+08:25 
+
+08:25 understood that you were actually open
+08:28 
+
+08:28 to receive some and also giving a very
+08:31 
+
+08:31 narrow place where you want feedback
+08:34 
+
+08:34 also gives people get less people get
+08:37 
+
+08:37 more creative than narrer the scope is.
+08:42 
+
+08:42 And the other eh thing is for example if
+08:45 
+
+08:45 you get a um
+08:48 
+
+08:48 a comment like this one wouldn't be
+08:50 
+
+08:50 cleaner if we used this API?
+08:53 
+
+08:53 You can either answer it with fixed or
+08:57 
+
+08:57 answer it with nice. I've never used
+08:59 
+
+08:59 that before.
+09:01 
+
+09:01 Much cleaner. And that way you're kind
+09:04 
+
+09:04 of like giving that person who reviewed
+09:06 
+
+09:06 it ehm
+09:09 
+
+09:09 like you're you're telling them that you
+09:11 
+
+09:11 appreciate their feedback and that they
+09:13 
+
+09:13 are allowed to kind of give you more
+09:15 
+
+09:15 feedback. And this tends to foster a lot
+09:18 
+
+09:18 more good and constructive feedback, at
+09:21 
+
+09:21 least in my opinion.
+09:23 
+
+09:23 And if you get a comment what does this
+09:26 
+
+09:26 function do? A lot of times we we get a
+09:29 
+
+09:29 little bit defensive when we get
+09:31 
+
+09:31 comments like this and we start
+09:33 
+
+09:33 answering the question what the function
+09:36 
+
+09:36 does. But if we go back and think about
+09:38 
+
+09:38 like why did this feedback come, it was
+09:41 
+
+09:41 obviously because someone was reading
+09:43 
+
+09:43 the code and had no clue what you were
+09:46 
+
+09:46 trying to do. So instead of answering it
+09:48 
+
+09:48 with an answer that will only be
+09:50 
+
+09:50 available during the PR, you can answer
+09:53 
+
+09:53 it with code instead. So changing the
+09:57 
+
+09:57 code to make it more readable, to make
+09:58 
+
+09:58 it more easy to understand to make the
+10:01 
+
+10:01 code speak for itself so that the next
+10:03 
+
+10:03 person that comes in and tries to read
+10:05 
+
+10:05 your code, which might be me in six
+10:07 
+
+10:07 weeks, still understands it because the
+10:11 
+
+10:11 code speaks for itself. I don't have to
+10:12 
+
+10:12 go to PR to look at the
+10:16 
+
+10:16 look at the answer.
+10:18 
+
+10:18 And then finally on this being open for
+10:21 
+
+10:21 feedback is a bit of a controversial
+10:24 
+
+10:24 suggestion.
+10:26 
+
+10:26 award all ties to the reviewer.
+10:29 
+
+10:29 So if there's a tie between the author
+10:31 
+
+10:31 and the reviewer, the reviewer wins. I'm
+10:34 
+
+10:34 saying this, but I don't always follow
+10:37 
+
+10:37 this advice. I will say eh but I'm
+10:41 
+
+10:41 saying this because the reviewer is
+10:44 
+
+10:44 coming in fresh. They don't have the
+10:45 
+
+10:45 context that you had when you wrote the
+10:47 
+
+10:47 code.
+10:53 
+
+10:53 base now on except for you. So in that
+10:58 
+
+10:58 way they do have more say in a sense.
+11:04 
+
+11:04 Ok
+11:06 
+
+11:06 advice for the author is write PRs that
+11:10 
+
+11:10 you would want to review and I think
+11:12 
+
+11:12 this is sort of like a little bit where
+11:15 
+
+11:15 the focus is often when people talk
+11:17 
+
+11:17 about good code reviews or good PR
+11:21 
+
+11:21 things like make the code readable this
+11:24 
+
+11:24 is code taken directly from lead code eh
+11:29 
+
+11:29 about some problem where you had to do
+11:31 
+
+11:31 min refs
+11:33 
+
+11:33 whatever that means.
+11:35 
+
+11:35 functioning code.
+11:38 
+
+11:38 I have no clue anymore what this code
+11:40 
+
+11:40 does. I know that it's using some
+11:44 
+
+11:44 dynamic programming because it uses DP
+11:47 
+
+11:47 which is like the term like the variable
+11:50 
+
+11:50 always used for dynamic programming lead
+11:54 
+
+11:54 code but otherwise I know nothing and
+11:56 
+
+11:56 asking someone to review this is just
+11:59 
+
+11:59 horrible. So making sure your code is
+12:02 
+
+12:02 readable.
+12:03 
+
+12:03 is number one
+12:06 
+
+12:06 and then maybe the most common advice
+12:09 
+
+12:09 about PR make them small
+12:13 
+
+12:13 eh sometimes
+12:15 
+
+12:15 I fall into the I'll submit everything
+12:19 
+
+12:19 because and this is especially if you
+12:21 
+
+12:21 have a team or a project where the
+12:24 
+
+12:24 culture is that people don't always
+12:25 
+
+12:25 review fast so you kind of like have to
+12:28 
+
+12:28 wait until you're done until get until
+12:32 
+
+12:32 you get a
+12:33 
+
+12:33 else you will have to be blocked for a
+12:36 
+
+12:36 long time.
+12:39 
+
+12:39 But if you make it smaller and narrow
+12:42 
+
+12:42 the scope, it will be so much easier to
+12:44 
+
+12:44 read through. I mean, how many of you
+12:47 
+
+12:47 have submitted a big pull request and
+12:50 
+
+12:50 looks good to me because no one no one
+12:53 
+
+12:53 can be bothered to to read your request.
+12:56 
+
+12:56 I'm sorry.
+12:58 
+
+12:58 Ehm, so scope the scope the changes more
+13:02 
+
+13:02 narrowly. I I welcome
+13:06 
+
+13:06 eh PR where you haven't solved the full
+13:09 
+
+13:09 problem, but it's easier to review as
+13:13 
+
+13:13 long as you've solved sort of like as
+13:15 
+
+13:15 long as it selfctain that it's not, you
+13:18 
+
+13:18 know, failing because it's eh it doesn't
+13:21 
+
+13:21 have all the pieces.
+13:24 
+
+13:24 And then I like when people put little
+13:28 
+
+13:28 bit of effort into the PR where they
+13:31 
+
+13:31 actually write sort of what what I am
+13:34 
+
+13:34 reviewing. Of course I should be seeing
+13:35 
+
+13:35 this from
+13:37 
+
+13:37 you know the
+13:39 
+
+13:39 work items that is referring to and
+13:41 
+
+13:41 things like that but in general it's
+13:43 
+
+13:43 just nice to put down in the PR context
+13:47 
+
+13:47 what is it solving what did you not
+13:49 
+
+13:49 cover with this because sometimes you
+13:51 
+
+13:51 didn't implement a full thing.
+13:53 
+
+13:53 How tested ide tested and like some logs
+13:59 
+
+13:59 or something that shows that you tested
+14:00 
+
+14:00 it great because then I know that youve
+14:03 
+
+14:03 tested it.
+14:04 
+
+14:04 have retest ifetest
+14:08 
+
+14:08 or anything special about implementation
+14:11 
+
+14:11 anything that kind of gives me context
+14:12 
+
+14:12 about why did you do X Y and Z over
+14:17 
+
+14:17 something else is useful
+14:19 
+
+14:19 and then also review eh the PRs before
+14:25 
+
+14:25 you let someone else review them so in
+14:28 
+
+14:28 this case
+14:30 
+
+14:30 I've done something that well I've done
+14:32 
+
+14:32 this a lot of
+14:35 
+
+14:35 exder
+14:39 
+
+14:39 [Musik]
+14:41 
+
+14:41 things that shouldn't contain you know
+14:44 
+
+14:44 reviewing sort of like what you have
+14:46 
+
+14:46 submitted
+14:48 
+
+14:48 giving it look through a reviewer size
+14:50 
+
+14:50 is very useful
+14:52 
+
+14:52 so those two things were for the author
+14:56 
+
+14:56 and then I have learnings for the team
+14:60 
+
+14:60 and the next one is settle style
+15:02 
+
+15:02 argument
+15:10 
+
+15:10 I like this and you like this
+15:13 
+
+15:13 write it down in a style guide and live
+15:16 
+
+15:16 by the style guide.
+15:18 
+
+15:18 In fact, I could not care more about if
+15:21 
+
+15:21 the brackets are Java style or C# style
+15:24 
+
+15:24 or if we're using, you know, four tabs
+15:27 
+
+15:27 or two spaces or whatever it is. As long
+15:30 
+
+15:30 as I can have my Visual Studio or my
+15:35 
+
+15:35 whatever tool I'm using, just
+15:37 
+
+15:37 automatically do that thing because of
+15:40 
+
+15:40 the style guide. So as long as it's
+15:41 
+
+15:41 consistent and easy to implement and why
+15:45 
+
+15:45 do we even care about style?
+15:49 
+
+15:49 This is an example a long time ago.
+15:53 
+
+15:53 a man in mids
+15:57 
+
+15:57 for SSH where a style guide or something
+16:01 
+
+16:01 that would have automatically formatted
+16:04 
+
+16:04 the code would have fixed the problem
+16:05 
+
+16:05 because the problem here is that there
+16:08 
+
+16:08 is an extra go to fail and if it would
+16:10 
+
+16:10 have been
+16:12 
+
+16:12 kind of like pulled out to the side
+16:14 
+
+16:14 where it should be or if it would have
+16:15 
+
+16:15 enforced having like the brackets around
+16:18 
+
+16:18 it wouldn't it wouldn't have caused the
+16:21 
+
+16:21 problem
+16:22 
+
+16:22 cost
+16:24 
+
+16:24 right now what happens is like basically
+16:25 
+
+16:25 you fall through but you haven't
+16:27 
+
+16:27 implemented any of the the things you
+16:29 
+
+16:29 should have and then the style gu like I
+16:32 
+
+16:32 mentioned earlier
+16:35 
+
+16:35 solves us having this conversation with
+16:38 
+
+16:38 every new developer on the team you know
+16:42 
+
+16:42 I hate this conversation
+16:44 
+
+16:44 do you hate this conversation I hope you
+16:47 
+
+16:47 do because this is not a conversation we
+16:49 
+
+16:49 need to have ehm
+16:53 
+
+16:53 Next team is automating boring bits.
+17:02 
+
+17:02 Humans or that taxing to review humans
+17:05 
+
+17:05 like typos or the mark down headings or
+17:12 
+
+17:12 you know whatever it might be like
+17:15 
+
+17:15 tests are not running or or anything
+17:17 
+
+17:17 like that.
+17:19 
+
+17:19 machines do that rely on things working
+17:24 
+
+17:24 and and you know all the net being taken
+17:29 
+
+17:29 care of so you can focus on on
+17:32 
+
+17:32 the real stuff because having someone eh
+17:37 
+
+17:37 give you this list this laundry list of
+17:39 
+
+17:39 problems is taxing both for for the
+17:42 
+
+17:42 author
+17:44 
+
+17:44 and the reviewer if it was a machine and
+17:47 
+
+17:47 you know you got like
+17:50 
+
+17:50 linting
+17:52 
+
+17:52 that's such a much so much faster
+17:55 
+
+17:55 developer feedback loop than having a
+17:58 
+
+17:58 human go through and give you that
+17:59 
+
+17:59 feedback in a PR
+18:01 
+
+18:01 and if we let machines take care of this
+18:04 
+
+18:04 like building the solution running the
+18:06 
+
+18:06 test checking for code style checking
+18:08 
+
+18:08 for typos checking for secrets that
+18:10 
+
+18:10 accidentally made it enter the code etc
+18:13 
+
+18:13 we as humans can focus on does it solve
+18:17 
+
+18:17 the task and does solve it in the best
+18:19 
+
+18:19 way. And I mean now for example also
+18:23 
+
+18:23 with things like LMs and eh
+18:28 
+
+18:28 various copilots and and things like
+18:31 
+
+18:31 that it's so easy to apart from just
+18:34 
+
+18:34 having like the basic linters and style
+18:36 
+
+18:36 guides and all of that have a machine
+18:38 
+
+18:38 kind of like do the first draft of like
+18:41 
+
+18:41 the boring PR so you can focus on
+18:44 
+
+18:44 looking at these things. Does it solve
+18:46 
+
+18:46 the task and does it solve it in the
+18:48 
+
+18:48 best way?
+18:50 
+
+18:50 Then eh we get into what the author can
+18:54 
+
+18:54 do.
+18:57 
+
+18:57 As an author or as a team actually we
+19:00 
+
+19:00 can start reviewing immediately. I don't
+19:03 
+
+19:03 mean necessarily exactly in the same
+19:06 
+
+19:06 second it goes through but when you
+19:08 
+
+19:08 created when you written some code and
+19:11 
+
+19:11 you put it in the repo and you created a
+19:13 
+
+19:13 PR
+19:15 
+
+19:15 you're quite energized and happy and
+19:17 
+
+19:17 ready to go to the next task but if you
+19:21 
+
+19:21 then have to wait and wait and wait and
+19:24 
+
+19:24 wait for this code to make it into the
+19:26 
+
+19:26 repo or you're starting to do weird
+19:29 
+
+19:29 things like you know adding a new branch
+19:32 
+
+19:32 on top of the old branch that hasn't
+19:34 
+
+19:34 been reviewed and and all of these crazy
+19:36 
+
+19:36 things, you're getting into just a bad
+19:38 
+
+19:38 pattern
+19:40 
+
+19:40 of of doing codes. Eh, so I suggest like
+19:43 
+
+19:43 treating PRs with the highest priority.
+19:46 
+
+19:46 instead of taking a new task do a PR and
+19:50 
+
+19:50 the reason for this is if your backlog
+19:53 
+
+19:53 is properly prioritized then whatever
+19:57 
+
+19:57 has been done and whatever needs
+19:59 
+
+19:59 reviewing has more priority than
+20:02 
+
+20:02 whatever you can do next. It always
+20:04 
+
+20:04 should have more priority to finish the
+20:07 
+
+20:07 old tasks overtaking new ones except for
+20:10 
+
+20:10 of course this like super urgent bug
+20:12 
+
+20:12 that cropped up that wasn't available
+20:14 
+
+20:14 before. But generally treating PRs with
+20:17 
+
+20:17 more priority and taking them before new
+20:19 
+
+20:19 tasks is in my view a very good system.
+20:24 
+
+20:24 And something that we've been
+20:26 
+
+20:26 doing in in our teams or in many of the
+20:29 
+
+20:29 teams that I worked in is eh you know
+20:33 
+
+20:33 always taking PRs before new tasks but
+20:37 
+
+20:37 also sending a note out maybe on teams
+20:40 
+
+20:40 or whatever your communication is and
+20:43 
+
+20:43 assigning PRs after daily. So you
+20:46 
+
+20:46 constantly focus on having people you
+20:50 
+
+20:50 know look at the PRs before they they
+20:52 
+
+20:52 look at something new.
+20:56 
+
+20:56 Don't overwhelm the author. This kind of
+20:59 
+
+20:59 goes back to the the whole like you know
+21:02 
+
+21:02 laundry list that we saw before that's
+21:04 
+
+21:04 very exhausting because developer
+21:07 
+
+21:07 patients is very finite. We're lazy
+21:10 
+
+21:10 people or at least me and the people I
+21:13 
+
+21:13 worked with have been very lazy
+21:15 
+
+21:15 developers
+21:17 
+
+21:17 and we don't like laundry lists like
+21:19 
+
+21:19 this. If we put the PR in and we get
+21:22 
+
+21:22 back this laundery list
+21:25 
+
+21:25 will
+21:27 
+
+21:27 at least my mood will drop a lot if I
+21:30 
+
+21:30 have a PR with you know like 100
+21:33 
+
+21:33 different things on it. And what will
+21:35 
+
+21:35 happen here is that I might focus on the
+21:38 
+
+21:38 easy ones like changing adding to adding
+21:42 
+
+21:42 or you know changing level two heading
+21:45 
+
+21:45 and I might miss the whole we should
+21:48 
+
+21:48 refactor this to fit the pattern that we
+21:50 
+
+21:50 used in the rest of the repo because
+21:53 
+
+21:53 that's a big one and it kind of like now
+21:57 
+
+21:57 gets the same level of priority as the
+21:59 
+
+21:59 rest.
+22:00 
+
+22:00 So and the other problem with this is
+22:03 
+
+22:03 that if I go through and actually fix
+22:05 
+
+22:05 this one the refactoring one many of the
+22:08 
+
+22:08 other ones may not even no longer exist.
+22:11 
+
+22:11 So I suggest and something I'm trying to
+22:16 
+
+22:16 do
+22:18 
+
+22:18 is putting one comment in there like the
+22:20 
+
+22:20 major one and then you can maybe say you
+22:23 
+
+22:23 know there are other things like there
+22:25 
+
+22:25 are some things but hopefully those will
+22:26 
+
+22:26 be taken care of by doing this but this
+22:29 
+
+22:29 is the one we want to focus on like have
+22:32 
+
+22:32 a hierarchy of problems you need to
+22:34 
+
+22:34 solve in the in the PR and focus on the
+22:37 
+
+22:37 bigger ones first so those actually get
+22:40 
+
+22:40 the attention they need.
+22:42 
+
+22:42 And also if you have a lot of the same
+22:44 
+
+22:44 problem like for example if someone I
+22:48 
+
+22:48 don't know did curly wrong and you
+22:51 
+
+22:51 didn't automate the boring bits then
+22:54 
+
+22:54 there's no need for you to mark every
+22:56 
+
+22:56 single spot. We need to trust our fellow
+22:58 
+
+22:58 developers to understand that if we say
+23:02 
+
+23:02 this and say, "Hey, apply it to the rest
+23:04 
+
+23:04 of the the code or the rest of the PR,
+23:07 
+
+23:07 they can do that. If you can't trust
+23:10 
+
+23:10 your fellow developers to do that,
+23:13 
+
+23:13 there are other issues in that team that
+23:15 
+
+23:15 PRS, I will say." So, and yes, the
+23:18 
+
+23:18 difference between having the one
+23:20 
+
+23:20 comment versus 10 here is is quite a
+23:23 
+
+23:23 bit.
+23:25 
+
+23:25 Ehm
+23:27 
+
+23:27 and this one eh basically
+23:32 
+
+23:32 adding to the scope of the code because
+23:35 
+
+23:35 now you're reviewing something and you
+23:36 
+
+23:36 want them to fix a little bit more you
+23:39 
+
+23:39 know eh that can go on forever if we do
+23:44 
+
+23:44 that. So respect a scope and instead do
+23:47 
+
+23:47 a PR yourself with whatever needs to be
+23:49 
+
+23:49 done here.
+23:52 
+
+23:52 And now we're getting into a little bit
+23:53 
+
+23:53 of
+23:55 
+
+23:55 controversial
+23:56 
+
+23:56 space. We don't have always have to go
+23:59 
+
+23:59 for perfect. This is something I learned
+24:02 
+
+24:02 during my argument PR
+24:05 
+
+24:05 that it would have been much better if I
+24:09 
+
+24:09 didn't go for my perfect. There are
+24:12 
+
+24:12 different kinds of of code that makes it
+24:15 
+
+24:15 into the the repoint PR like things that
+24:18 
+
+24:18 are obviously wrong like it doesn't
+24:21 
+
+24:21 work. it has multiple problems that
+24:24 
+
+24:24 should of course not go into the repo.
+24:27 
+
+24:27 Also things like that seem to work but
+24:30 
+
+24:30 are very very hard to understand
+24:33 
+
+24:33 I suggest that should also not make it
+24:35 
+
+24:35 into the repo.
+24:37 
+
+24:37 But things that work it could be a
+24:40 
+
+24:40 little bit more readable. We could have
+24:43 
+
+24:43 like know little bit more consistency on
+24:45 
+
+24:45 the eh
+24:48 
+
+24:48 on the variable names or whatever it
+24:51 
+
+24:51 might be.
+24:53 
+
+24:53 If that makes it into the repo, it's not
+24:55 
+
+24:55 the end of the world. It's something
+24:57 
+
+24:57 that we can also fix later. And of
+25:01 
+
+25:01 course then there is like the pretty
+25:02 
+
+25:02 good code where we could rename a few
+25:05 
+
+25:05 things but generally ok.
+25:07 
+
+25:07 Nirvana code
+25:09 
+
+25:09 write code
+25:13 
+
+25:13 Nirvana code
+25:15 
+
+25:15 but I'm suggesting that to take it from
+25:18 
+
+25:18 works to Nirvana
+25:20 
+
+25:20 might be a little bit too exhausting
+25:23 
+
+25:23 especially
+25:25 
+
+25:25 if someone is new to the repo or if
+25:27 
+
+25:27 someone's
+25:29 
+
+25:29 you know and maybe we should then stop
+25:32 
+
+25:32 to take it from works to pretty good and
+25:34 
+
+25:34 be happy with
+25:38 
+
+25:38 s
+25:43 
+
+25:43 the next level if that's what we to do
+25:47 
+
+25:47 but enforcing that everything needs to
+25:50 
+
+25:50 be perfect
+25:53 
+
+25:53 is gna cause you know a lot of
+25:56 
+
+25:56 frustration if there is a long gap
+25:58 
+
+25:58 between what is coming in there and
+26:00 
+
+26:00 perfect so
+26:03 
+
+26:03 we might think
+26:05 
+
+26:05 If we have sort of like level Code and
+26:09 
+
+26:09 we only take it up to B and that's what
+26:12 
+
+26:12 we put in the in the repo.
+26:15 
+
+26:15 Code repo is grade B but that is not
+26:19 
+
+26:19 true because taking someone from C to B
+26:26 
+
+26:26 means that they have improved and next
+26:27 
+
+26:27 time you can take them from B to A you
+26:31 
+
+26:31 know so there is like there is levels of
+26:33 
+
+26:33 progression and there is levels of at
+26:35 
+
+26:35 least in my opinion what
+26:38 
+
+26:38 what we can do without completely
+26:40 
+
+26:40 exhausting the people around
+26:45 
+
+26:45 And then this is one of my pet peeves
+26:47 
+
+26:47 like if their remaining tasks are very
+26:50 
+
+26:50 trivial then approve the PR. You know if
+26:53 
+
+26:53 it's like
+26:55 
+
+26:55 typos or things that are generally not
+26:59 
+
+26:59 something that needs to be debated or
+27:01 
+
+27:01 something that that is hard to implement
+27:03 
+
+27:03 then prove.
+27:06 
+
+27:06 And then also on this journey like
+27:11 
+
+27:11 if if there is something that you like
+27:14 
+
+27:14 tell the people that you you like it.
+27:16 
+
+27:16 Tell the developers that you like it
+27:17 
+
+27:17 because the way humans work outside of
+27:22 
+
+27:22 PR in all kind of feedback is that if we
+27:24 
+
+27:24 get positive feedback we continue doing
+27:27 
+
+27:27 that a lot more than changing ourselves
+27:31 
+
+27:31 if we get negative feedback. So the best
+27:33 
+
+27:33 way that you can make a person do
+27:35 
+
+27:35 exactly what you want is reinforcing the
+27:38 
+
+27:38 things that you like that they do.
+27:42 
+
+27:42 So
+27:43 
+
+27:43 eh be generous with positive feedback
+27:47 
+
+27:47 and be generous with examples.
+27:52 
+
+27:52 This is an actual eh comment from an
+27:56 
+
+27:56 actual PR
+27:58 
+
+27:58 maybe a few years back where I had
+28:02 
+
+28:02 someone on the team who was not very
+28:04 
+
+28:04 familiar with Python but was excellent
+28:07 
+
+28:07 at security things and
+28:11 
+
+28:11 and he wrote this code and and I said
+28:15 
+
+28:15 dude consider using F strings for
+28:16 
+
+28:16 readability does anyone know what F
+28:18 
+
+28:18 strings
+28:20 
+
+28:20 Does anyone know what string
+28:21 
+
+28:21 interpolation is in C?
+28:24 
+
+28:24 So F strings is string interpolation.
+28:27 
+
+28:27 It's the same thing. The concept is not
+28:30 
+
+28:30 what this guy was missing when he didn't
+28:33 
+
+28:33 know what the F strings were. The the
+28:35 
+
+28:35 context he was missing was the term f
+28:38 
+
+28:38 strings which was new to him and python
+28:41 
+
+28:41 that was new to him as well. So
+28:46 
+
+28:46 have putting this comment in here meant
+28:48 
+
+28:48 that he had to then go and search for
+28:50 
+
+28:50 the word f strings. Understand how that
+28:52 
+
+28:52 works and how to implement you know how
+28:53 
+
+28:53 to change this to that.
+28:57 
+
+28:57 But instead just using like this little
+28:59 
+
+28:59 suggestion which is in almost all the
+29:01 
+
+29:01 tools that were used for code reviews
+29:04 
+
+29:04 and saying you know use F strings with
+29:08 
+
+29:08 an example
+29:10 
+
+29:10 means that you're saving the person so
+29:12 
+
+29:12 much time and and energy trying to
+29:14 
+
+29:14 figure out what it is you actually mean
+29:17 
+
+29:17 and this is especially also sort of like
+29:20 
+
+29:20 I I love to do this when I say hey maybe
+29:22 
+
+29:22 we can simplify this and then you can
+29:24 
+
+29:24 give an example of
+29:29 
+
+29:29 may subjective like it might be hard to
+29:32 
+
+29:32 understand exactly what you mean and
+29:34 
+
+29:34 giving an example
+29:36 
+
+29:36 is is quite useful in that case.
+29:39 
+
+29:39 Ehm and then we can also work on sort of
+29:45 
+
+29:45 like the language of our feedback so one
+29:48 
+
+29:48 way we can do that is framing the
+29:49 
+
+29:49 feedback as questions.
+29:54 
+
+29:54 So let's say for example
+29:57 
+
+29:57 someone gives this comment implement
+29:58 
+
+29:58 this using start copying instead then
+30:01 
+
+30:01 the copying will be done in the data
+30:02 
+
+30:02 plane. If I get this comment, this is
+30:06 
+
+30:06 you don't have to worry about the
+30:07 
+
+30:07 details of this if you're not doing
+30:09 
+
+30:09 copying in of files in Asure. But eh
+30:14 
+
+30:14 if there is a reason why I can't do this
+30:17 
+
+30:17 or there is a reason why I don't wan to
+30:18 
+
+30:18 do this
+30:20 
+
+30:20 and I say you know that would require
+30:22 
+
+30:22 key access I'm a bit hesitant now I'm
+30:26 
+
+30:26 disobeying a direct order from someone
+30:29 
+
+30:29 like they've literally said implement
+30:31 
+
+30:31 this using this.
+30:34 
+
+30:34 optional implement using that
+30:37 
+
+30:37 changing like a few words
+30:41 
+
+30:41 can we implement this assuming that the
+30:45 
+
+30:45 person has actually done due diligence
+30:48 
+
+30:48 on on their code allows them to answer
+30:52 
+
+30:52 something like this we we could but that
+30:54 
+
+30:54 would require key access thought so now
+30:57 
+
+30:57 instead of having sort of like a mini
+31:01 
+
+31:01 argument which I mean it wasn't like
+31:04 
+
+31:04 harsh argument by any means now we have
+31:06 
+
+31:06 a conversation
+31:08 
+
+31:08 and the subtle difference is may seem
+31:13 
+
+31:13 small here but it's big when you get it
+31:17 
+
+31:17 as the author of a PR like where it it
+31:20 
+
+31:20 turns into more of a conversation
+31:22 
+
+31:22 instead because now you can have real
+31:25 
+
+31:25 you know constructive discussions about
+31:27 
+
+31:27 this and you don't feel like if you're
+31:29 
+
+31:29 disobeying it they are automatically gna
+31:33 
+
+31:33 dis
+31:36 
+
+31:36 and on the
+31:38 
+
+31:38 don't make it personal and actually
+31:40 
+
+31:40 don't take it personal
+31:43 
+
+31:43 if someone is calling you or your code
+31:46 
+
+31:46 out that is not really you code that's
+31:49 
+
+31:49 just
+31:52 
+
+31:52 code.
+31:53 
+
+31:53 So if someone writes eh you put this
+31:56 
+
+31:56 method in the wrong class, please move
+31:58 
+
+31:58 this to the user repository class.
+32:01 
+
+32:01 Also by the way user repository hate the
+32:04 
+
+32:04 word repository in a repository but
+32:07 
+
+32:07 that's a different story. Eh but you
+32:11 
+
+32:11 here is very accusatory.
+32:14 
+
+32:14 pointing at you did something wrong
+32:18 
+
+32:18 whereas he is changing it again to can
+32:20 
+
+32:20 we
+32:22 
+
+32:22 makes it completely different in
+32:24 
+
+32:24 connotation so
+32:27 
+
+32:27 ehm there is no point like if I write
+32:30 
+
+32:30 can we I don't actually think that I'm
+32:32 
+
+32:32 gna be changing this but just can we
+32:36 
+
+32:36 makes it more we're owning this code and
+32:40 
+
+32:40 we together should decide if we should
+32:43 
+
+32:43 or
+32:50 
+
+32:50 adding why you want someone to do
+32:54 
+
+32:54 something makes it a lot easier to
+32:56 
+
+32:56 either make them accept it or maybe they
+33:01 
+
+33:01 have a reason why you why to do this but
+33:04 
+
+33:04 now at least they know why you wanted
+33:06 
+
+33:06 them to do that so they can kind of like
+33:09 
+
+33:09 contest it in the right
+33:17 
+
+33:17 use any reviewing friends PR and doing
+33:22 
+
+33:22 good code and you always I know you're
+33:26 
+
+33:26 right good code so I trust this is
+33:28 
+
+33:28 written well check that is also not a
+33:31 
+
+33:31 very you know that is also not how we
+33:33 
+
+33:33 should do code reviews
+33:36 
+
+33:36 finally eh the
+33:40 
+
+33:40 learning advice is resolving stale mates
+33:45 
+
+33:45 proactively. So if you do run into an
+33:48 
+
+33:48 argument with people
+33:51 
+
+33:51 then ehm
+33:55 
+
+33:55 try to fix it before it gets too bad.
+33:58 
+
+33:58 Eh, so something like you have to change
+33:60 
+
+33:60 this before I approve
+34:02 
+
+34:02 and then the author says but I don't
+34:05 
+
+34:05 want to make these changes and then
+34:07 
+
+34:07 you're suddenly in a position where this
+34:10 
+
+34:10 person want to approve and this person
+34:11 
+
+34:11 won't change and what are you going to
+34:14 
+
+34:14 do about it?
+34:16 
+
+34:16 And you can kind of see when stale mates
+34:18 
+
+34:18 are coming.
+34:19 
+
+34:19 number of perending
+34:22 
+
+34:22 when mosts are rejected the tone is
+34:26 
+
+34:26 getting more and more hile you can feel
+34:28 
+
+34:28 the people kind of like going like this
+34:30 
+
+34:30 on the keyboard as they write the
+34:32 
+
+34:32 comments.
+34:34 
+
+34:34 Eh or maybe if you're the reviewer you
+34:36 
+
+34:36 can feel like your heart rate going up.
+34:38 
+
+34:38 That's not a good sign I would say in in
+34:41 
+
+34:41 the code review.
+34:43 
+
+34:43 And to everyone else it kind of sounds
+34:46 
+
+34:46 like this. You know, when someone is
+34:48 
+
+34:48 having an argument on
+34:50 
+
+34:50 the internet and someone is right and
+34:53 
+
+34:53 the other person is also right and
+34:55 
+
+34:55 everyone else is going like, who are
+34:57 
+
+34:57 these buffons? Why are they bickering
+34:59 
+
+34:59 about this completely unimportant thing?
+35:02 
+
+35:02 Who cares if there was an extra space
+35:03 
+
+35:03 there? I don't care.
+35:07 
+
+35:07 So, how do we solve this?
+35:09 
+
+35:09 We solve it like we solve like any other
+35:13 
+
+35:13 arguments like we pick up the phone
+35:16 
+
+35:16 because having arguments over text is
+35:19 
+
+35:19 just bound to get worse and worse and
+35:21 
+
+35:21 worse because you're kind of like
+35:23 
+
+35:23 interpreting what the other person said.
+35:25 
+
+35:25 So just picking up the phone and having
+35:27 
+
+35:27 a proper discussion about it usually
+35:29 
+
+35:29 solves of these problems.
+35:32 
+
+35:32 Or getting a second opinion, having like
+35:35 
+
+35:35 a third person come in and say, "Hey, we
+35:38 
+
+35:38 can't decide if we should do A or B. You
+35:43 
+
+35:43 decide and let that person be the
+35:47 
+
+35:47 decider."
+35:48 
+
+35:48 Or we can do something like a little bit
+35:51 
+
+35:51 controversial again. We can give up. If
+35:54 
+
+35:54 we're in an argument, we can actually
+35:56 
+
+35:56 give up and that's fine. And you're not
+35:60 
+
+35:60 losing sort of like your professionalism
+36:02 
+
+36:02 or anything. It's like better.
+36:07 
+
+36:07 And if we give up, it's fair to also
+36:10 
+
+36:10 like, you know, add a task to fix this
+36:12 
+
+36:12 later or do a design review with a
+36:14 
+
+36:14 larger group later. But by giving up and
+36:17 
+
+36:17 letting the code in, you're kind of like
+36:20 
+
+36:20 letting life progress. Because
+36:21 
+
+36:21 oftentimes
+36:23 
+
+36:23 when I found that people get into these
+36:26 
+
+36:26 stress situations where they start
+36:27 
+
+36:27 arguing is because someone needs to get
+36:30 
+
+36:30 code in you know for whatever artificial
+36:33 
+
+36:33 deadline Friday at 3:00 whatever and
+36:37 
+
+36:37 they get stressed because they have to
+36:38 
+
+36:38 go on vacation and whatn
+36:41 
+
+36:41 let them let him do that like let this
+36:45 
+
+36:45 code go in and fix it later whatever.
+36:48 
+
+36:48 Ehm
+36:50 
+
+36:50 but don't block it for for blocking sage
+36:54 
+
+36:54 and then when you have kind of like
+36:57 
+
+36:57 fixed the problem and everything and
+37:01 
+
+37:01 and you're kind of ready with a PR then
+37:03 
+
+37:03 hug and make up like actually go through
+37:06 
+
+37:06 and make the effort afterwards to kind
+37:08 
+
+37:08 of like recou the
+37:11 
+
+37:11 the relationship because eh
+37:15 
+
+37:15 not having a good relationship with
+37:22 
+
+37:22 L absolutely
+37:26 
+
+37:26 to summarize before we kind of go into I
+37:29 
+
+37:29 want to hear what you guys have to say
+37:31 
+
+37:31 eh we have a few things for the author.
+37:35 
+
+37:35 Be open for feedback write PRs that you
+37:37 
+
+37:37 would want to review settle style guides
+37:41 
+
+37:41 style arguments with style guides.
+37:43 
+
+37:43 automate boring
+37:46 
+
+37:46 reviewing immediately don't overwhelm
+37:48 
+
+37:48 the author generous with examples frame
+37:50 
+
+37:50 feedback as questions don't make it
+37:52 
+
+37:52 personal and resolve stale mates
+37:54 
+
+37:54 proactively
+37:58 
+
+37:58 and
+37:60 
+
+37:60 looking back at this if you're not
+38:01 
+
+38:01 arguing in code reviews you're doing
+38:03 
+
+38:03 them wrong suggest if you're arguing in
+38:06 
+
+38:06 code reviews you might be doing them
+38:08 
+
+38:08 wrong
+38:10 
+
+38:10 thank you ehm
+38:14 
+
+38:14 Does anyone have sort of like any
+38:16 
+
+38:16 comments on anything
+38:19 
+
+38:19 that I've said anything else you feel
+38:22 
+
+38:22 like I completely missed that you really
+38:24 
+
+38:24 wan to shout out like a really good
+38:30 
+
+38:30 yes
+38:33 
+
+38:33 >> there one
+38:37 
+
+38:37 big level and more detail yes there was
+38:40 
+
+38:40 one part where I mention going big
+38:42 
+
+38:42 detail.
+38:48 
+
+38:48 you fix like the big thing and then you
+38:50 
+
+38:50 get the com. So you're wondering if it
+38:53 
+
+38:53 feels demotivating if you fix the big
+38:55 
+
+38:55 thing and then go into the details.
+38:57 
+
+38:57 Actually that's like a comment I've
+38:59 
+
+38:59 gotten by multiple people in eh on this
+39:03 
+
+39:03 and I try to do something like at least
+39:08 
+
+39:08 personally I try to say hey this is the
+39:11 
+
+39:11 big picture. There were some knits but
+39:14 
+
+39:14 we can take care of them after you know.
+39:17 
+
+39:17 Yes.
+39:24 
+
+39:24 or may not even relevant
+39:26 
+
+39:26 but do you feel like it would
+39:29 
+
+39:29 be demotivating to have like comments
+39:32 
+
+39:32 that weren't there in the first round?
+39:35 
+
+39:35 I think for me personally not so much
+39:37 
+
+39:37 but
+39:39 
+
+39:39 I can definitely feel the I can
+39:42 
+
+39:42 definitely feel that other people in the
+39:44 
+
+39:44 in my team might have that feeling.
+39:47 
+
+39:47 >> Oke. Yeah, I think it's a fair comment.
+39:50 
+
+39:50 >> Great. Thanks.
+39:54 
+
+39:54 >> Oke. Yeah. Go for it.
+39:55 
+
+39:55 >> Question. Because you mention to award
+39:58 
+
+39:58 the reviewer in the ties. I don't always
+40:02 
+
+40:02 do that.
+40:03 
+
+40:03 >> Yeah, because we have some issue um
+40:06 
+
+40:06 because for the small things when the
+40:08 
+
+40:08 reviewer wants something they either
+40:11 
+
+40:11 push it to my PR or they open PR against
+40:14 
+
+40:14 my
+40:15 
+
+40:15 >> but sometimes they sneaking like
+40:17 
+
+40:17 completely big changes. Ah
+40:19 
+
+40:19 >> right.
+40:20 
+
+40:20 >> So how to set the boundaries?
+40:22 
+
+40:22 >> Mm.
+40:23 
+
+40:23 I don't know. Eh do you have an answer?
+40:26 
+
+40:26 >> I don't know.
+40:27 
+
+40:27 >> I think it all comes down to I guess
+40:29 
+
+40:29 communication.
+40:31 
+
+40:31 and and kind of like if someone is
+40:33 
+
+40:33 pulling a lot of things into yours then
+40:37 
+
+40:37 I would just say you know this wasn't
+40:39 
+
+40:39 part of the original problem can we add
+40:42 
+
+40:42 this to to like a separate PR or
+40:46 
+
+40:46 something because yeah you don't want
+40:48 
+
+40:48 someone else sneaking in enough that it
+40:50 
+
+40:50 makes it hard to review the PR for sure.
+40:53 
+
+40:53 I hand sorry you can you had something
+40:56 
+
+40:56 else.
+41:04 
+
+41:04 >> I have a question.
+41:06 
+
+41:06 So you talked a lot about PR reviews.
+41:09 
+
+41:09 Have you any experience with commit
+41:11 
+
+41:11 level reviews?
+41:14 
+
+41:14 Do I have any experience with commit
+41:15 
+
+41:15 level reviews?
+41:18 
+
+41:18 Not formally, but we do that a lot
+41:20 
+
+41:20 still. Eh in the sense like we if we
+41:24 
+
+41:24 have
+41:26 
+
+41:26 like in a lot of projects I work on we
+41:28 
+
+41:28 have a lot of like pair programming
+41:30 
+
+41:30 which is kind of like commit level
+41:32 
+
+41:32 reviews. So background maybe I started
+41:35 
+
+41:35 with Garretsit
+41:38 
+
+41:38 review tool each commit and each commit
+41:41 
+
+41:41 and now switching over to get the lab.
+41:45 
+
+41:45 So also doing PR reviews and I'm still
+41:48 
+
+41:48 indecise about if I wanch back or not
+41:51 
+
+41:51 because it can get really nick picky if
+41:54 
+
+41:54 you really have to fix commits in the
+41:57 
+
+41:57 history and get them perfect. Oh can you
+41:60 
+
+41:60 explain how that works then?
+42:03 
+
+42:03 commit
+42:10 
+
+42:10 get min e pretty well fast
+42:15 
+
+42:15 >> because commit a lot like commit like a
+42:20 
+
+42:20 lot of bad code you know on the other
+42:24 
+
+42:24 hand you have the really small structure
+42:26 
+
+42:26 also
+42:31 
+
+42:31 PR
+42:33 
+
+42:33 does anyone have any experience with
+42:36 
+
+42:36 that and what do they feel?
+42:42 
+
+42:42 >> Thank you. Sorry.
+42:44 
+
+42:44 Well, that's a good usage of prequ and
+42:49 
+
+42:49 small atomic comits. We are doing
+42:51 
+
+42:51 something like this but not like
+42:55 
+
+42:55 reviewing the single commits but in our
+42:58 
+
+42:58 local host every single developer local
+43:01 
+
+43:01 host we have this precommit hook in the
+43:06 
+
+43:06 git folder. So when you commit
+43:10 
+
+43:10 everything is scanned for like linting,
+43:14 
+
+43:14 formatting and
+43:17 
+
+43:17 >> automated r so at least eh confident
+43:21 
+
+43:21 that your commit is kind of okay not on
+43:25 
+
+43:25 the style general code style perspective
+43:29 
+
+43:29 but from a linting and formatting
+43:31 
+
+43:31 perspective yes also you can test your
+43:34 
+
+43:34 code so every single commit F test if
+43:38 
+
+43:38 they are fast it depends on your use
+43:41 
+
+43:41 case. But we are doing something like
+43:43 
+
+43:43 that. But on a review perspective we
+43:46 
+
+43:46 review the food request, not the single
+43:48 
+
+43:48 commit. Yeah, I use a lot of get hooks
+43:52 
+
+43:52 as well. I like that.
+43:57 
+
+43:57 Yeah. Anyone else? Ja.
+44:02 
+
+44:02 >> Hi. Eh, we got a question regarding
+44:05 
+
+44:05 tooling. We just talking about gitc to
+44:08 
+
+44:08 kind of automate the way the boring
+44:10 
+
+44:10 parts.
+44:11 
+
+44:11 >> Eh, for frontend projects, I've used
+44:13 
+
+44:13 things like prettier and such and it's
+44:15 
+
+44:15 just lovely to work with. But I haven't
+44:18 
+
+44:18 found something similar that gives me
+44:20 
+
+44:20 the same results for backend codes.
+44:23 
+
+44:23 C#.NET. Eh, do you have anything? I mean
+44:28 
+
+44:28 I think like I use a lot of the
+44:31 
+
+44:31 builtinnet
+44:34 
+
+44:34 sort of like the editor config and and
+44:37 
+
+44:37 these sort of things to automatically
+44:40 
+
+44:40 clean that thing clean that uply but the
+44:43 
+
+44:43 problem is that it isn't automated you
+44:46 
+
+44:46 can't enforce it on all your team
+44:47 
+
+44:47 members that this should be done every
+44:50 
+
+44:50 time actually commit the m you can't
+44:54 
+
+44:54 maybe enforce it on each commit
+44:57 
+
+44:57 Eh, but you can definitely enforce it on
+44:59 
+
+44:59 HPR.
+45:02 
+
+45:02 Yeah, but I prefer to have it done
+45:05 
+
+45:05 before,
+45:05 
+
+45:05 >> right? But even like on the on the
+45:08 
+
+45:08 commit level or sort of like as you're
+45:10 
+
+45:10 working eh at least in Visual Studio and
+45:14 
+
+45:14 Visual Studio Code, you will see sort of
+45:16 
+
+45:16 like the errors and things like that.
+45:18 
+
+45:18 I think I'm not sure now that you
+45:24 
+
+45:24 wondering if arithub
+45:27 
+
+45:27 get hooks that will also run sort of
+45:30 
+
+45:30 like eh format and
+45:36 
+
+45:36 >> maybe someone else knows
+45:47 
+
+45:47 eh So my question is more eh how do you
+45:50 
+
+45:50 teach maybe some team members the
+45:52 
+
+45:52 importance of reviewing because I had a
+45:55 
+
+45:55 personal experience where I was part of
+45:57 
+
+45:57 a team where was pretty serious and
+45:58 
+
+45:58 everyone did it and then I was part of a
+46:00 
+
+46:00 team where there was maybe only me and
+46:03 
+
+46:03 another colleague that took it seriously
+46:05 
+
+46:05 and then we kind of like were maybe the
+46:08 
+
+46:08 bad guys because the others didn't agree
+46:10 
+
+46:10 that you should do it so extensively and
+46:13 
+
+46:13 yeah
+46:14 
+
+46:14 >> that's a very good question And one I
+46:17 
+
+46:17 wish I had like a really good answer to.
+46:19 
+
+46:19 I think
+46:22 
+
+46:22 the way I try to to do it but it takes
+46:25 
+
+46:25 time is doing exactly what you said like
+46:28 
+
+46:28 being a good role model and constantly
+46:31 
+
+46:31 do it. And I'm also in a position where
+46:35 
+
+46:35 I'm usually the spider in the project in
+46:38 
+
+46:38 the sense I review everything I have. So
+46:42 
+
+46:42 in that sense I I touch a lot of
+46:47 
+
+46:47 people's code and like give them the
+46:49 
+
+46:49 sense of the reviewing but eh I know eh
+46:54 
+
+46:54 and especially for example early in in
+46:56 
+
+46:56 projects when you're in the
+46:57 
+
+46:57 experimentation phase and and things
+46:59 
+
+46:59 like that there is a lot of like bad
+47:02 
+
+47:02 code that needs to come through because
+47:04 
+
+47:04 you can't kind of like enforce that all
+47:08 
+
+47:08 the experimentation and all the
+47:09 
+
+47:09 notebooks or whatever it might be are
+47:13 
+
+47:13 perfect. And I always have like this
+47:15 
+
+47:15 sinking feeling that
+47:19 
+
+47:19 like you know I almost afterwards I pull
+47:22 
+
+47:22 down a a new eh you know a new version
+47:27 
+
+47:27 of the repo and I almost review the
+47:29 
+
+47:29 things myself and fix. But one thing
+47:32 
+
+47:32 I've kind of learned in that case is
+47:35 
+
+47:35 when when we get into the MVP stage or
+47:38 
+
+47:38 when we get into the production stage I
+47:40 
+
+47:40 try to be very tough on on like my
+47:44 
+
+47:44 opinions about that we need to do proper
+47:47 
+
+47:47 code reviews.
+47:49 
+
+47:49 >> Thank you.
+47:50 
+
+47:50 >> But any other anyone have like because
+47:52 
+
+47:52 this is a problem that is perennial I
+47:54 
+
+47:54 think. I
+47:56 
+
+47:56 I also asked maybe for selfish reasons
+47:58 
+
+47:58 because PR reviewing is also a process
+48:01 
+
+48:01 of sharing your knowledge and if there
+48:03 
+
+48:03 is someone in the team that is up to
+48:05 
+
+48:05 date with the latest let's say features
+48:07 
+
+48:07 is also a way of sharing that knowledge
+48:09 
+
+48:09 >> and if it's only me doing it then why
+48:11 
+
+48:11 are the other people not I want it from
+48:13 
+
+48:13 them as well like I want that knowledge
+48:15 
+
+48:15 to come from their side as well so I can
+48:17 
+
+48:17 also learn at the end of the day so
+48:19 
+
+48:19 >> eh yeah
+48:20 
+
+48:20 >> I don't think I figure out another way
+48:24 
+
+48:24 to do it other than
+48:28 
+
+48:28 I would be interested to know if someone
+48:30 
+
+48:30 else does.
+48:34 
+
+48:34 Okej. Well, thank you so much eh and
+48:39 
+
+48:39 have a great conference.
+48:41 
+
+48:41 [Applåder]
+48:47 
+
+48:47 [Applåder]
