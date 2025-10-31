@@ -1,0 +1,514 @@
+00:07 Howdy everybody. How's everybody doing today? Good. Excited.
+00:16 There we go. That's the kind of energy I like to see. Uh, welcome to my talk, How
+00:21 to Not Strangle Your Co-workers. Uh, this is me. Hi, I'm Arthur or Art.
+00:26 Take your pick. Uh I'm aggressively neutral about it frankly. But uh I am an
+00:32 engineer, a software engineer. I'm not a therapist or a psychologist or a neurologist in any form or fashion. I am
+00:39 at best an overly educated hobbyist. But I love talking about this stuff because
+00:46 I have been an engineer for well over 20 years, which means I'm just going to crumble into dust any minute now. But I
+00:53 love teaching it because the kind of things I talk about, especially this topic, I think are things that you as
+00:59 engineers can take back and use in your day-to-day life to make your jobs better
+01:05 so that we as together can make better software, can be better co-workers, can just be better people.
+01:12 I work at a company you've never heard of. Uh it's called Avaturure. It's a tiny little software development
+01:18 consultancy in Omaha, Nebraska, which is where I live. Uh, and they
+01:23 um they let me come and do cool stuff like this. So, they get a slide.
+01:29 Okay, time for some audience interaction. Everybody loves that, right? How many of you raise your hand if you think you've had a conflict with
+01:35 a co-orker in the past? Okay, most of the room. I'm concerned about the ones who haven't. But first,
+01:43 we have to distinguish between a conflict and a disagreement.
+01:48 So a disagreement is when two or more people hold differing or opposing
+01:56 opinions or beliefs about something and in this context it's about you know
+02:01 something at work. A dis or a disagreement rather becomes a
+02:06 conflict when a couple things become true. First that thing is important or
+02:12 you both perceive it as important. The second is when you are
+02:17 interdependent with each other. When you succeed together or you fail together
+02:22 and that becomes very important and the third thing is when you both believe that the weight of the evidence is on
+02:28 your side. What psychologists would call evidentiary skew. So with that definition in mind, how
+02:34 many of you have had a conflict with a co-orker? Okay, fewer number of hands. How many of
+02:41 you enjoyed that experience? There's always a couple and I worry
+02:46 about you [Laughter] because largely we don't enjoy that.
+02:52 Most of the conflict that we recognize as conflict kind of sucks. And we're usually afraid of it. And what
+03:00 that means is we do this little trick called defensive avoidance, which is we
+03:05 just pretend that it doesn't exist. We don't talk about it. We don't think about it. We sidestep, ignore, downplay,
+03:13 and just move as far away as we can from conflict whenever we can.
+03:19 And that strategy doesn't really work in the long term because conflict is beneficial to us.
+03:26 And it's everywhere in a developer's life. If you put five developers in a room, you have seven opinions
+03:34 about all kinds of things, things from spaces to tabs, languages, frameworks, god even knows what.
+03:41 Conflict is a part of our lives. It's going to be a part of your lives and an important part of your lives. Hopefully,
+03:46 I can sell you on that part throughout the rest of the talk. Hopefully, or rather luckily, psychology
+03:52 really has us covered on some of this stuff. So today we're going to start out by talking about the types of conflict that
+03:58 you can have. Then we're going to talk about psychological safety as a groundwork for good conflict. We're
+04:04 going to talk about how to deal with your emotions during conflict. That sounds really weird, icky, but please promise I stay like stay around. It'll
+04:10 be interesting. We're going to talk about confrontational styles. And lastly, we're going to talk about dealing with conflict if you're just an
+04:16 individual contributor. If you're not a manager or leader on a team, let's start off with the types of conflict. There
+04:24 are three main kinds. Task conflict, process conflict, and relationship conflict. And they're framed this way
+04:30 because it's helpful to think about conflict in terms of where it originates from.
+04:35 So task conflict, as an example, is conflict about what we're doing, the
+04:41 tasks at hand. What are the tools you have to use? What are the things you need to use? What is
+04:47 the the way that you're building that stuff? What are the things you even have to do? What are the tickets you're working on? the goals that you as a team
+04:53 have and task conflict is actually really good. When you get a bunch of disperate
+04:60 human beings in a room, you actually want varied viewpoints because that's going to help you be better at
+05:05 brainstorming, help you arrive at better solutions faster, and get more diverse perspectives on the matter.
+05:12 It's going to help you find and locate risks that you didn't even know existed in your applications.
+05:18 It's going to help you identify new ways to get value out of the things you've already built. This is good conflict.
+05:26 Process conflict is conflict that comes from a disagreement about process, about
+05:32 how we do that work. Who's in charge?
+05:38 How does your team make decisions or does an individual make the decision?
+05:44 What are the goals of that team? How are you striving to reach those goals?
+05:50 And process conflict largely is good at the beginning
+05:56 because it can help you find new ways of working with other human beings. It can solidify your own goals, your team
+06:01 goals, and make sure that everybody's on the same page. It can help you even figure out if you have the right people on the team. If you identify something
+06:09 and you look and you say, "Wait a minute, we don't have a person with that specialtity." That's conflict that you need to
+06:15 address. But after a certain point on a team, process conflict becomes a little toxic.
+06:23 Generally, if you're having it after the team has really gotten up and running, what it indicates is that there is some
+06:29 degree of perceived inequity going on. Something where someone or some group
+06:35 feels like they don't have enough resources or they're not given the things that they need to succeed.
+06:41 whether that's unfair or whether it's simply because of you know bureaucratic nonsense
+06:47 and process conflict isn't just about individuals either. It can actually be come from teams and between teams which
+06:55 we'll talk about in a bit. The third kind of conflict is conflict
+06:60 that can come from disagreements about who we do the work with. It can be anything from just simple
+07:07 personality tastes, dislikes, or it could be something as egregious as
+07:12 say power plays, people making power moves. This is the conflict we hate, that we're
+07:19 afraid of at all costs, that we seek to avoid at all costs.
+07:25 This is the conflict that is awful and squamas and terrible, and it starts bad and it just gets worse.
+07:34 This is the stuff we really want to avoid on our teams and as humans,
+07:39 but we confuse the kinds of conflict for each other. And sometimes they can get a little
+07:44 muddled, which we'll talk about later. But like I said, conflict doesn't just happen inside of our teams either. It
+07:50 can happen between teams. It can happen between teams even naturally. You can have process conflict
+07:56 if two teams feel like they both own the same responsibility.
+08:02 So, who wins? Congratulations. You've got conflict. It can happen from misaligned priorities
+08:08 as well between teams. Teams that feel like another team is getting more resources or that the priorities aren't
+08:14 going where they should be going. If you work on a DevOps team, you're probably familiar with that. So, how do we
+08:20 minimize the good bad conflict and maximize that good conflict? Well, like
+08:26 any good magic trick, most of the work actually happens well
+08:32 before the magic trick even starts, well before the show starts.
+08:39 You have to start work with psychological safety. So, let's talk about that.
+08:45 Hopefully, it's not a surprise to you um seeing as you are sitting in a room with other human beings, but human beings are
+08:50 a social animal. We evolved that way as a species to be social, to interrelate. We have the most
+08:58 complex communication with each other of any species on this planet, at least that we're aware of.
+09:05 And that relationship, those relationships actually evolved or we
+09:10 evolved to treat them as equivalent to our bodily safety.
+09:16 We are just as protective of our social relationships as we are in a lot of cases of our own physical body because
+09:23 in a lot of cases those two were actually fairly tightly interrelated. When we talk about exile or ostracizing
+09:29 someone to use the Greek that's because we used to kick people out of a community and that was almost a death
+09:34 sentence because a human being largely needs other human beings to survive.
+09:42 And so we evolved to have a sense in our heads of how strong and in what
+09:49 direction those interpersonal relationships are and we work to protect
+09:54 them. Part of the reason that we are riskaverse when it comes to conflict is because we want to protect those
+09:59 interreationship uh factors, right? That strength in the relationship.
+10:05 And we do this unconsciously without thinking about it. It just kind of happens to us because it that level or
+10:13 how important it is to us. It's occurring at a level that's below our actual conscious awareness
+10:21 because improperly managed conflict can be damaging. We know that.
+10:27 We've seen it. Psychological safety then is a
+10:34 description of an environment where people feel safe enough to take
+10:40 interpersonal risks by speaking up and saying what they actually believe.
+10:48 Sharing concerns, sharing opinions, sharing ideas. The psychologist Amy Edmonson, who's
+10:54 done a ton of research into both failure and psychological safety, uh, thinks of it, or rather she describes it as a
+11:00 climate. It's kind of like a place. It's not an
+11:05 attribute of a team. It's kind of just like the weather that's happening around you.
+11:12 And it isn't just about being nice. There's often a common confusion when we
+11:17 start thinking about, you know, psychological safeties. We just have to be nice to each other all the time. We absolutely don't. Toxic positivity can
+11:24 be just as bad as toxic negativity. And it isn't just a personality factor.
+11:32 They've done studies on individual human beings. And it's not like an an individual person is carrying
+11:37 psychological safety around with them like a suitcase. You're not taking it from team to team to team. It only
+11:43 exists in the context of that team. If you move to a new team, you might not have it.
+11:49 And it isn't just trust either, although it's related to trust. I like to think of it as you give trust to your team and
+11:57 you receive psychological safety in return. So why do you want it? Up here talking
+12:04 about the benefits of it. largely without psychological safety.
+12:09 Teams withhold and hold back from saying what they believe even when what they
+12:14 think has to say could be like safety critical to the organization to an
+12:20 individual to their clients. Even when they think it could be efficient or beneficial even to themselves, they will
+12:26 still hold back for fear of upsetting those other personal relationships.
+12:33 Teams with psychological safety prevent catastrophic failures. A lot of Amy
+12:38 Edmonson's research was happening in a hospital context. And so she was researching teams with doctors and
+12:45 nurses and you know other medical professionals that were working together and the teams that had psychological
+12:51 safety where the nurse felt safe raising a hand and going uh wait a minute that
+12:56 dosage doesn't seem right. Those patients had better outcomes.
+13:02 Now maybe most software is not that critical. Some is but not most of it.
+13:08 But on the other hand, you can still have a dramatic impact on human beings
+13:13 daily living. If you're building software that somebody's using at their job, you could be a part of why they
+13:19 don't want to come to work that day or a part of why they do because they
+13:25 think they can be effective and get things done. Teams with psychological safety have
+13:30 higher performance and higher engagement. Those two kind of squishy metrics that managers and recruiters and
+13:35 everything else loves to talk about. This is one of the ways you get them. But most importantly, psychological
+13:42 safety allows you to find hidden conflict and to surface it. Conflict which was lurking below the surface, at
+13:50 least below your individual awareness. conflict that was already shaping your
+13:55 team's behaviors and you didn't even know it because unfortunately if you think you
+14:02 work on a team without conflict I have some news for you and it's not great news
+14:08 that conflict's already there unfortunate natural part of human existence so great how do we get
+14:14 psychological safety well more bad news uh psychological
+14:22 safety can't really be estab established at an organizational level. Your CEO, CTO, boss cannot come in one day and say
+14:28 Sanctus Dominic, you are all now psychologically safe. That's not how it works. It has to be built at the
+14:36 interpersonal level, at the team level. All right. So, how do we do that?
+14:44 Well, like Edmonson says, it's a climate. All you can really do is prepare the overall environment and hope
+14:51 that psychological safety emerges. It's like gardening.
+14:57 And like gardening and like magic, you have to do a bunch of work long before you ever see the benefits.
+15:05 I've mentioned Amy Edmonson a couple times. Um I recommend this book if you like what I'm talking about, The Fearless Organization. She goes into a
+15:11 lot more detail about her research and about psychological safety in general. But one of the most important things that happens in this book is that she
+15:18 lays out a toolkit for establishing psychological safety in organizations.
+15:24 How to till that ground, how to make it fertile. This is the toolkit. Like a lot
+15:29 of things, it seems very simple at first glance. Initial versions of this talk, I went through each bullet point in, you
+15:35 know, each stage in this. Uh, turns out I don't have time for that. That's another whole hour worth of talk. We're
+15:41 going to only talk about a couple of these, the ones I think are most important. We're going to talk about demonstrating situational humility,
+15:48 practicing inquiry, and expressing appreciation. So, let's start with demonstrating
+15:53 situational humility. Nobody wants to participate and have a conversation with you if you pretend you already know
+15:60 everything. You have to adopt a learning mindset, a humble mindset, and that includes
+16:07 acknowledging your errors and your shortcomings because you're human and all of us have them.
+16:14 You want to heir on the side of I don't know instead of an uninformed opinion. And I know it's we live in the age of
+16:21 social media, so everybody's like, what? That's nonsense. Try hard especially at work
+16:28 because how you perceive the world is not how everyone else perceives the world. And I kind of mean that
+16:34 literally. There is this psychological concept that describes the tendency that we have to
+16:41 assume that the way we see the world is the way the world is and that everybody
+16:47 else must be seeing it wrong. We assume that our perceptions are exactly the same thing as reality. This is called
+16:53 naive realism. So, as an example of naive realism, I
+16:60 would like to ask you all a question. And I'm actually really curious on the split on this. Go ahead and raise your
+17:06 hand and keep it up if you think a hot dog is a sandwich.
+17:11 Okay. Took a couple people taking a brave stand.
+17:17 If you didn't catch, there were like three people who are now all very afraid to keep their hands up. Oh, there's a couple more. more people trickling out.
+17:23 All right. So, what we're going to do, and I'm sorry for all the people who said yes, all of you have to go on that side of the room. Everybody else go on
+17:28 this side of the room, and we're just going to fight it out for the rest of the talk. No, where I'm trying to drive at is it's
+17:36 a very simple question when it comes down to it. But you have probably a very
+17:41 firm opinion on whether or not it's true.
+17:47 But there are people in this room who have an opinion that isn't the same as yours.
+17:53 Why is that? It's because we see the world differently. We perceive things differently. Naive realism makes us
+17:58 assume that the other people who were either, if you didn't raise your hand, raised your hand, the people who disagreed with you, they're wrong. That
+18:05 they literally do not perceive the world or they've been misled.
+18:11 As we live our lives as human beings, we gather samples. We experience the world.
+18:19 And those samples shape our autonomous selves, our unconscious existence.
+18:25 And what that means is our experiences shape how we collect
+18:31 further samples, how we continue to see and experience the world.
+18:36 This is confirmation bias as an example, but it happens at an even deeper level. We as humans actually begin to
+18:42 specialize. We diverge
+18:48 And we start noticing different things. If you talk to somebody who works in DevOps, they see the world differently
+18:55 than somebody who works strictly as a dev, than somebody who works as a product owner. They care about different
+18:60 things. They will see different things in a scene at first. And if I've still not convinced you on any of that, let's
+19:08 talk about this. How many people remember this? There you go. It was the last good day
+19:14 on the internet, wasn't it? like you had uh earlier that day there was some llamas that got loose in in Arizona. And
+19:20 so there's all these videos online of like police trying to chase down these llamas. And then somebody posts this.
+19:29 This was a mother-in-law or a mother who was going to buy a dress to attend a wedding and she took this
+19:36 picture and sent it to her daughter and then you know it was an opinion of like how do you like the dress and the
+19:43 eventually got posted on the internet and then on Buzzfeed they went wild.
+19:49 We do have a real answer for this by the way. The dress is black and blue. Like that's the actual photo of it. They
+19:56 sold it on the site. Um, but the interesting thing about it is that your
+20:03 brain doesn't see color in the way we are told that it sees color. You're often told that color is like a
+20:08 wavelength that enters your retina, right? And it strikes with a certain value and that transforms into a color. Well, it's way more complicated than
+20:14 that. Your brain has this thing called the visual cortex that's like 30 or 40 steps kind of crammed into each other.
+20:20 Think of it like Google's deep mind, only way more intense. These things that will start doing color correction for
+20:26 you. it will start telling you, "Oh, that's not you're seeing this, but it's
+20:32 actually this." If you're curious how somebody could see it differently, it's not quite the same effect, but this is a
+20:38 washed out version where you can see how the lighting actually changes how you perceive the color.
+20:48 And the true answer, well, one of the true answers to this really is uh if you happen to be a night owl, somebody that
+20:54 tends to stay up later, you actually see the dress more often as black and blue because you expecting it to be lit in
+21:01 yellow or red artificial lighting. If you are a morning lark, somebody who tends to get up earlier and experience a
+21:06 lot more natural lighting, your expectation is that you're seeing the dress in natural light, blue or white
+21:13 natural light. And so your brain subtracts that out and you get actually get a white gold. So, a lot of developers saw it as black.
+21:24 The other, well, the second thing we're going to talk about is practicing inquiry. Naive realism makes us think we
+21:29 know how the world works because of course the world works exactly as we're perceiving it. Except, you know, it doesn't. So, we have to be curious. We
+21:37 have to practice inquiry. And asking questions can sometimes be seen as weak,
+21:44 especially if you're an organization with what's uh Edmonson calls a culture of telling where the leaders feel like they have to have an answer for
+21:50 everything. Questions can help broaden our understanding.
+21:56 Questions like, well, what else is true? Or they can help deepen our understanding.
+22:01 Why do you think that's so? Edmonson actually talks about the rules
+22:07 for a good question. Starting with number one, don't ask the question in a form that gives them the answer that you
+22:13 want. If your boss comes to you and says, "Hey, so that ticket that you're implementing for this, you know, piece
+22:20 of front-end nonsense, you're using the blah blah blah pattern for that, right? Every one of us in the room knows the
+22:26 right answer to that question, which is yes, boss." You don't ask a question with the answer
+22:32 embedded in it because the power dynamics involved means somebody is going to actually turn around and just
+22:37 answer that. Secondly, you don't ask questions or you ask questions that don't limit responses
+22:43 to yes or no. So that question about you're using this pattern, right, is doubly bad because what happens is as a
+22:49 human being is just going to go yes or they're going to go no. A better question would be something
+22:54 like why don't you tell me what you know practices or patterns you're trying to look at for this particular implementation of this thing.
+23:02 And thirdly you phrase the question in a way that helps focus or helps others share their thinking in a focused
+23:07 manner. If you're looking for a particular kind of thing for instance you want to know are they using this
+23:13 pattern because it implies something about this architecture over here. You ask that question in a way that says,
+23:19 "Hey, I want to know the pattern or practice you're following here." You're helping get them not to the answer you
+23:26 want, but to the form of answer that you want.
+23:31 You also want to use a ton of elaboration questions.
+23:36 I'm curious why you believe that. Oh, that's interesting. Why are you doing it that way? Oh, that's curious. Have you
+23:43 thought about this? asking elaboration questions to help try and extend your understanding of what
+23:51 they're actually saying. The third thing from the toolkit we're going to talk about is expressing
+23:56 appreciation because it's hard to ask questions. To keep that culture of inquiry alive, you
+24:03 have to respect the effort that it took, the energy, the the risk that somebody
+24:09 took by speaking up and asking a question. And that's actually can be pretty simple
+24:15 and easy. If you respect that, you just start with
+24:20 those responses. Hey, thank you very much for asking that. I think that's a really important
+24:27 question. What you're not understanding is and then you can continue on from there
+24:32 instead of just going no and charging forward. And trust me, I've been that
+24:38 developer that does that, who's got the first like the stuff in his head that's like, "No, you don't see my grand vision."
+24:45 You have to take a step back and go, "Okay, no, thank you for trying to help to make my stuff better."
+24:53 This is especially important in uncertain environments. And obviously, it does have to be
+24:58 genuine, right? Or it's really going to backfire if you're like, "Thank you for your question, but I don't think you
+25:04 understand all of this nonsense." like in a super sillious way. Human beings can generally tell when they're being
+25:11 talked down to like that. You might ask the question with psychological safety. Uh what if the
+25:18 rest of your leadership and organization is a dumpster fire? Is it possible to achieve psychological safety when
+25:26 everything around you is chaos? And the answer to the question is maybe.
+25:32 Really useful answer. Realistically, you can. It is possible to achieve psychological safety in a team that is
+25:40 working together against nonsense odds, working together in a chaotic environment.
+25:46 But that usually involves a significant amount of sacrifice on the part of a
+25:53 manager or some other person who's in a leadership position on that team who is effectively shielding the rest of the
+25:59 team from some of that chaos. And that's not a tenable situation for those managers.
+26:04 Uh, the term I've heard for this, to be polite, is a poop umbrella where you're
+26:09 preventing their poop from dropping on the team. Nobody wants to be the poop umbrella for like four years. You burn
+26:15 out really quickly because you're shouldering an immense amount of burden.
+26:22 And psychological safety isn't even enough. That's the worst part about it. Because
+26:28 we're human. And because we're human, we have these nasty thing called emotions that start to get in the way.
+26:34 So, let's talk about how to deal with our emotions.
+26:39 Dealing openly with your emotions, not just shoving them down
+26:45 because that's our expectation in a lot of cases.
+26:51 We want to approach conflict and say, well, you know, it it's intuitive to me that if I want to have good conflict,
+26:58 that conflict should be as unemotional as possible, should be as logical as possible. We'll just pretend to be a
+27:03 bunch of Vulcans talking at each other. That will work, right? Nope,
+27:09 it doesn't. Sorry. Trust me, I love what I would love if it did. It would be wonderful to just go
+27:15 live in the land of pure ideas for a little while and we hash it out and then we can come back and still be friends. But it that's not how it works. Stuffing
+27:23 emotions into a bag doesn't make them go away. Shoving them down does not make them go away. Therapy would be a ton
+27:29 easier if it did. And the majority of developers are
+27:35 actually still men. And men don't often get a lot of uh teaching or practice in how to process our emotions in
+27:42 meaningful ways that aren't just getting angry at things. Again, speaking from my
+27:47 personal experience. So, what do we do? Well, if you're me, uh you go read this book. This is Theory
+27:54 and Practice by Argus and Shonne. Um I do recommend Edmonson's book. Don't read this one unless you are really in for
+28:00 some punishment. public I read these books so you don't have to a lot of the time but this book is really good it's dense
+28:08 as hell but it's really good argus and shown anybody heard of them before how
+28:14 many people have heard of double loop learning no okay maybe I should give a talk on
+28:19 that next uh but they're the ones who did double loop learning but in this case Argus and shown are talking about a
+28:25 models or two models for how people engage in conflict and they called them imaginatively
+28:31 Model one and model 2. Now, model one seeks to win in a zero
+28:39 sum game. How many people know what a zero- sum game is? Okay, for those who don't, zero sum game in short is from
+28:45 game theory. It basically means that if you win, the other person can't. And if you do a lot of winning, they do a
+28:50 little bit of winning. So, every time they win anymore, you you win less. It's a zero sum. Both sides must add to zero.
+29:01 So model one seeks to win in the zero sum game and they seek to control the emotions of the other participants
+29:06 involved because that's going to help them win and they seek to enact concrete
+29:12 strategies to achieve these outcomes. So the problem with model one aside from
+29:19 that it's vaguely sociopathic is that it creates two things self-fulfilling
+29:24 prophecies and self-sealing processes. I'm going to wager that a lot of you have heard of the first one,
+29:31 self-fulfilling prophecies, but not the latter. So, we're going to talk about both of these. If you've not heard of
+29:36 what a self-fulfilling prophecy is, here's an example. I'd like you to meet two people, Morgan and Sawyer. Morgan is
+29:43 a teacher and Sawyer is a student in Morgan's class. And Morgan believes that
+29:48 Sawyer is a troublemaker. So, they keep a sharp eye out
+29:54 on Sawyer for when Sawyer steps out of line. Now Sawyer feels like they're being singled out, not unfairly,
+30:03 and so as a result, they become angry at Morgan. Then they start looking for opportunities to act out, to display
+30:10 their lack of respect for Morgan. That reinforces Morgan's opinion. Now
+30:16 we're locked in a vicious circle of belief, of expectation, and of
+30:21 behavior. Morgan believed a thing and because they believed that thing, that thing came true. That's a
+30:28 self-fulfilling prophecy. A self-sealing process, on the other hand, is a little more difficult to
+30:34 explain. So, we're going to talk about Jordan and Taylor here.
+30:39 Jordan is Taylor's manager, and they hold model one as their model of conflict.
+30:46 They also believe that Taylor is incompetent at developing.
+30:51 But Jordan doesn't believe that they can have a conversation about that because that's going to lead to emotional
+30:57 response. Taylor is going to get upset when they get that feedback. And model one says, "You try and minimize emotions
+31:05 to achieve success." So they can't have that conversation openly. And so what they do,
+31:12 they try to get Taylor to transition to being a QA by assigning them QA related
+31:18 tasks and praising them for their behavior on those tasks.
+31:24 Now, Taylor, for their part, has doubts about the authenticity of Jordan's praise. Correctly so,
+31:32 but they don't confront Jordan about it because they don't have psychological safety. And there's risk involved in
+31:37 confronting your manager in those situations. And you don't want to get into open conflict with somebody who has that much
+31:43 power over your job unless you have a really good union.
+31:49 So Taylor is angry about what they see as Jordan's deception and they stubbornly refuse to move to QA.
+31:57 And now Jordan is locked in a prison of their
+32:03 own making. As long as they believe that they have
+32:08 no they have to prevent Taylor from getting mad and that they have no way of confronting Taylor about that
+32:14 performance, there's nothing they can do. Their own beliefs have locked them in this prison.
+32:20 The way that they've approached conflict has trapped them. To contrast to model one, model 2 seeks
+32:27 to arrive at a win-win scenario, a scenario where both participants achieve at least some degree of their goals.
+32:35 Model 2 also seeks to accept and to understand the emotions of the other participants involved in that conflict.
+32:41 And lastly, it tries to avoid self-sealing processes at all costs. It tries to embrace a vision of the world
+32:48 where you have these conversations openly that allows you to move more freely.
+32:54 The problem is if you're afraid of conflict, if you're afraid of emotions, afraid of losing, you will unnaturally
+33:01 or naturally gravitate towards model one.
+33:09 And that creates a self-fulfilling prophecy because the more you try to control other people's emotions,
+33:14 they wind up more emotional most of the time.
+33:22 Initially, when we are having conflict, we will out of our guts use model one
+33:28 style thinking. We'll do things like angrily swat down incorrect opinions, trying to smash them as quickly as we
+33:34 can because that will minimize the emotions involved. That will maximize our chance
+33:41 of winning and the other person's chance of losing.
+33:46 Or we'll use moral language to batter our opponents down. You're so stupid. How could you possibly believe that this
+33:52 is true? You're a bad person for believing this thing.
+33:58 So, what do we do about any of that? Well, we provide psychological safety and we
+34:04 prepare to get uncomfortable. That's what we have to be open about our emotions.
+34:10 We have to drag them into the open. And we can do that by doing things like
+34:16 offering explicit points to talk about our emotions.
+34:21 In a sprint retrospective, for example, ask the question, how do you feel about the work we did this sprint? Are you proud of it?
+34:30 Or in a postmortem for some incident after that outage, how do you feel about the circumstances surrounding this
+34:36 project? How did you feel before the outage? as an example, something that I've
+34:42 actually said out loud. Hey, we're not we don't understand this
+34:48 whole system. We don't understand how the system works. And that scares me
+34:54 because I'm worried that we might get put into a situation where we're held responsible for something that we don't
+34:60 have control over. If you are a leader on a team, you can
+35:05 model that sort of emotional talk. Give people the license to be open about
+35:10 their emotions in those moments. It doesn't all have to be wailing like tearing hair and nashing teeth. It can
+35:16 be simple statements about things like I'm scared.
+35:22 Uh you can also do therapy about it. Therapy can be a pretty good sort of preventative maintenance for this sort
+35:28 of thing. It can also help you get comfortable with your own emotions and with the fact that other people have
+35:33 opinions that you won't agree with.
+35:39 But as we go along thinking about conflict, we talked about some of those good kinds of conflict.
+35:47 And you have to worry or be aware of conflict and how it happens over time.
+35:53 Even good conflict like task conflict can flare up and it can become
+35:59 relationship conflict. Valid disagreements over how to do the work can turn into bitter rivalries between
+36:07 two individuals where the other person consistently thinks that the other person's a big jerk.
+36:15 And that can happen because we don't address emotions or because we let those emotions fester.
+36:21 If you have an opinion with someone, a disagreement with someone, and they get their way and you just let it eat at you
+36:27 or vice versa, that can turn into relationship conflict. you start blaming that person
+36:32 for being the way that they are, whatever way that happens to be, you know, a functional programmer. How dare
+36:38 they? So, you have to allow for that sort of thing. And you have to allow for
+36:46 we as developers don't often get a lot of training in how to receive feedback. So, for instance, if you make a comment
+36:52 on someone's PR and they get real squirrely about it, they're probably not
+36:58 divorced from that idea yet. they have emotional attachment to that idea.
+37:03 That's natural. That's normal. You have to give them a little time to get over it. A trick that I've actually
+37:09 used myself uh is when I, you know, get a comment on my PR, I will often h say
+37:15 things like, "Okay, I'm having an emotion about this. I will get back to you in x number of hours, sometimes like 24." Or if I'm looking at a PR and I'm
+37:22 like, "This I don't I don't like the way that they've done this." I will give myself I leave a comment. I'm like, "Hold on, please don't merge this for
+37:29 like 24 hours." Come back and ask yourself the next day, do I have anything concrete or am I still just like gut level, I don't like this?
+37:38 Being open and giving yourself the space for those helps you be a better engineer and helps me get over it because if I
+37:44 come back at 24 hours and I'm like, "Ah, I still don't like it, but my brain has provided me no reasons why I don't like
+37:50 it." All right, it's probably fine. Merge it. You want to help to keep that conflict
+37:57 localized just around the tasks that you're working on. And we can do that by this
+38:04 tool called conversational receptiveness. Julia Mson uh psychologist at Harvard advocates for
+38:10 this technique because interestingly enough it doesn't matter if you are situationally humble.
+38:17 It doesn't matter if you have empathy because in a lot of cases the other participant in a conversation can't see
+38:23 that unless you're doing really awkward things like I'm being very humble right now
+38:30 and so the other person doesn't see it so it doesn't often have an effect. Sometimes they can perceive it well a
+38:35 lot of the times they'll perceive it unconsciously but it's not very direct. So Mincson
+38:42 talks about this technique that she calls here. The first it's an acronym. The first is
+38:47 hedging. When you come to somebody and have an opinion, offer it with hedging words.
+38:55 Things like perhaps, sometimes, maybe. If like you write it out in word and
+39:00 words like you should remove all these weasel words. That's about what you're looking for. is something where you
+39:06 soften your opinion so that it isn't always must be constant.
+39:13 The second step in here is emphasizing agreement. Finding the things you do agree upon and stating those out loud.
+39:21 Okay, we believe in this way thing about software. I think this and I think we both agree
+39:27 on that part, but we'll talk a little bit about that technique in a bit. The A is
+39:34 acknowledgement. How many people have heard of a technique called active listening?
+39:40 Handful. Okay. Active listening is a technique by which you listen and instead of thinking about the thing
+39:46 you're going to say next, you actually process what they're saying and then you restate it back to them in
+39:52 your own language. Okay. So, what I'm hearing you say is this doesn't have to
+39:57 be weird and stilted and formal. It will be until you get practiced at it, but it can become a normal part of
+40:02 conversation. So, you want to acknowledge what they've said and make sure that you understand
+40:08 what it is that they believe. And the R is for reframing to the
+40:14 positive. Instead of saying something like, I hate this,
+40:19 I hate this behavior, you can frame it around and instead flip it. Look at the positive aspect of it. So, as an
+40:25 example, I hate it when people interrupt me versus I really love it when people let
+40:32 me finish my thoughts. There's an emotional tenor there that's different between those two things. And
+40:38 one of them leads to way more productive conversation. Now, obviously, we don't just bring ourselves and our emotions to the table
+40:46 when conflict happens. We bring the whole big messy ball of nonsense that it
+40:51 is to be a human being. the big hot mess of ourselves shows up on both sides. Our
+40:58 tendencies, innate or learned or situational, mean that we approach conflict in particular ways. So, let's
+41:05 talk about confrontational styles. These get arrayed in a two what's called
+41:12 the dual axis model. Along the horizontal one, you have the concern for your outcome, the concern for you quote
+41:19 winning your argument or your part of this conflict. The vertical one is concern for others
+41:25 outcomes. So let's walk through each of these in turn. The first we're going to talk about is avoiding which is a strictly passive approach.
+41:32 You're going to hope that problems solve themselves and you are going to change the just change the topic. You're not
+41:40 going to discuss it. You're going to skip meetings. You're going to leave the group altogether because you just don't want to deal with this conflict anymore.
+41:47 This is defensive avoidance. This is what we do when we just don't want to even engage in the conflict.
+41:55 The next one is called yielding. This is the passive pro-social approach. So, you don't care as much about yours, but you
+42:01 do care about the other person's. Yielders try to solve both large and
+42:08 small conflicts by just giving into the other person's demands, exceeding constantly. Here, you know
+42:14 what? You win. Now, that could be either genuine conversion. Okay, I bet you've actually convinced me. Or it could just be
+42:20 superficial compliance. I don't want to have this. You win.
+42:27 Fighting is the active pro-self approach. In fighting, you use competitive
+42:32 powerful tactics to intimidate. And you can also use mandates, challenges, arguing, insults, accusing,
+42:39 complaining, vengeance, and even physical violence, which I really hope you don't use at work.
+42:45 But you use all of those things to get your way. This is model one really at least sort
+42:52 of. I guess it's more correct to say that it is complimentary to it. These are the behaviors that you observe out
+42:59 of someone who has model one as a mindset. Similarly, there's cooperating
+43:05 which is the active pro-el and pro-social approach. In cooperating, you work to un identify the issues
+43:12 underlying the dispute and work to identify a solution for both of those things and you attempt to get both sides
+43:18 to consider each side's outcomes. This is the behavior of someone who is
+43:23 has model 2 most of the time. There's also consiliating which is the fifth one.
+43:29 It's a weird kind of mixed approach where sometimes you're yielding, sometimes you're pushing, sometimes
+43:35 you're fighting. Arguably, there are some psychologists, well, excuse me, attempts to win other others by accepting some but not all of the
+43:41 demands. There are some psychologists who don't even really think this exists. They think it's just people kind of switching styles mid argument,
+43:49 which is an important thing to mention. You want to know what your default
+43:54 conversational or confrontational style is, but it's not going to be your only one. And just like that, not everyone
+44:03 has always just one confrontational style. It can change based on your emotions,
+44:10 what you're dealing with that day. It can actually change based on the social group you find yourself in. Your status
+44:16 in that group can change the style you use. The norms of the group can change
+44:21 the style you use. And again, sometimes those can change mid conversation, midconlict.
+44:29 You want to keep an eye out for the default style of others in the groups that you're interacting with.
+44:35 And then you can ask yourself, what does that imply about their goals, about what they want to achieve?
+44:44 You and your team when you're building software have a shared goal, at least I really hope you do, of succeeding in
+44:52 building whatever it is you are attempting to build. you have a goal together.
+45:00 Okay, so all of that is great if you're a CEO or whatever, but what about if you're just a line dev? What if you don't have
+45:07 any power on a team or an ability to shape the behavior of others? At least you think you don't. So, let's talk
+45:13 about how to handle conflict as an individual contributor. The first thing I want you to do is
+45:18 never sell yourself short. You would be surprised what the actions of a single individual can do to shape
+45:26 the norms and behavior of the entire group. The trick is to remain a member in good
+45:32 standing because the second the group is able to say, "Wait a minute, you don't seem like
+45:38 you're one of us anymore." That's the moment they start ignoring you entirely.
+45:43 So, what you want to do is preface descent with conformity.
+45:50 When I was talking about emphasizing agreement, you want to find the things you still agree on, the goals that you
+45:55 still share, and say, "I believe this. I think you do too." But
+46:04 that will allow you to stay a member in good standing of that group. or hopefully.
+46:10 You also want to keep an eye out if you're an individual for power dynamics
+46:16 because power can really shape how conflict works. Sure, that's not shocking.
+46:22 Power can make you, if you have it, look at other individuals as problems to be solved.
+46:30 Uh there's a quote from this paper rather where they say powers can become you cause leaders to become overly
+46:36 obsessed with outcomes and control. When you have that power especially if
+46:42 somebody is attempting to have a conflict with you that can feel like insubordination that can feel like somebody trying to
+46:48 slow you down. On the other hand, a lack of power can change what you actually can shift in
+46:55 any meaningful way. If you don't have power, sometimes there are goals that are beyond you.
+47:03 Power can make other people feel like or if you have it can make you feel like positions that threaten you, threaten
+47:10 your status in groups. So when we were talking about how peep
+47:15 individuals can change their confrontational styles in a group that can be because they have power and
+47:21 status in that group and they think you're challenging it and the monkey brain starts screaming and grabs for the bone.
+47:29 Generally I want you to try to engage with model 2 as much as you can but that is going to
+47:36 require the other person to play ball. So, you have to be on the lookout for when somebody comes at your model 2 with
+47:42 model one. And in that moment, you have to decide,
+47:48 is that conflict now worth it? Do I want to continue on with somebody who's engaging in a zero- sum game or do I
+47:54 yield? To help you decide that, it helps to
+47:59 know the difference between goals and positions. A goal is something that the person in a
+48:06 conflict wants to achieve. this is the outcome that they're looking for. A position is how they have envisioned
+48:12 achieving that goal. So as an example, I could say I want
+48:19 good solid quality working software. And my position could be everybody is going
+48:24 to achieve 100% unit test coverage.
+48:29 Even though the one thing is still laudable and admirable, the other thing's a little stupid. like
+48:36 my position is not ideal. At least hopefully from your perspective, it's not ideal because it's not from mine
+48:42 either. You can't really shift somebody's goal, but what you can do is shift their positions so that the goals
+48:49 overlap and so that your goal is also met. So in
+48:55 that case, if your manager comes at you and says you have to do 100% unit test coverage, first thing your job is to
+49:03 uncover their goal. What are they actually trying to achieve? Next, your job is to shift their position so it
+49:08 overlaps with yours, which is to not have to do 100% unit test coverage
+49:15 and finding some midway solution that says, "Okay, let's mandate something like 70. Here's why. Here's these
+49:21 things. 100% unisex coverage is going to conflict with say another goal that you have of us being efficient and actually
+49:27 getting work done." It helps open that conversation
+49:33 and make it a little easier. And finding the goals that you both share, things like that, we both want to
+49:39 have good quality code helps you have those conversations as well.
+49:44 People with differing amounts of organizational power almost certainly have different goals
+49:49 because they don't just have their own personal goals. They will also have sometimes power focused goals but more
+49:55 importantly than that they'll have organizational focused goals.
+49:60 They'll have goals that are saying well that we need to make this amount of money. We need to run at this percent of operating capital. We need to achieve
+50:07 these certain things. It's more than just their personal KPIs. They have goals that involve the larger structure
+50:13 that may conflict with your goals.
+50:18 If as an individual you can't pick your style of conflict, choose your conflicts carefully.
+50:26 What things really matter to you? Which goals do you think you can actually achieve that you can get others
+50:32 to believe in? You can also pull in other team members
+50:38 for this, but I want you to be aware that that is a power play. If you are having a conflict and you say, "Cool,
+50:45 I'm going to get three friends that agree with me and we're all going to come in." The other person is going to correctly
+50:51 perceive that they're being, you know, pushed on, that they're being bullied a little bit.
+50:59 It doesn't mean you don't do it, but it does mean you have to be aware of the consequences. So, as an example of that, if you turn
+51:05 around and you're having a disagreement and you look to the rest of your team and go, "You all agree with me, right?
+51:11 You're making an attempt to actually pull in power at that moment.
+51:17 How many people have read the uh Seven Habits of Highly Effective People? Couple people. Did you like the book?
+51:22 You love the book. I'm sorry. I hated the book. But that said, I think this
+51:28 sentence is actually worth the rest of the book. Seek first to understand and then to be understood. This is one of
+51:34 the seven habits. It's my favorite one. Obviously, your job if you are engaging in conflict
+51:40 is to understand what the other person actually is saying, what their goal is, and what their position is. Not just the
+51:47 one you've made up in your head. You have to actually listen. And a way to think about it is just you
+51:53 want to be curious. You want to explore the p the opinions,
+52:00 the thoughts of the other person in that conflict. You want to think about them as your collaborator
+52:07 because they are you're collaborating with somebody else to hopefully if you're engaging in model
+52:13 2 achieve a larger goal, achieve something you both can win at.
+52:20 So, okay, let's review. There's more than one type of conflict.
+52:27 Task conflict, process conflict, and relationship conflict. And of those only relationship conflict is all bad. Task
+52:34 conflict is great and process conflict is usually great until you have a point where it's happening later in a project
+52:40 or a team's life cycle. Psychological safety enables us to surface hidden conflict. Conflict that's
+52:46 already happening in your team and helps you engage with it. Not squash it, but engage with it. Emotions are going to
+52:53 happen in conflict. You just can't stop them. Trying to control them using model one
+53:00 methods creates a self-sealing process that locks you in a prison of your own design, your own beliefs. You can offer
+53:07 explicit moments to talk about those emotions and model talking about emotions yourself if you are a leader.
+53:13 Recognizing the confrontational styles of other participants in the conflict will help you decide whether you should
+53:18 adjust your strategy or whether you should withdraw. As an individual, you have to be aware of power dynamics. You
+53:24 want to seek overlap in those goals or propositions that fulfill most or all of those goals. And you want to pick your
+53:30 conflicts very carefully. Conflict doesn't have to be a Lord of
+53:35 the Flies situation all the time. Conflict can be a thing that can lead us
+53:42 together to a place where we work better together, where we feel valued, and where we build things that we can be
+53:48 proud of. So, I want you to go forth and conflict.
+53:54 Thank you very much for listening to me. I will be up here if you have any questions or I'll be here for the entire rest of the conference if you want to
+53:59 catch me. Again, thank you very much for listening.
+54:10 One sec. Sorry. Uh, and if you want the slides for this talk, they're up there at that bit.ly link. Feel free to grab
+54:15 it.
