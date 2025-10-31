@@ -23,7 +23,8 @@ For each thesis:
 
 Follow this structure:
 
-**“[Thesis Statement]”**
+> **“[Thesis Statement]”**
+
 * Central idea: The central idea from the resource
 * *Meaning:* Explain the central idea in your own words — what the thesis truly conveys, why it is significant in its context, and what broader insight or universal principle it represents. Expand beyond a definition to include its implications for behavior, decision-making, or understanding.
 * *Mechanism:* Explain the reasoning or mechanism behind it.
@@ -33,6 +34,7 @@ Follow this structure:
 Example:
 
 > **“Velocity without clarity leads to chaos.”**
+
 * *Central idea:* Teams coding fast without shared priorities
 * *Meaning:* Teams coding fast without shared priorities create rework and confusion.
 * *Mechanism:* Lack of clear vision multiplies coordination overhead and decision churn.
