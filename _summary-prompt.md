@@ -92,6 +92,3 @@ List the main insights chronologically with short summaries:
 * [18:45] Principle – Key idea or model introduced
 * [27:10] Closing – Main conclusion and recommended actions
 
----
-
-**Usage Tip:** This prompt format produces summaries that are both analytically deep and easy to recall later — ideal for professional learning notes, documentation synthesis, or preparing executive briefings.
