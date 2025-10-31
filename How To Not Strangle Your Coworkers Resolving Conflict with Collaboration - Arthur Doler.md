@@ -158,8 +158,65 @@ Such listening-first behaviors make others feel heard, creating a foundation for
 - *Seek to understand before being understood.*
 
 ---
+## 4. Quick Reference: Example Phrases by Thesis
 
-## 4. Key Points with Timestamps
+### **1. Conflict is inevitable—and essential for creativity.**
+- “Let’s debate this approach to find the strongest design.”
+- “What risks might we uncover if we challenge this idea?”
+- “Different views help us improve the architecture—let’s explore them.”
+
+### **2. Psychological safety is the soil where healthy conflict grows.**
+- “I might be missing something—please share your thoughts.”
+- “Thanks for pointing that out early—it helps us avoid issues later.”
+- “Let’s make sure everyone feels safe to raise concerns.”
+
+### **3. Humility beats certainty.**
+- “This worked before, but I’m open to better options—what do you think?”
+- “Maybe my assumption is off—can you walk me through your logic?”
+- “I might be wrong; help me see what I’m missing.”
+
+### **4. Curiosity outperforms control.**
+- “What would it take to make this feasible within the sprint?”
+- “What other factors might cause this issue?”
+- “I’m curious what led to that decision—can you explain the trade-offs?”
+
+### **5. Appreciation sustains openness.**
+- “Thanks for catching that—it helps us deliver more reliably.”
+- “I appreciate you bringing this up; it challenges us to think deeper.”
+- “Thanks for your honesty today—it’s not easy to share tough feedback.”
+
+### **6. Win/lose mindsets trap you; win/win frees you.**
+- “Let’s review both options and see which meets our goals best.”
+- “What’s blocking us from meeting Friday’s goal, and how can we adjust together?”
+- “How can we combine both methods for a better result?”
+
+### **7. Emotions aren’t the enemy—they’re information.**
+- “I’m frustrated because we keep hitting the same blocker—can we address it?”
+- “It sounds like deadlines are causing stress; let’s unpack what’s behind that.”
+- “I reacted strongly earlier—I realize it came from concern about targets.”
+
+### **8. Conflict styles define the outcome.**
+- “Let’s pause and discuss this one-on-one to clarify viewpoints.”
+- “Let’s test both versions to see what performs better.”
+- “We can prototype both ideas and decide based on results.”
+
+### **9. Influence doesn’t require authority.**
+- “I’ll start by modeling respectful communication in reviews.”
+- “Let’s try a quick sync each morning to spot blockers early.”
+- “Here’s something I learned from my mistake—I hope it helps us improve.”
+
+### **10. Seek first to understand, then to be understood.**
+- “Can you walk me through why this feature matters for the user?”
+- “Help me understand the business impact so we can adjust priorities.”
+- “So your goal is to reduce latency even if it adds complexity, right?”
+
+---
+
+**Tip:** Keep this list visible during meetings, reviews, and retrospectives to promote curiosity, empathy, and psychological safety at work.
+
+---
+
+## 5. Key Points with Timestamps
 
 | Time        | Key Idea               | Summary                                                              |
 | ----------- | ---------------------- | -------------------------------------------------------------------- |
@@ -179,4 +236,6 @@ Such listening-first behaviors make others feel heard, creating a foundation for
 | 45:07–50:13 | Power & goals          | Understand authority dynamics; align around shared goals.            |
 | 51:22–52:13 | Collaboration mindset  | Treat others as collaborators, not opponents.                        |
 | 52:27–53:48 | Summary                | Conflict + Safety + Curiosity = Healthy teams.                       |
+
+
 
