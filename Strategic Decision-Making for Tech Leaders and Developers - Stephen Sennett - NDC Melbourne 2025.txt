@@ -1,0 +1,550 @@
+00:04 I feel like the smart people are here because I'm guessing everyone got their caffeine early, right?
+00:10 Yes. There we go. Um, did anyone manage to get to the after party drinks last night? I actually didn't get to those.
+00:16 Were they any good? I see a few nods. Are we still nursing a bit of the it
+00:22 afterwards? Quietly drinking coffee. Good. Good. Excellent. No worries. We will kick this
+00:29 off. I'm conscious everyone's got a bit of a busy day ahead and of course all of us have got our day jobs around this. So
+00:35 I do want to kick this off a bit on time. We might have some people wander in throughout the day. So to kick this
+00:41 off, hi my name is Steven and today we're doing what's the big words on this decisions risk reversibility strategic
+00:48 decision making for tech leaders and developers. That's a mouthful. When I put it
+00:54 together I didn't really realize just how much of a mouthful it was. But of course, it's great to have everyone
+00:59 here. And hopefully, this will be a really good and interesting session for everyone.
+01:04 Make sure my clicker is working. That's all right. I use the keyboard.
+01:13 Yes, there we go. That's done it. Cool. All right. So, obviously, here we are today on the beautiful Melbourne on the
+01:20 banks of the Yara River. And as part of all this sort of stuff, I think it is important of course to of course give
+01:25 the acknowledgement of the first nations people upon whose lands we're meeting today, the Warjury people. Um I think
+01:31 it's a really important part of this as well. There's a beautiful thing about the Yara River as well. Now when the
+01:36 first European settlers arrived, they pointed to the river and said, "What's that? Yara?"
+01:42 It's like, "Oh, so it's the Yara Yara River." Okay. Interestingly, the meaning
+01:48 of that is actually just flowing water, not actually the name of the river. Name of the river is something else.
+01:54 Fantastic case of uh brilliant miscommunication. So, I think that's something will come
+01:59 up a little bit today, but of course want to pay my respects to elders past, present, and emerging in any here today
+02:05 as well. But of course, who am I? I'm terrible for not really introducing myself. So,
+02:11 hi, I'm Steven. Um, bit of background about myself, all normal bits and pieces. So I'm a senior consultant in an
+02:18 organization called Kinetic IT. We do a bunch of consulting for uh large government entities, uh large Australian
+02:25 enterprises, that sort of thing. I'm a course author with ACloud Guru. And I'm also an AWS community hero. You can find
+02:31 me on LinkedIn. And of course, I'm here from the best city in Australia, which is Melbourne. Do we have any Sydney
+02:37 people in the room? Oh, well, I'm sorry you're out voted here, but we love Sydney as well.
+02:43 All right. Now, I do want to get a little bit of a chance to get to know each of you as well. Now, first thing in
+02:49 the morning, no one wants to be doing too much, but I do want to get a bit of a hand raise on this. I want to
+02:54 understand how many people we have here and do a bit of a breakdown of the individual contributors versus the people managers in the room. So, how
+03:01 many people do we have who are individual contributors? People who don't have people reporting to them on a daily basis. Cool. Quite a few. Lovely.
+03:08 What about people managers? People who are managing people on a daily basis. Excellent. a good few there as well. And
+03:14 oh my goodness, do our people managers work hard. But no, this is going to be a great day for both sets as well. And I guess today
+03:23 what I want to be talking about is some very practical tools for people when it comes to making decisions and also
+03:29 communicating our decisions as well. And what you'll get out of this hopefully will be a little bit different depending
+03:34 on what level you're at in your career. So for people who are starting out in their career, guess what? you're in a
+03:41 fantastic spot because you get to learn how these sorts of things work and also how you can start to interpret the
+03:46 decisions that get made and how to also influence them as well because influence is an incredibly powerful thing. For
+03:52 people who are at that mid level in their career quite often as we're trying to get up towards that senior level, it's a little bit tricky to figure out
+03:58 how we can make those impactful decisions, how we can actually influence those things in a stronger way to actually get to that senior level.
+04:05 That's quite a barrier for a lot of people. And when you're at that senior level, look, you might look at this and
+04:10 think, "Oh, I know all this. This is nothing new to me." The other thing is it helps you put some of those things
+04:15 you've just accumulated over years into some words that you can actually use to communicate with others as well.
+04:22 So that's the idea of today. Now, of course, the disclaimers for this first part is that of course I have been using
+04:29 generative AI like all of us here. Um, so anything within this has been created with midjourney unless otherwise
+04:35 specified. And there's another part of this as well is that because of course I work in
+04:41 consulting I have changed around the name sectors some of the technology just to make sure that any of the clients involved are kept anonymous to protect
+04:47 both the guilty and the innocent. All right so now talking about decision making the
+04:56 decisions that we make come in many different forms and not all of them are incredibly obvious right off the bat. And I guess part of this is that we can
+05:03 make a decision. It seems really good at the time, but 6 months later as we move
+05:08 forward, we might realize who the heck made this decision. Wait, was this me?
+05:14 Maybe. So, there can be lots of pieces like that. The other thing here is that we'll never avoid making bad decisions.
+05:22 We will never ever avoid making bad decisions. That's something all of us have to live with. It's something I live in mortal dread of but it's something
+05:28 that we can do a little bit better if we understand some of the forces behind them. So that's part of today. Now the other
+05:35 thing as well is that with this session ultimately I'm also interested in hearing from everyone else as well. If
+05:41 at some point you get the aha moment like if something snaps into your brain and you want to contribute just throw
+05:46 your hand up and I'll throw to you and I will repeat it back into the microphone because obviously we've got the stream as well. But I am really curious to hear
+05:53 from people's experiences as well to try and generate some more of those aha moments for everyone else in the room.
+05:59 So let's say you're starting out as a developer in a brand new role. Excellent. Welcome to the job. And you
+06:06 get introduced to your tech stack. Okay. So we're going to be doing our front end in Angular. We're doing our back end in
+06:11 Node. We're doing some stuff with Tailwind with Docker, etc., etc. Now for a lot of people they might say
+06:18 oh well I'd really rather be using React. I'd rather be using spelt or Vue. Why on earth are we using Angular?
+06:26 Welcome to the first part of all this the wonderful topic of constraints. This is something we all deal with in our
+06:31 roles but they also take many forms as well. So I want to explore that in a
+06:37 little bit of detail around this concept of constraints because often when we talk about constraints there's the
+06:43 typical sort of triad that pops up a lot with this the idea that we can have good fast or cheap
+06:49 but we often know how this goes if we let people at it themselves usually doesn't end that well for us.
+06:57 So I guess looking at this there's two prime ones that we often talk about. This is not just in tech but everywhere
+07:03 in life. It's time and it's money. Those are the two biggest constraints that we
+07:08 have generally within the work that we do. But there's a lot more to that as well.
+07:13 Thinking about some of the other constraints that we have within tech. We talked about tech stack. We all know that we have constraints in our tech
+07:20 stack in our organizations. We can't use whatever we want as much as we might like. But there are constraints around
+07:25 that. There's also many other constraints that we get to contend with. Some of them a little bit more
+07:30 challenging than others. So, I want to pick on one here. There's a bit of an example of how constraints
+07:38 can sometimes be very useful, but sometimes you also want to dig deeper into what they're trying to communicate
+07:43 as well. So, looking at one of these geographic
+07:49 constraints when it comes to technology and specifically I want to talk about something data sovereignty. And now
+07:55 before everyone goes to sleep, before you go to sleep, don't worry. I want to give an example here. This one here is a
+08:00 case of let's say a large retailer that I've worked with and they had a requirement and that requirement is our
+08:07 data must be stored here in Victoria like not just in Australia but in
+08:12 Victoria. It must be in Victoria. That's a hard requirement that we have. And we think to ourselves,
+08:20 okay, that's interesting. I ask some other people. They ask the other architects, the managers like, "Oh yeah, you're very serious about this. They are
+08:26 very serious about this." Okay, well that limits your tech choices quite a lot, especially as a cloud
+08:32 person. Like that does kind of become quite a limitation. So I go off and I ask a few people more
+08:38 and then eventually I end up talking to some of the people in the legal team and some of the people in the security policym and they say there's no hard
+08:45 requirement for Victoria but really we have a risk tolerance that says we would really prefer Victoria like ultimately
+08:52 Australia yes we do need to have that data sovereignty with Australia but really we prefer Victoria because that's our organizational riskcape. Okay,
+08:59 excellent. Now we can have a discussion. Now I can kind of explain and go through some of the options of this is what we
+09:05 do and what we can offer. If we're building something just for Victoria, we can build something and it will be quite
+09:11 good but there are limitations to it. Or alternatively, if we're comfortable with Australia, suddenly you get this option.
+09:18 If we can challenge those constraints a little bit, suddenly oh, it opens up a lot of possibility for us. And again,
+09:24 that lets us make a much more informed decision. Interestingly, that's not the only time I've come up against this sort of
+09:30 barrier. Another case here was a smaller sort of organization, a nonprofit, and
+09:35 they had the same thing. Data must be kept in Victoria. Okay, so again, this was afterwards. I'm thinking, I know how
+09:42 this game goes. All right, let's have that conversation. Eventually talk to their legal people. No, we actually have
+09:48 something in our grant funding that means we must keep in Victoria. There's actually a line here in our contract from the government.
+09:54 Okay, I guess you do have to keep it in Victoria. That is interesting. And again, that
+10:02 informs some other stuff as well because through looking at those kinds of artifacts as well you can understand.
+10:07 Hang on. So you have these legal constraints within this document, are there other constraints in here, are
+10:12 there other things in here that become useful for us to understand when we're building out that technology? So that's
+10:18 a really important one for us there. And I guess this is just an example of where sometimes digging and questioning when
+10:25 it comes to our constraints can lead to some interesting outcomes. I guess between all of these, has anyone here
+10:31 had cases where they've kind of dug at constraints a little bit and possibly found something that maybe doesn't seem quite like it is?
+10:39 Yep. In my organization, a lot of AWS in London, a lot of AWS in Oregon saying,
+10:46 "Why can't we have AWS in Sydney? Too expensive to this. I was like really how
+10:51 expensive and then eventually you get as Sydney because they realized when they thought about it it's not that
+10:57 expensive. Yeah. And that's a really good example. So I guess for the stream as well. So the idea there that having
+11:02 AWS in multiple regions like Oregon and London and then Melbourne um not Melbourne for Sydney the best Sydney
+11:09 city of course. Um no but the idea of that that there can be cost differences between regions and that people will
+11:15 have that hard sort of limitation in their mind and then say actually no when we look at it that's not a really
+11:20 significant thing and there is a part there around quantifying that as well when we actually quantify that to
+11:26 understand okay as we look at that constraint what's informing that can we quantify that to show the difference
+11:31 awesome go for it mate yep doing a database migration moving our IDs from
+11:38 32bit 64 bit and we were had not had downtime or
+11:46 planned down time or much downtime at all for a couple of years and we're
+11:52 doing the project for no downtime migration and for our primary
+11:57 identifiers to migrate was getting hard. Um and we
+12:05 were talking about this with someone higher up and How much easier is this going to be if
+12:11 we have some down time? And we're like blink blink blink.
+12:17 Hell of a lot easier. Okay. How how how small window can we get? And we said
+12:24 four hours and we ended up doing it in two. But with that planned down time, customers told in advance out of hours
+12:32 and it went incredibly well and it was incredibly easier. Fantastic. That's a really good story. And I guess again for
+12:38 the stream as well, the idea there of doing a database migration where the primary ID had to be modified and the
+12:43 constraint originally being we don't want downtime because we haven't had downtime in a long time. That's something we're very proud of. I'm
+12:49 guessing that's something we really want to maintain. But the question kind of coming up, it makes a more complex migration if we can't have downtime. But
+12:56 what if we did? So it becomes a lot easier. And I'm guessing overall in terms of like the cost for that one as
+13:02 well in terms of time as well, you know, all the sorts of complexity of technology that would have made it
+13:07 significantly easier. Yeah. Fantastic. That's a really good example as well.
+13:12 And I guess the other thing for this thing session today as well is for these not necessarily just to be remember
+13:18 what's on the slides, but just peppering in those little stories from other people because these are the things that will pop out of our brains later in our
+13:23 careers. Excellent. Awesome. I'll continue on now. But
+13:29 again, these are the kinds of stories I want to hear here because it is really important when we talk about this sort of stuff and I love the points there
+13:35 about quantifying what the actual numbers would be as well if we approach that constraint.
+13:40 Now speaking of quantification, who is a fan of risk? Do you have any risk people
+13:45 in the room? No. Oh, we have one person. Excellent. So you would love stuff like
+13:51 this. We love the process, the risk, the ISO 2700, all these types of things, right? Oh, I can see the smiles.
+13:58 Everyone is just going with it's one of those. No, it's not. Ultimately, at the end of the day, risk
+14:04 really comes down to a few things. At the end of the day, it's about the effect of uncertainty on objectives. And
+14:10 that one does actually come from another ISO definition. So, don't worry, I am being respectful of risk. But the idea
+14:15 here really is down to the concept that at the end of the day, it's all about
+14:21 how likely is it for something to actually happen and what's the impact if it does happen. Now, realistically, if
+14:27 we look at something here, you know, what's the likelihood of me tripping while I'm standing up here? Well, I'm
+14:33 not up on a stage. I'm just here on the floor. I could trip myself over on cables, but that's a fairly low likelihood and probably wouldn't have
+14:38 much of an impact. So, there's not really an issue there. I'm sorry for the venue staff who might be getting nervous
+14:44 at the moment. Um, but the idea of also like what about me walking outside and getting struck by a meteor also very low
+14:52 likelihood, very high impact, but much lower likelihood, right? So there's this
+14:57 example that we talk about when it comes to risk, understanding that idea of how likely something is to happen and the
+15:03 impact of it. All the other stuff that you'll hear about of course in um proper risk management about scores and
+15:10 frameworks and everything those are important but ultimately in your heart if there's one thing to remember this is
+15:17 kind of the nutshell of risk and I want to give an example here from the cloud world specifically about something
+15:23 called reserved instances now just so I get a bit of an idea do we have many cloud people in the room do people kind
+15:29 of understand reserved instances all right cool so I'll touch on this a little bit the idea of this is it really
+15:35 is that billing discount. If you say I'm going to use a particular type of virtual machine for a large like for a
+15:40 long period of time, then I'll be able to get a discount, right? Cloud's very good. If you spin something up, you can
+15:46 use it, shut it down. That's great. But you can get a discount if you run it for longer. Now, jumping on to that, when we do
+15:53 these commitments, it can be set to either one year or 3 years. So, we're not talking about a couple of days or
+15:58 anything like that. This is a little while. And we can either pay these things fully upfront. So we can pay
+16:03 everything all at once. We can pay a little bit up front, pay a bit ongoing, or we can just pay it all ongoing.
+16:09 And the idea for this sort of thing is if we have something like our database setup, something like our primary
+16:15 database, we know we're going to be running that for a while. We know it's going to be fairly stable. So yes, we
+16:21 would want to have a reserved instance for that. Other things like our read replicas, we might spin them up, we
+16:26 might spin them down. We probably aren't going to be running them all the time. So maybe they could be something on demand. We'll pay a little bit more for
+16:33 them, but we know we're not going to be running them as often, so we're happy to have that flexibility.
+16:38 So that's a bit of an idea of reserved instances. Now, going with a sort of standard
+16:45 bigish instance uh that is available here in Melbourne, the C6G4X large. We
+16:50 love those names. Um this one with 16 CPUs and 32 gig of RAM, so fairly beefy.
+16:57 Now, if I was to run one of these on demand each year, it would cost me in US
+17:03 dollars. And again, communication is interesting. I have seen Australians where it's like, "Oh, this will cost us $6,000 Australian." No, US dollars are
+17:10 scary. Um, so $6,000 a year on on demand. Okay. Well, that makes sense. If
+17:16 we do something like our reserved instances, if we look at this on an annual basis for the one year or 3 years, so per year for one year, 3,900.
+17:26 But if we go for that 3-year period annualized, it goes out quite a lot cheaper. Lovely. Likewise, same for all
+17:33 up front. You can see there's bit of a difference there between the no up front and the all up front. It's not huge. And
+17:40 likewise for the partial up front, really that annualized cost comes comes out around that number as well.
+17:47 Now, if we want to reorient this into how we really think about this in our mental model, the way people think about
+17:53 this is often on a bit of a horizontal scale. Now, when we ask people, okay, well,
+17:59 what's your goal of your cloud financial management? The biggest thing is usually we want to save money. Perfectly example
+18:07 of before, like we want to save money. We don't want to spend a lot of money. Cool. We want to save the most money.
+18:12 Now, if I was to say to people here, okay, if you and your organization were asked, do you want to spend three years
+18:18 all up front just like pay however many tens of thousands of dollars right now to guarantee this thing for the next 3
+18:23 years? How are we feeling? Seeing some headshakes. Uh, no, maybe
+18:29 not, right? Because that's a pretty expensive thing, right? Spending a lot of money. Same thing for that 3 years,
+18:36 you know, whichever way we're going. There's going to be quite a lot of cost involved in that commitment. Even for that one year all upfront, there's quite
+18:43 a lot of cost in that. And the thing I sometimes find is that organizations which are hesitant around this sort of
+18:50 stuff, they're not willing to make a commitment yet is quite often they'll stick with the default like let's stick with the on demand because it makes
+18:56 sense, right? There's a lot of risk over there. There's not really much benefit at this point. So, we will stick with
+19:02 our default. This is really that thinking fast mentality that we have in our heads because we do kind of put
+19:08 these things into these nice horizontal mental models and say this is generally how this will come out.
+19:14 But really let's reassess this scale and actually quantify it. When we actually think a little bit slower, we start
+19:22 seeing that it looks a bit more like this because of course we have a very different discount rate on each of
+19:28 these. And we already know of course upfront makes very little difference to us whether we're paying up front or not.
+19:34 Just kind of clusters them together a little bit more. So if we're thinking about it from this perspective, well
+19:40 suddenly the difference between option one and two is quite a lot bigger. So this one really is fairly minimal risk
+19:48 but for quite a bit of reward. It's breaking that mental model because of course we're all smart people here.
+19:54 We've all seen that table. We all know this. But when people are thinking about this in their head, quite often that
+19:59 first mental model, that thinking fast mentality sometimes will draw people to the wrong conclusions. It's that whole
+20:06 thinking fast and slow mentality. Now, I'll throw this to people. How
+20:12 risky are some of these options? If I ask the room for those three-year options, how risky would we say this is?
+20:22 Fairly, you know, little bit risky maybe. probably ties us to a technology ties us Yeah. I don't know how how your
+20:29 tech road map looks like but mine gets pretty fuzzy after 18 months. Yeah. And
+20:36 and there's some significant load on the database that we're looking to move out to better services and if we do that
+20:43 well we might be able to reduce the size and at a threeyear time frame I don't
+20:48 know what that looks like. Yeah. Beyond the 18month time horizon things do get a little bit hazy. So I think we can agree
+20:54 there's probably a fair bit of risk there to an extent. Yeah. I feel like we all like to think that our platform's
+21:01 going to evolve rapidly in 3 years, but then before you know it, 3 years is gone and you're like, whoa, that was three
+21:07 years and we're still kind of where we were. So that's definitely true as well. That whole fact that like three years
+21:13 goes a lot faster than we think. Um, and to that point, I mean, for one year,
+21:18 would we say there's like how does one year feel in our risk space? Feeling pretty okay. All right. What about on
+21:25 demand? Is there any risk for us on on demand? Yeah. This $2,000
+21:32 risk of overpay. Oh, there we go. The risk of overpay. I think you've been reading ahead because that's exactly my
+21:38 point with this one. Because the first risk that a lot of people have in their mind here is if we run this for 3 weeks,
+21:45 obviously there's quite a lot of risk. If we would say we're going to run this for three years and we only run it for 3 weeks. There's a big issue. But the
+21:52 interesting thing is if we run this thing for 3 years exactly has kind of been highlighted suddenly the risk looks
+21:57 very different to us and again let's quantify this if we run
+22:02 this thing for 3 weeks of course what are the costs for those reserved instances
+22:08 fairly significant for 3 weeks that's not great when for on demand we can get it for couple of hundred bucks and again
+22:16 a lot of organizations do still have this in their head especially if they're getting used to cloud And this applies
+22:22 across other technologies, not just cloud. But a lot of organizations have this kind of mindset when they approach
+22:28 cost commitments. Again, when we're talking about multiple thousands of dollars, it's a little bit a little bit
+22:34 hesitant. On the flip side, exactly as has been noted, if we run this for three years, cool, for all upfront, we get the cost
+22:42 that we know. If we pay that one year no upfront each time, we are paying more.
+22:48 But is it that much more? It's a little bit more. But if we compare it to one
+22:54 demand suddenly, yeah, that's uh quite a significant difference.
+23:00 So it is that idea that risk isn't just in the most obvious thing because of course the obvious thing that people are
+23:06 thinking with risk is that 3-W week period. What if we turn this thing off? But there is that risk of overpay
+23:12 exactly as been said, right? So that part comes up a lot with all of this as well.
+23:17 And this is the sort of thing that also helps our finance people feel a little bit safer around this as well because it
+23:24 shows that we've actually done the proper calculations around this because of course ultimately we're asking the
+23:29 organization to spend a lot of money. If we can communicate this is what we've considered it helps both our managers in
+23:36 the technology area but also people from the business and finance side to also look at this risk a little bit more as
+23:41 well. And of course we don't want our finance people feeling crabby. Now, speaking of Krabby,
+23:49 hang on. Actually, no, before I do that, um, so this is an interesting one. You actually mentioned this point. Um, three
+23:56 years will go faster than we think, ultimately 7 and 12 months to break even, like between those um, costs
+24:03 there. So, if you get a one-year no upfront reserved instance and you're running it for seven and a half months,
+24:09 ultimately you're still going to break even on that by what was the date I have here? the 17th of December.
+24:16 Now, if you don't know if you're running several of your machines highly productionized systems by the 17th of December, there's probably a few more
+24:22 questions around road map I'd have for you. But yes, who knows what this is?
+24:28 Anyone can identify this? I see a few smiles. Come on. Rust logo. Rust logo.
+24:34 Rust crab. Where is the rust crab? Now, Rust is a great language. There are lots
+24:40 of great things about it. There truly are. Um, when it comes to having Rust enthusiasts in organizations though,
+24:46 what does every Rust enthusiast want to do in their organization? I see smiles. Come on. Rewrite it in
+24:52 Rust. There we go. We want to rewrite it in Rust. And yes, I have been in the
+24:59 middle of these ones. So, here's a bit of an example. So for let's say an advertising platform
+25:05 with a TypeScript back end worked fairly well but they were starting to encounter some issues when it came to performance
+25:11 when it came to the scalability of the system and ultimately it was just not a great platform for developers to be
+25:17 working on. There was a lot of technical debt in there. So TypeScript isn't great. So let's just rewrite this thing
+25:23 in Rust. Right? Oh, I see the reactions in the room. People are getting the cringe going on. Right. Okay. Now, I
+25:31 think we can see where this might be going, but let's go with the engineering pitch. If I'm an engineer, I might pitch
+25:36 it with something like this. Why do we love Rust? It is blazingly fast. Memory
+25:41 safe with the borrow checker. We use it in the kernel. We can give conference talks about it. Tokyo, Tokyo, Tokyo,
+25:47 Tokyo. We love Rust. Right now, this is all true. All of this is
+25:53 very much true. But if you ask this to an engineering manager and you say, "This is why I want to rewrite our platform in Rust. What are they going to
+26:00 be thinking and seeing? Who can we hire to maintain it? Oh, who
+26:06 can we hire to maintain it? That's a good one. Team skills are an important one. How many dev hours are going to go
+26:11 into not delivering business functionality? Yes, dev hours. Cuz there's going to be a lot of time involved in this, right?
+26:18 Yeah, there's a lot of stuff here and ultimately I would translate it as something like this
+26:25 burning dumpster fire because of course exactly as you say there is a lot of time required for this sort of thing. If
+26:31 we're rewriting across language paradigms as well, TypeScript is very different to Rust. As much as people
+26:38 will say TypeScript is, you know, statically typed, no, you don't have any any types in Rust. Um there's always the
+26:44 potential for scope creep. If we're going to be doing something like this, this could very quickly blow out of control. The platform capability,
+26:51 maturity, and that thing of team skills. Hiring Rust developers is a lot more expensive and a lot more difficult than
+26:57 hiring TypeScript developers. And of course, the unknown unknowns.
+27:04 I think we've all seen cases where projects, whether it's a rewrite in Rust or not, cases where this kind of thing
+27:09 has kind of happened on us. Does this feel familiar to a few people here? I guess in terms of situations where
+27:16 we've seen projects kind of blow out like this from something that from an engineering process, you know, from an
+27:22 engineering perspective seems really simple, but when we dig into it from a technical perspective, things get a
+27:27 little bit more complex. Does this feel familiar to anyone here? Does anyone have anything they'd like to share on this one?
+27:34 Not quite. Too many war stories. I get it. That's what we'll have beers for later. Don't worry.
+27:40 So ultimately if we're looking at something like this and we're saying let's rewrite
+27:46 the whole platform chances are the answer is going to be no and in this case like the engineer who was dealing
+27:52 with this was fairly frustrated and asking me like well but this is obviously the right choice. How do we
+27:57 make like the manager see that this is what we should be doing? It's like okay there's a lot of things to be said
+28:03 there. So let's take a step back. Now, if I'm asking you to rewrite, let
+28:09 me rewrite the entire platform in any paradigm to anything else,
+28:14 it's going to be a fairly hard conversation. On the flip side, if we're saying, hey,
+28:20 there's a new tool we need to develop, single server, something like that, something that might be part of our dev
+28:26 pipeline, something we might have as a new micros service that we're developing, something like that.
+28:31 Now, if I'm asking you, hey, we run everything else in Typescript. Can I write this thing in Rust? What's the
+28:38 feeling there from people with like wearing the engineering manager's hat?
+28:44 We got some like slight nods of like, yeah, yeah, yeah, small innovate because then
+28:50 we can actually let people innovate. It gives them the space to innovate, right? The other part here is well, okay, well,
+28:57 what if it breaks? What if this like single tool of ours breaks?
+29:03 It's like impacted. Yeah.
+29:09 Yeah. We can always rewrite it. I mean, exactly to that point like when we come down to how much time we're spending on
+29:14 it, you know, really would it be a huge amount of investment of time to rewrite a single tool or something like that?
+29:21 Probably not. And again, it becomes a bit of a story in case of like, well, we tried rewriting this thing in Rust and
+29:28 it didn't work or we tried writing in Go or we tried writing in C++ if we really hate our lives. Um but at the end of the
+29:35 day it gives us some empowerful lessons to that and also encourages our devs to actually be thinking experimenting and
+29:41 doing things like that and that is an important thing as well. One thing I think that often can be missed from an
+29:47 individual contributor perspective but from a people manager perspective is really important. Having devs who are actually engaged and want to do their
+29:53 jobs and really want to excel at stuff is hard and having a team who is motivated is a huge huge value ad. Even
+30:01 if sometimes it's like, okay, we have to let you shoot yourselves in the feet a little bit here, but we're going to let
+30:06 you do it in a place that is not going to try and break a lot of stuff, right? Sometimes that's an important part of
+30:12 just building the culture as well and encouraging people to be willing to experiment to go that next mile.
+30:19 Now, when we talk about this, I think this comes into another concept around the concept of reversibility.
+30:25 Now, when we're making that decision, we want to rewrite this particular thing. We're deciding, okay, we're going to
+30:31 make that decision. We're going to go through a door. Now, if anyone here is familiar with um Amazon and the Amazon
+30:37 leadership principles, this is the Amazon two-way door concept. But I think even though Amazon don't necessarily do
+30:43 it themselves perfectly, there are some great things to take from this. Now, let's say we want to create a brand new
+30:49 cloudnative app. You know, we're an organization. We've done a lot of traditional on-rem stuff, lots of Java, lots of net. We want to try something
+30:56 with TypeScript. We want to build something in the cloud with containers and everything like that. Right now, if
+31:01 we're building a small proof of concept, arguably the worst case for that exactly is with this tool. If it doesn't work,
+31:08 we can reverse course. We haven't really invested a lot. We can walk right back out that door. Doesn't really cost us
+31:14 anything really significant. On the flip side, what if we decide to go ahead and do something like rewriting
+31:22 that platform? Suddenly, we can't just go backwards. we have to go back out through the fire escape and set off all
+31:28 the alarms on the way out the door because there is a very big cost in that sort of thing. And that's not a bad
+31:35 thing to know either because ultimately in these cases if we're adding more gates and architecture gates to things
+31:42 then it will cause issues if we try and reverse course on that. And that's the kind of decision we should be trying to avoid. We should be very mindful of
+31:49 those decisions that will have a high cost if we reverse course. For the other ones that don't have a high cost,
+31:55 ultimately who cares? Like if worst case our developers spend a week or two weeks
+31:60 on something to realize that wasn't very useful, let's start over on something else. Is that an issue? Yeah. Is it a
+32:07 huge issue? Is it going to break the organization? Not really.
+32:13 So, it's important for us to know which one we're walking through and also to know which one you're asking your boss
+32:18 to walk through as well. And that's an important thing for individual contributors when we talk to our managers and our um senior
+32:25 leadership as well is to explain if this goes wrong, here's how we can reverse
+32:30 course on this. Either this is going to be a hard reverse course, this is going to be a big challenge and this is where we need leadership to weigh in on it. Or
+32:37 ultimately, look, worst case, we burn some time. We might burn a couple of thousand dollars on it. But ultimately,
+32:44 there is very good chance of this going well. We've still thought this through. We're not being reckless. But if it does
+32:49 go wrong, we do have a way out. So understanding which one we're going to be walking through is important.
+32:56 So some characteristics of this is that they should be low cost to reverse our decisions. And what low cost means to
+33:02 your organization can vary. And that's why it does kind of come down to where your organization's at. But with those
+33:09 one-way doors, we're talking about that high cost to reverse decisions. These are the ones that going to be really impactful to us. they're going to cost
+33:15 us a lot and can potentially do a lot of damage to our organization. Um, if I want to think about an interesting case
+33:21 of this sort of thing, let's think about something like Facebook and when they decided to rebrand themselves into the metaverse, they made a very big one-way
+33:29 door bet. And I think we can agree, look, it probably didn't turn out as they'd hoped, but realistically, if the
+33:35 metaverse had become a bigger thing and if they'd won that battle, then they would own that space. Like unarguably,
+33:42 they would own that space. They made a very big bet on that. Ultimately, did it turn out to be right? Maybe, maybe not.
+33:49 Even for Amazon when they decided to do things like launching Amazon Prime or like launching AWS, launching a new line
+33:56 of business is a very expensive thing or Netflix when they decided to start making their own shows. Running
+34:02 television production is an incredibly complex thing. Costs a lot of money. If they got that wrong, they're kind of
+34:09 betting the lot on that. But ultimately it was a very valuable decision
+34:14 for two-way doors. It does let us make those decisions and innovate. We can actually get stuff done. If we ask
+34:20 people to spend a lot of time on our things, then it can be more difficult to get things done. As an example, if we
+34:28 have to go through a lot of architecture gates, sit in a lot of meetings, work on a lot of presentations just to be able
+34:34 to build a proof of concept, quite often, a that proof of concept is going to be a lot more expensive than we
+34:40 would hope. And B, at the end of the day, am I going to go through and jump through all those hoops just to build a
+34:47 proof of concept that's something that might not even go ahead for individual contributors? it's going
+34:52 to start drawing them back to say we don't really want to feel like innovating cuz we're going to put all
+34:57 this time into something just to get it picked apart and say nah or even if we
+35:03 do get the proof of concept done maybe the proof of concept isn't viable. Now if we just started building it and we
+35:09 got you know a bit of the time with our you know team to actually work on this lovely cool it didn't turn out well that
+35:15 sucks but okay. But if we've introduced more cost to that, whether that is cost in money, in time, in organizational
+35:23 hurdles and political capital within our organization, suddenly that's a much higher cost to us. On the flip side, for
+35:31 those one-way doors, we really want to be ensuring that if we are making those critical decisions that they are well
+35:37 assessed. There are decisions where we want to be taking our time to something.
+35:42 Maybe in some organizations if you're dealing with for example public safety or certain things around healthare there
+35:49 are cases where you want to be saying at this point we need to be making a decision and this is a very high cost
+35:55 one to reverse but that's usually not that many of them
+36:00 and ultimately for two-way doors we still want to be assessing that risk we want our people to be thinking about
+36:06 risk we want them to understand it and really to be able to control and accept those risks. So this could go wrong. We
+36:13 might get to a point where this entire project becomes nonviable and we have to scrap it and walk away and the time, the
+36:19 money that we put into this is going to be gone. Okay. Are we okay with that level of
+36:24 risk? And ultimately that's a decision for management, right? That's a decision for our managers. We want to empower our
+36:30 managers to make that decision. But we want to do it as low of a level as possible. We don't want this to have to go all the way up to the CTO to approve
+36:36 whether we can do a proof of concept. Otherwise, we're never going to get it done. But there is that concept with the
+36:42 oneway doors that if we want to take that fire exit then really we have to be happy with the cost of that as well
+36:49 because we're kind of going from the space of well anything that we spent this in any of that sunk cost that sunk
+36:56 cost is gone all the way to well we have the sunk cost and then we have the cost
+37:01 of going all the way back to the start again. So there's a very different approach to how we look at risk and the
+37:07 costs therein. And when we talk about this as management for the two-way doors, we
+37:13 want to remove those barriers to make our teams go faster. And this is something for individual contributors to
+37:19 think about if there are things that slow you down repeatedly in your organization. That's a good conversation
+37:24 with management. And likewise for the people managers, think about those cases where you can help eliminate some of
+37:30 those barriers. Where are those barriers that are like really when I look at this and I try and
+37:36 quantify this risk, what's the worst that could happen here? Maybe we're okay with this. Maybe I need
+37:43 to take this to my boss. Maybe my boss isn't aware. Maybe there are spaces we can improve that.
+37:48 But then from the flip side, we do want to implement those things where those risks do pop up. Where those one-way
+37:55 doors should be there, we should have them there. One thing that Amazon talks about a lot is the concept that we
+38:01 should just make as many two-way doors as possible and don't have one-way doors. But they never really talk about the fact that you still need oneway
+38:07 doors. But the concept is that really you should be dealing with that at a higher level. Your senior management,
+38:13 your senior leadership should be dealing with that sort of thing. And you want them to be dealing with that because that's where they're most valuable.
+38:20 Going through some examples of this just in bit more of a tech scenario. Going back to that example with Ross,
+38:26 developing some, you know, tools on an alternative tech stack, that's not that much of an issue. I
+38:32 think we can agree like we can go backwards on that. If we're migrating to an entirely different tech stack, that
+38:38 is a very big decision. There is a one-way door there. Likewise, um, if
+38:44 we're talking about, so we want to start going to cloud adopting a pilot solution. We have something we might
+38:50 want to build using cloud native services that we can't do in our data center. Lovely. That's an easy two-way
+38:56 door. Adopting a full on-prem to cloud migration. That's a very different
+39:01 beast. And something where I do disagree with, I guess, a lot of the AWS orthodoxy. AWS
+39:08 will quite often say the best time to migrate to the cloud is right now and to be allin so that your executive
+39:13 leadership is lined up behind it and we have all the support we need to push this thing through. And look, I'm not
+39:20 going to say that's incredibly wrong because in executive support really is a big thing. Having an organizational um
+39:26 mandate behind it does help drive it, but often that's like we are making a one-way door decision. Now, of course,
+39:33 for any cloud vendor, Microsoft, the same, Google, any of the others, they want you to be making that one-way door
+39:39 decision because they know there's no way back. But ultimately, if I'm talking to someone and they say, "Well, we don't
+39:46 know about this cloud thing yet. We're not entirely sold on it yet. Okay. What are your pain points? Like what are some of the challenges that you have? Well,
+39:53 our website tends to be fairly slow and it keeps on like crushing our data centers and like we just don't have the
+39:58 network capability to scale up. Okay, let's talk content delivery networks. CDNs are something you can do in the
+40:04 cloud quite easily. Point it back to your onrem stuff. Just let the CDN handle that. But that's just one
+40:10 service. Yeah, like use that as your proof of concept. If that delivers value, lovely. spot on stuff like
+40:17 long-term backups. Some organizations do that thing of like we want to be able to put our long-term backups in cloud.
+40:23 There are lots of cases where you can have that pilot that is a lot easier to walk back and say look it's not that
+40:30 great. And the other thing is after you've done that pilot when it comes time to do a migration look we've
+40:36 already built on this system we know the platform we're fairly comfortable with it. Suddenly there is a lower level of
+40:41 risk if we're talking about cloud migration. Likewise, if we're going to implement
+40:46 experimental features in our new public API, okay, look, that's fairly straightforward enough. We want to be
+40:53 wary of when we're putting stuff out to public, obviously, because people will start to rely on it. But for experimental stuff, yeah, that's
+40:60 probably okay for a lot of customers. But if we're looking at deprecating a major API capability, suddenly that is a
+41:06 very big decision. If we're saying, "Okay, we're going to V2, V1's disappearing in the next year." That's
+41:13 not something I really want just like a lead developer to make the decision on. That's something where you kind of have
+41:19 to be thinking what are the implications to our customers? Where's the implication to our go to market? We need to be talking with like our um customer
+41:26 success teams as well. There's lots of pieces there that could be very very problematic.
+41:32 So we want to think about that. That's a good case for oneway door. And whilst ultimately yes it's a technology
+41:38 decision, it's not just a business decision, there are business implications. So that's a good case
+41:44 where we might want to do that. Now the last bit I'm going to talk about for today is around communication.
+41:51 Now I'm going to give an example I've had um in a couple of organizations to various extents. But here's a bit of a
+41:57 case study. So in this case the CIO is saying that we've got issues with our
+42:03 long-term data backup. This is a really urgent issue and the crux of this is that in the next 3 months we're going to
+42:09 have the next audit cycle come along and we need to be able to show the auditors because our senior leadership our board
+42:14 are demanding like we need to have a solution for this and it has to pass muster when the auditors come around.
+42:21 All right, cool. Fair. Got it. Boss head of IT ops. Okay, I understand this. We
+42:27 need to build a new long-term backup solution and time is a really pressing issue here, right? We don't have time to mess around with this. Now, here's an
+42:35 idea. Cloud storage is fast to spin up and implement. All right, let's get spun up. Let's go for it. So, I'm going to
+42:41 talk to my cloud architect. All right. Now, our cloud getting that done. That's
+42:47 pretty straightforward. Okay, we can get that done. We just need to make sure the network's good to go. So, we'll need to
+42:53 have a chat with our network architect, talk about capacity. We're talking about a couple of terabytes or maybe even pabytes of data.
+42:59 Now a network architect of course they're looking at this suddenly you're coming along to a network architect and saying hey we want to chuck a couple of
+43:05 extra terabytes through your internet connection what are they going to say not hope in hell you're going to do that
+43:12 so we're going to have to start thinking about more of the procurement we're going to think about that dedicated cross connect how that works within our
+43:17 network now about 2 months down the line we're realizing oh yep so we're just talking
+43:23 about the planning and procurement for our network equipment and meanwhile the CIO is thinking we're
+43:30 a month away from audit and you're still planning. What's going on here? Now, I think we
+43:37 can see all of these are fairly reasonable. All of these are fairly reasonable approaches, but something
+43:42 essential got lost in the mix here. There was a little something that didn't quite come through the layers.
+43:49 Now, when we think about this, there's a lot of things we can say about these scenarios, and I'm sure we have all had
+43:55 scenarios like this before. Does this kind of thing sound familiar to people where all of a sudden big bosses come down and say, "Yeah, it's not right."
+44:01 Excellent. Yeah. Now, the biggest thing here is if you ask any of them, they'll
+44:06 all say, "Yes, I've done the communication. Yes, we've communicated." Well, this is a fantastic one by George
+44:12 Bernard Shaw. The biggest problem with communication is the illusion that it has taken place.
+44:19 Now, we think back to that original piece there. Of course, we need time. We
+44:25 need things to be going fast. We need to be moving. Excellent. The concept of that audit cycle got missed in there.
+44:31 I'm sure the CIO would have said, "Excellent. I understand this from my boss. Excellent. I pass on to the next level." And then the head of ops would
+44:38 say, "Yes, audit cycle 3 months. Let's go. Is the audit cycle mentioned? Was
+44:44 there consideration around?" We don't necessarily need to have everything in place. But maybe for the auditors, we
+44:50 can have something else. We can have something get dispensation or we can say here is our road map towards it and we
+44:55 actually want to have a thorough road map. Maybe that's better than having an implementation that's half dodged. Right? So in those cases and this is
+45:02 something that pops up here. There is a big issue here with communication.
+45:08 It is a huge issue when we see that things might not have actually come all the way through.
+45:13 And it's important that people all layers really need to possess the whole level the whole picture of the
+45:18 organization and its needs. Now, as a bit of a correlary to this, I
+45:23 guess one of the things I also do a lot of in my life, I'm also a volunteer in the emergency management sector as well.
+45:29 And a couple of years ago, we of course had the fantastic black summer fires. This was a uh really, really, really,
+45:37 really, really, really long summer. Um, and I guess one thing that popped up here, and it pops up throughout
+45:45 disasters of any type or sort, and it pops up throughout also the military and
+45:50 other contexts as well, is the case that you really want your leaders on the ground to have all the information that
+45:55 they need to be able to make the decisions right at the front lines of things. Should people be focusing on
+46:01 getting the fire under control? Should people be focused on getting people in the community out? Should people be
+46:06 focused on getting themselves out? like for the agencies should their concern be for the people in the community or
+46:12 ultimately for themselves. Now everyone can kind of look at that and say well we all have our own
+46:18 perspectives on this and we all have our own things on that but ultimately the importance of this is that that vision
+46:24 needs to come down from the top ultimately in so Victoria is an example
+46:30 we have the state emergency management priorities and that's something mandated from government from the top level that
+46:36 realistically every leader down to a crew leader on a fire truck should know in terms of what are our priorities how
+46:43 do we make those decisions And the idea is that the emergency management commissioner sitting up in Nicholson Street here in East Melbourne,
+46:50 they should expect that if they were talking to the fire truck um crew leader that they would make the same decision
+46:55 and say, "Got it. At a high level, I know exactly what needs to happen."
+47:00 And the idea of this really comes down to something quite simple and that's that leaders can't be everywhere at once. We simply can't be. It's it's
+47:07 impossible. And quite often we will burn ourselves out if we try and be in the middle of everything.
+47:13 So the idea is that we really need to give our teams the knowledge and understanding and also the competency.
+47:19 We want our teams to be capable of executing that vision and we want to be able to communicate to our bosses that
+47:25 we understand that. And if we don't understand that as individual contributors at any level, we should be asking our boss that kind of question.
+47:31 If you're a junior engineer and you're asking your boss, okay, so is the important thing here that I get the test
+47:37 coverage done or is it important that I just get it pushed out by the date? like what's the most important thing? If
+47:42 you're a principal architect or something like that, you might have the question for your boss of so is this
+47:48 mostly about trying to constrain our operational expenditure because that's what we're really concerned about for this financial year given the cost of
+47:55 financing or is it really about showing innovation to the market. So at whatever level you're at, you should always be
+48:01 asking that question up clarifying understanding because quite often your boss will assume everything's been
+48:08 communicated. It's great. If you've got that niggling doubt in your mind, then always ask the question and always just
+48:14 feed it back anyway because it will always help clarify that part of the vision.
+48:20 We want to empower our teams to really move fast and get things done. We don't want our teams to be spending all of
+48:25 their time digging down through the weeds of trying to figure out how do I get the approval to do stuff? How do I
+48:32 pitch all the stuff to my manager? We want our teams to be doing stuff. I if I'm an engineering manager, I want my
+48:38 teams to be focused on delivering, not focused on trying to make me happy and trying to jump through all the organizational hurdles. I want them
+48:44 delivering value. That's the part that we need to be empowering them to do. And likewise, it frees up space for our
+48:51 leaders to make those big decisions because those one-way door decisions, they take a lot of mental energy. They
+48:58 are hard. They are complex. And if on top of that, I also have to be considering, hey, this is going to be
+49:04 this thing. It could potentially cost us millions of dollars if we get it wrong. But at the same time, hey, you also need
+49:10 to give equal consideration to this proof of concept that might cost a thousand bucks at most and two weeks worth of dev time. Then realistically,
+49:18 that's taking up important space in my head. That's taking away from the bigger priority. Freeing up space to make our
+49:23 leaders more capable to make those big decisions. It's a hugely important thing.
+49:28 Now, as we wrap up, there's of course a couple of I guess people tend to like books. These are a couple of ones that
+49:34 kind of come in around some of my thinking on this and a few things. People might be familiar with a few of them. And of course, the normal thing
+49:40 there, LinkedIn, feel free reach out and connect. I'll be around through parts of the day if people would like to chat as well. And with that, I would also like
+49:48 to just say thank you very much to everyone for coming today. It's been awesome having you all here. I also want to say thank you to people who actually
+49:54 at this time of morning were willing to actually like speak up and say things as well. I'm not a morning person. I'm guessing a few people are aren't as
+50:00 well. So, thank you very much for coming and I'm open to any questions. [Applause]
+50:12 Oh, back to the last screen. Sure. There we go.
+50:21 Excellent. If not, I'm believing morning tea will be on fairly soon. Yep. Sorry. Go ahead, mate. Ask you about the oneway, two-way door, the thingy. Yes.
+50:29 And the whole idea trying to make everything a two-way door. What are your feelings about the fact
+50:35 that can a company get too stagnated worrying about the simple easy backisions when really they should be
+50:42 focusing on the one decision more
+50:47 it is and that's one of those ideas around I guess the big rocks in the D jar the big hairy audacious goals um a
+50:55 good example of where Amazon managed to shoot themselves in the foot spectacularly was with uh the just walk
+51:01 out technology if people remember that whole idea of like the stores and actually there's one over at um I think it's at Marvel Stadium still where you
+51:08 can like pick something up off the shelf and you just kind of like tap your phone you pick up whatever and walk out and it'll just charge your phone and they
+51:14 realize that technology really doesn't work as well as they thought it would and shot themselves in the foot quite
+51:20 bad and kind of had to walk that back. Um now of course that didn't turn out
+51:25 very well but the other thing there is that ultimately if that went well they could have done huge things and they
+51:31 could have made enormous enormous um things out of that if they managed to get it working. I guess that's also a
+51:38 case where people do start looking at that and thinking well this is why we stay in our lane. This is why we kind of stay with the safe things right because
+51:45 we don't want to make those big things that could risk everything. And quite often one of the challenges I find
+51:51 talking with um senior leaders in some organizations is that they are afraid of like we don't want to be the ones who
+51:57 make that mistake. We don't want to be the ones who shoot ourselves in the feet that badly and quite often because of
+52:03 that sort of risk. The thing is quite often they're also the people who are dealing with a lot of those smaller things at the same time as well. Okay.
+52:10 So, I'm thinking about things like how we can pull off these big initiatives and do all this sort of stuff, but also
+52:15 I also have to chair the change management committee or I also have to be overseeing and signing off on all
+52:21 these different proposals that are coming up from the bottom level that need my signature before I can do stuff. My brain is over here deep in the
+52:27 tactical while I really need to be up here in the strategic. That's a challenge for it. And ultimately, if
+52:33 there's one thing that the last oh 20, 30 years have shown, it's that any
+52:38 incumbent who feels that they're at the top of the train, like they're at the top of the tree, and that nothing can
+52:43 assail them. I think the word disruption, we've seen that that very much is not the case. Um, we look at
+52:51 companies like Oracle, which, you know, legitimately did some fantastic stuff in the database space, you know, over many
+52:56 years. Now really the only reason a lot of people stay with them is quite often because they're stuck with licensing and
+53:03 hence very prone to disruption. So organizations that don't take that risk
+53:08 quite often are going to find themselves being overtaken and quite often organizations where leadership are stuck
+53:15 in the middle of everything else are not going to have the head space to actually focus on those things and to take those big carry audacious risks. And the other
+53:22 thing there I guess is we want to be encouraging that culture of thoughtful risktaking. Like as a leader I want my
+53:30 people within my teams to be taking those considered levels of risk. And I want that to cascade up as well. We
+53:36 should all be taking those considered levels of risk because if the goal is we will never make any mistakes. We will
+53:41 always get things right. At some point it's just going to go wrong on us and we won't have any control over it.
+53:49 Yes. In a small organization where you have too many projects going on two ways.
+53:56 Yes. And because it's a small organization things change very rapidly and executives are coming with one big
+54:03 one and you are not able to make those decision rapidly because one way take
+54:10 time to split it into the smaller two. Yes. So handle this situation where
+54:17 there so many ways are running because you got the time to split it out and run
+54:23 it but still at the same time you need to make some critical decision on the way. Yeah. How do you make those
+54:29 critical decisions on those one-way doors? And I think one of the things there is especially where you have interdependencies. One thing that you
+54:36 know it it's often very hard to implement in certain types of organizations but having crossunctional
+54:42 teams is a really powerful thing there specifically because you can get the right subject matter experts into a room
+54:47 to have those discussions earlier. Um, one of the projects I was working on not
+54:53 too long ago was very much focused around um, building out a new critical application. And the idea was we would
+55:00 have certain checkpoints in with the security team and then they would look at it and say, "Okay, we're good for
+55:06 this to continue. Okay, we're good for this to continue." But as those things spaced out in that time in between, um,
+55:13 the security team really had no visibility of stuff. And so some of those gulfs of concern widened over time
+55:19 between those milestones. And it went from being like, "Yep, we're cool with this. We're mostly okay with this. We're
+55:26 like not really great with this. Can we go back and check on a few things?" All the way to like, "No, this this is
+55:32 absolutely terrible. Like we cannot make this like we cannot have this go ahead." Having those integrated teams where you
+55:37 have those functions built into it makes a lot of difference. To your point though, like that works well where we
+55:43 have, you know, fairly tactical concerns that we're trying to work on. If we have those more strategic concerns like, you
+55:49 know, how do we make those strategic one-way door decisions? If we have that focus again on those big hairy goals,
+55:55 those initiatives that we know these things are going to take that time, we're going to have to make you know, a lot of clear way to get it done. The
+56:02 idea here is also that we should be able to free up our leaders at the next levels down to say we want to empower
+56:07 you to make those decisions. And there's a whole piece there around organizations and organizational structure. Like in
+56:13 some organizations where everything is very tightly integrated and you might have several things will have to run
+56:19 through legal at the same time. That can be a challenge and it can be a challenge that the organization structure just
+56:25 doesn't permit a certain level of speed. Like the organization itself and its structure might not permit it. Where if
+56:31 you have a lot of very tightly vertically integrated silos, they can make a lot of decisions within themselves. Fantastic. But of course
+56:38 they can miss the bigger picture across the organization as well. This is a challenge I think a lot of organizations struggle with not just in tech but just
+56:44 in large organizations in general. So it takes wiser minds than me to completely answer that.
+56:54 Excellent. Look, it's been fantastic having you all here. Thank you very much for coming for the first session of the day. And it is morning tea time, I do
+57:00 believe. So look, thank you very much for coming and I look forward to seeing you all around throughout the day. Thank you.
+57:06 [Applause]
