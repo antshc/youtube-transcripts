@@ -1,6 +1,6 @@
 ### Improved Summary Prompt Template (v2.0)
 
-**Goal:** Produce deep, structured, example-rich summaries from transcribed youtube video or audio — suitable for strategy, leadership, software design, software development, communication, or learning materials.
+**Goal:** Produce deep, structured, example-rich summaries from transcribed YouTube video or audio — suitable for strategy, leadership, software design, software development, communication, or learning materials.
 
 ---
 
@@ -19,27 +19,25 @@ Provide a concise, narrative overview of the main ideas and conclusions. Write i
 
 For each thesis:
 
-* Present the thesis as a **quoted principle** (short and memorable)
+1. Present the thesis as a **quoted principle** (short and memorable)
 
-Follow this structure:
+2. Follow this structure:
 
-> **“[Thesis Statement]”**
+**“[Thesis Statement]”**
 
-* Central idea: The central idea from the resource
-* *Meaning:* Explain the central idea in your own words — what the thesis truly conveys, why it is significant in its context, and what broader insight or universal principle it represents. Expand beyond a definition to include its implications for behavior, decision-making, or understanding.
+* *Meaning:* Explain the central idea — what the thesis truly conveys, why it is significant in its context, and what broader insight or universal principle it represents. Expand beyond a definition to include its implications for behavior, decision-making, or understanding.
 * *Mechanism:* Explain the reasoning or mechanism behind it.
 * *Examples:* Provide 2–3 concrete examples from different domains (tech, leadership, daily life, etc.).
 * *Caution (optional):* Mention any limitation or counterpoint for nuance.
 
 Example:
 
-> **“Velocity without clarity leads to chaos.”**
+## **“Velocity without clarity leads to chaos.”**
 
-* *Central idea:* Teams coding fast without shared priorities
 * *Meaning:* Teams coding fast without shared priorities create rework and confusion.
 * *Mechanism:* Lack of clear vision multiplies coordination overhead and decision churn.
-*Examples:*
 
+*Examples:*
 * Agile teams optimizing only ticket count lose architectural integrity.
 * Infrastructure automation without IaC causes configuration drift.
 * Product teams rushing features without UX testing degrade customer trust.
