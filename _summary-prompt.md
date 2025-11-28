@@ -3,6 +3,8 @@
 ---
 
 #### 1. Executive Summary (≈1 page)
+> Video: <Placeholder for resource video>
+> Transcript: <Placeholder for resource transcript>
 
 Provide a concise, narrative overview of the main ideas and conclusions. Write in flowing prose (not bullets). Cover:
 
