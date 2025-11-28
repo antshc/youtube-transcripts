@@ -1,5 +1,3 @@
-### Improved Summary Prompt Template (v2.0)
-
 **Goal:** Produce deep, structured, example-rich summaries from transcribed YouTube video or audio — suitable for strategy, leadership, software design, software development, communication, or learning materials.
 
 ---
