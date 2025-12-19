@@ -1,0 +1,2904 @@
+1
+00:00:00,000 --> 00:00:15,000
+Hello. Good afternoon. Keep coming in. So, welcome. Thank you for coming along to this
+
+2
+00:00:15,000 --> 00:00:17,680
+session. My name is Steve. I'm a Microsoft MVP,
+
+3
+00:00:17,680 --> 00:00:22,560
+Plurusite author and engineer at Elastic. You can find me online. I'm at Steve J. Gordon
+
+4
+00:00:22,560 --> 00:00:28,000
+on most social platforms. I blog at SteveJ Gordon.co.uk. Some of the stuff that I'll be
+
+5
+00:00:28,000 --> 00:00:32,320
+going through today is kind of built off of longer form blog posts. So, if you want to dive
+
+6
+00:00:32,320 --> 00:00:38,320
+a bit deeper, check out those articles. This bit link here. If you want access to the slides,
+
+7
+00:00:38,320 --> 00:00:43,200
+the code and things after the session, just grab that link with the QR code there and you'll
+
+8
+00:00:43,200 --> 00:00:48,880
+be able to kind of review those. I'll share that link again at the end. So, today we're
+
+9
+00:00:48,880 --> 00:00:54,400
+going to be talking about high performance C-shop code and some of the, I call them new.
+
+10
+00:00:54,400 --> 00:00:58,960
+They're not new anymore, but newer features available to us in the language and the
+
+11
+00:00:58,960 --> 00:01:03,160
+base class libraries that allow us to do high performance code. So, just to set the agenda
+
+12
+00:01:03,160 --> 00:01:08,800
+and make sure we're all on the same page. What we'll be covering is we're going to begin
+
+13
+00:01:08,800 --> 00:01:11,840
+with just a quick discussion around what is performance and what is it we're actually
+
+14
+00:01:11,840 --> 00:01:18,320
+aiming to improve in our code. Thank you. We'll then spend a little bit of time talking
+
+15
+00:01:18,320 --> 00:01:22,560
+about how to actually measure the performance of code so that we know where we're starting
+
+16
+00:01:22,560 --> 00:01:26,640
+from and where we're actually moving towards as we do some optimizations on some code.
+
+17
+00:01:27,200 --> 00:01:33,280
+We'll then spend a bit of time with these types. So, span of T, we don't know span and memory of T.
+
+18
+00:01:33,280 --> 00:01:38,880
+We'll talk a bit about a rapes. We'll talk a little bit about pipeline system IO pipelines
+
+19
+00:01:38,880 --> 00:01:43,760
+and a type we'll read only sequence. And hopefully there'll be time for me to race through some
+
+20
+00:01:43,760 --> 00:01:48,160
+stuff on System Text Jason at the end and just show some demos of using high performance stuff
+
+21
+00:01:49,120 --> 00:01:53,040
+there. So, let's begin really with the aspects of performance. So, there's three main
+
+22
+00:01:53,040 --> 00:01:57,600
+sort of categories or criteria of performance that I tend to think about when I'm optimizing
+
+23
+00:01:57,600 --> 00:02:05,520
+code. The first is execution time. So, how long does a unit of code take to run? That might be,
+
+24
+00:02:05,520 --> 00:02:09,600
+you know, the entire operation of handling a request, for example, or it might be that you're
+
+25
+00:02:09,600 --> 00:02:13,840
+looking at smaller units of code, individual methods, or even lines of code, and how long
+
+26
+00:02:13,840 --> 00:02:18,960
+those take to execute. Typically, if we can make our code execute more quickly, then we can give
+
+27
+00:02:18,960 --> 00:02:24,320
+a better response to the user, the customer that's visiting the site, or using the application,
+
+28
+00:02:24,320 --> 00:02:27,600
+because we're able to return results or information to them more quickly.
+
+29
+00:02:28,640 --> 00:02:34,000
+Frueput is a sort of related measure, but it's a better way of thinking about this in terms of
+
+30
+00:02:34,000 --> 00:02:39,200
+what a system or a service can actually achieve. So, Frueput is more a measure of what we can actually
+
+31
+00:02:39,200 --> 00:02:43,200
+do with a given amount of resource on a machine. So, request per second in ASP Connect core,
+
+32
+00:02:43,200 --> 00:02:47,360
+maybe messages, processed off a cube per second per minute, however we're measuring that.
+
+33
+00:02:47,920 --> 00:02:53,280
+And this gives us a nice way of measuring sort of the actual performance of an application
+
+34
+00:02:53,280 --> 00:02:58,080
+in production, because it's an easy measure that we can take using metrics-based tools to collect
+
+35
+00:02:58,080 --> 00:03:02,880
+this information to see how applications are performing. These two are quite closely linked.
+
+36
+00:03:03,440 --> 00:03:07,440
+Typically, if we can reduce the execution time of our code, then we might see that we're able
+
+37
+00:03:07,440 --> 00:03:11,200
+to increase the Frueput of the system as well. It's not always an exact correlation.
+
+38
+00:03:11,200 --> 00:03:14,800
+Different things can affect Frueput. There's different sort of bottlenecks that you might encounter
+
+39
+00:03:14,800 --> 00:03:20,560
+on your system around IO and memory that may sort of play a part in that measure as well.
+
+40
+00:03:21,360 --> 00:03:25,920
+But typically, if we get the execution time, we see improvements in Frueput. And then the final one,
+
+41
+00:03:25,920 --> 00:03:30,960
+that not everyone tends to think about, is around memory allocations. So, allocations in .NET
+
+42
+00:03:30,960 --> 00:03:35,840
+are extremely cheap, because we already have the heap memory sort of ready to go. And so, when we
+
+43
+00:03:35,840 --> 00:03:41,120
+create a new object, it's usually just bumping a pointer logically within that sort of heap memory.
+
+44
+00:03:41,680 --> 00:03:46,320
+The cost for memory allocations comes later. At some point in time, those objects go out of scope,
+
+45
+00:03:46,320 --> 00:03:50,800
+and that memory can be reclaimed. So, at some point, garbage collection process is going to need to
+
+46
+00:03:50,800 --> 00:03:58,880
+kick in and clean up those unused objects. And that tends to have a small, but sometimes significant
+
+47
+00:03:58,880 --> 00:04:04,080
+performance impact in high Frueput systems. And so, if we can avoid allocating objects on the heap
+
+48
+00:04:04,080 --> 00:04:10,160
+and allocating memory at all, then we avoid that potential penalty later on. And a lot of the stuff
+
+49
+00:04:10,160 --> 00:04:14,560
+you see, if you read any of the post-partly, like Stephen Taub from Microsoft, when they talk about
+
+50
+00:04:14,560 --> 00:04:19,120
+the high performance features that they've introduced, they'll often be demonstrating how they've
+
+51
+00:04:19,120 --> 00:04:23,360
+reduced allocations as one of the ways that they've made performance overall better.
+
+52
+00:04:26,000 --> 00:04:31,760
+Now, I do like to caution that performance is contextual. There's various different ways of saying
+
+53
+00:04:31,760 --> 00:04:35,680
+this, but I just sort of summarise this in this form. Because a lot of what I'm going to show you
+
+54
+00:04:35,680 --> 00:04:41,040
+today isn't necessarily stuff that you need to race to your office on Monday and start implementing.
+
+55
+00:04:41,520 --> 00:04:46,320
+But in certain situations where you've got high Frueput systems or you're already encountering
+
+56
+00:04:46,320 --> 00:04:51,040
+certain bottlenecks in your system, then you might want to start looking at optimizing some of the
+
+57
+00:04:51,040 --> 00:04:56,960
+code to reduce those problems that you're facing. But maybe for 95% of applications, some of the
+
+58
+00:04:56,960 --> 00:05:01,360
+stuff I'm going to show you today might not be necessary. Although, what I do hope to demonstrate
+
+59
+00:05:01,360 --> 00:05:06,560
+is that some of the techniques, for example, reduce allocations don't necessarily require a lot of
+
+60
+00:05:06,560 --> 00:05:12,000
+deep advanced code to write them. Sometimes we can actually achieve those gains with relatively
+
+61
+00:05:12,000 --> 00:05:19,360
+simple changes. That said, there is a bit of a trade-off when it comes to high performance code.
+
+62
+00:05:19,360 --> 00:05:24,160
+Typically, the high performance code tends to get a little bit more verbose. It's a little less
+
+63
+00:05:24,160 --> 00:05:29,200
+easy maybe to read or reason about because it's written in a certain way that we know optimises
+
+64
+00:05:29,200 --> 00:05:34,240
+for certain scenarios. That can mean that it's harder to maintain the code that we've moved to
+
+65
+00:05:34,240 --> 00:05:39,760
+this higher performance environment. You do have to have this trade-off. If you're working on a
+
+66
+00:05:39,760 --> 00:05:45,040
+system that's regularly changing, it has lots of developers touching that code on a regular basis,
+
+67
+00:05:45,040 --> 00:05:49,520
+then you might want to move more towards readability and maintainability as your priority,
+
+68
+00:05:49,520 --> 00:05:55,360
+because actually getting out features, shipping code is more important than milliseconds of execution
+
+69
+00:05:55,360 --> 00:06:00,160
+time or small amounts of memory gains that you might make. But there will always be a certain set
+
+70
+00:06:00,160 --> 00:06:04,240
+of applications where if you can reduce the memory footprint, for example, of the application,
+
+71
+00:06:04,240 --> 00:06:08,320
+you might be able to reduce costs in terms of how you have to scale that application
+
+72
+00:06:08,320 --> 00:06:13,360
+in production environment. You need to weigh this up in your organisation service by service to
+
+73
+00:06:13,360 --> 00:06:19,040
+see where you should be treading across this line. Are you moving more to the high performance
+
+74
+00:06:19,120 --> 00:06:23,440
+or are you needing to just keep that code easy to work on and easy to read?
+
+75
+00:06:27,440 --> 00:06:31,760
+When we go around optimising code, I'm going to be demonstrating what I refer to as the
+
+76
+00:06:31,760 --> 00:06:37,600
+optimisation cycle today. The most important first step in optimising code is actually making
+
+77
+00:06:37,600 --> 00:06:42,480
+measurements first. It's very dangerous when you're doing optimisations to make assumptions about
+
+78
+00:06:42,480 --> 00:06:47,600
+how code might operate if we switch to a higher performance code that we've already used,
+
+79
+00:06:47,600 --> 00:06:52,880
+maybe elsewhere, it doesn't always pay off in the way we expect. We start by measuring our code
+
+80
+00:06:52,880 --> 00:06:57,200
+to get an understanding of what the system is currently doing. The very first set of measurements
+
+81
+00:06:57,200 --> 00:07:01,680
+should be, ideally, production measurements if you can. How is your system currently function
+
+82
+00:07:01,680 --> 00:07:06,720
+if it's already deployed? What is your throughput of a web server, for example, or how many messages
+
+83
+00:07:06,720 --> 00:07:11,520
+can your processing service manage off a queue in a certain given amount of time? You want to make
+
+84
+00:07:11,520 --> 00:07:15,360
+sure that any changes you're making on negatively affecting those production metrics.
+
+85
+00:07:16,320 --> 00:07:19,920
+Then when we start actually looking at where we should be spending our time in our code,
+
+86
+00:07:19,920 --> 00:07:25,440
+we want to start with higher level tools that allow us to profile CPU and memory to start to give us
+
+87
+00:07:25,440 --> 00:07:31,040
+a guidance of where we want to start optimising code. We'll talk about a few of the tools in a
+
+88
+00:07:31,040 --> 00:07:35,360
+moment, but the basic idea is we want to know what are the hot pass in the application so that we
+
+89
+00:07:35,360 --> 00:07:40,320
+can go and focus on where we could approve that code base on those hot pass. That's going to give
+
+90
+00:07:40,400 --> 00:07:45,440
+us the most gain if it's code that's executed most often. We can use memory profiles, for example,
+
+91
+00:07:45,440 --> 00:07:50,080
+to help us narrow down within that hot pass where are the potential gains for maybe reducing
+
+92
+00:07:50,080 --> 00:07:55,520
+allocations coming from. Then we go down to even lower level measurements. We'll have a look at
+
+93
+00:07:55,520 --> 00:08:00,320
+an example of benchmarking with a tool called benchmark.net as we move through the session. This
+
+94
+00:08:00,320 --> 00:08:05,280
+is what allows us to get very high precision measurements for small units of code as we go about
+
+95
+00:08:05,280 --> 00:08:11,600
+optimising it. We measure first, we get our sort of baselines and then we can begin to optimise.
+
+96
+00:08:11,600 --> 00:08:15,200
+The most important thing about this step is that we don't just make all of the possible
+
+97
+00:08:15,200 --> 00:08:20,720
+changes that we can think of in one go. I prefer to do this in small iterations, small changes.
+
+98
+00:08:21,280 --> 00:08:26,000
+After we optimise maybe a few lines of code with a high performance technique, maybe like one of
+
+99
+00:08:26,000 --> 00:08:31,360
+the ones I'll show you today, we want to measure again to validate that that change is actually
+
+100
+00:08:31,360 --> 00:08:35,440
+represented in the data that we're seeing. If you change a whole bunch of things together,
+
+101
+00:08:35,440 --> 00:08:39,440
+you might improve the overall performance of your code, but you don't know if all of those changes
+
+102
+00:08:39,440 --> 00:08:44,320
+were actually positive. By doing things in small increments, you can get very scientific about
+
+103
+00:08:44,320 --> 00:08:48,960
+validating each theory that you have and each change that you're making is pushing you towards
+
+104
+00:08:48,960 --> 00:08:54,960
+whatever goal it is you're working towards. Then this cycle just continues. There's no real specific
+
+105
+00:08:54,960 --> 00:08:59,520
+end point for this that you have to determine within your organisation, within your team what is
+
+106
+00:08:59,520 --> 00:09:03,840
+the point to stop optimising. Sometimes you'll have reached your given requirement, you may have
+
+107
+00:09:03,840 --> 00:09:08,560
+reduced your memory footprint by half and you're happy. That's fine, that's a good place to stop
+
+108
+00:09:08,560 --> 00:09:12,560
+if that was your objective. Sometimes you might just hit the ceiling of what you think you can
+
+109
+00:09:12,560 --> 00:09:16,640
+reasonably achieve. You've gone through all of the techniques that you've read about or seen
+
+110
+00:09:16,640 --> 00:09:21,040
+today and actually you don't think there's any more real gains you're talking sort of nanoseconds
+
+111
+00:09:21,040 --> 00:09:25,200
+or maybe a few bites here and there, but there's not a real gain to be had. So you don't want to
+
+112
+00:09:25,200 --> 00:09:30,880
+continue optimising too far past that sort of optimum point of time spent versus the gains that
+
+113
+00:09:30,880 --> 00:09:37,120
+you're making. So how do we measure high performance code, how do we sort of start to analyse some of
+
+114
+00:09:37,120 --> 00:09:42,480
+this stuff? So the first tool I like to highlight just because it's often overlooked is if you're using
+
+115
+00:09:42,480 --> 00:09:48,800
+Visual Studio and I do, then the diagnostic tools that pop up when you start debugging an application
+
+116
+00:09:49,840 --> 00:09:54,560
+can be quite useful. They can give you a bit of a representative view of how the memory profile
+
+117
+00:09:54,560 --> 00:09:58,960
+of that application is looking. You can see where the GCs are occurring. You can take snapshots
+
+118
+00:09:58,960 --> 00:10:04,320
+of that memory if you want to understand a little bit more about it. And so just by sort of debugging
+
+119
+00:10:04,320 --> 00:10:09,200
+our application we have access to some rich data. The caution here is that you are in a debug mode.
+
+120
+00:10:09,200 --> 00:10:14,240
+You're not running this against highly optimised code. So there might be some differences to what
+
+121
+00:10:14,240 --> 00:10:18,960
+you would measure in a production application. So it's a good indicator but it isn't necessarily
+
+122
+00:10:18,960 --> 00:10:22,960
+a final measure. For that what you want to do is start going a little bit deeper on the
+
+123
+00:10:23,920 --> 00:10:31,120
+the release build code and actually use tools like the Visual Studio Profiling Suite or Perfew or
+
+124
+00:10:31,120 --> 00:10:35,920
+some of the JetRains products to actually narrow down further. Visual Studio Profiling tools are
+
+125
+00:10:35,920 --> 00:10:39,440
+actually pretty rich today. We have a lot of options in there. We can look at all of the memory
+
+126
+00:10:39,440 --> 00:10:45,280
+allocations, tracking those across time to see what's being allocated. We can profile the CPU and
+
+127
+00:10:45,280 --> 00:10:51,280
+see where the method times are being spent. And we can also dig into things like the Async and the
+
+128
+00:10:51,520 --> 00:10:56,640
+Task Parallel Library parts as well. So you can actually get quite rich information just from Visual
+
+129
+00:10:56,640 --> 00:11:05,040
+Studio. The other end of the scale I would say is Perfew. This is a very rich tool, it's a very
+
+130
+00:11:05,040 --> 00:11:09,680
+advanced tool. I don't get along with it particularly well. I've dipped in and out of it but it is
+
+131
+00:11:09,680 --> 00:11:14,080
+quite difficult to get to grips with. And so I don't recommend it as kind of the first thing you
+
+132
+00:11:14,080 --> 00:11:19,040
+go to unless you really feel you need to or you've had some familiarity with it in the past. Where I
+
+133
+00:11:19,040 --> 00:11:23,840
+tend to push most of my time for performance stuff is into the JetRains tools. I'm not paid to
+
+134
+00:11:23,840 --> 00:11:30,240
+say that. I don't work for them. I just prefer them. .trace.memory are both very easy tools to get
+
+135
+00:11:30,240 --> 00:11:35,280
+started with in terms of taking CPU profiles of an application as well as understanding where the
+
+136
+00:11:35,280 --> 00:11:40,000
+memory is being allocated and diving into that information. So pick the tool that you like.
+
+137
+00:11:41,520 --> 00:11:47,040
+Sometimes not always, it can be useful to go quite deep. And this is where maybe you might
+
+138
+00:11:47,040 --> 00:11:50,880
+want to start even looking at the intermediate language code that gets generated when you compile
+
+139
+00:11:50,880 --> 00:11:56,720
+your C-sharp application. Sometimes this can give you a rid of an indicator in terms of the C-sharp
+
+140
+00:11:56,720 --> 00:12:01,360
+you're writing. How many IL intermediate language instructions is that actually compiling down to?
+
+141
+00:12:01,360 --> 00:12:06,240
+And typically if you can make your code smaller and have less instructions, then it's going to
+
+142
+00:12:06,240 --> 00:12:11,520
+execute more quickly. Other things we can sometimes spot in IL based tools is we can see where
+
+143
+00:12:11,520 --> 00:12:16,720
+boxing instructions, for example, are being occurring. So we can maybe identify cases where we're
+
+144
+00:12:17,200 --> 00:12:22,400
+boxing value types as well. So not always needed, but there are various free tools out there that you
+
+145
+00:12:22,400 --> 00:12:28,480
+can use just to go and inspect that IL code. And don't overlook the importance of having production
+
+146
+00:12:28,480 --> 00:12:33,040
+metrics and monitoring in place before you start doing this as well. Again, testing this stuff
+
+147
+00:12:33,040 --> 00:12:37,360
+locally, even if you try your hardest, you might not always get a representative example of how
+
+148
+00:12:37,360 --> 00:12:41,920
+an application performs in a real production environment. Because our developer machines are a
+
+149
+00:12:41,920 --> 00:12:46,320
+bit different. There's no real contention going on. The loads that we're putting through them are
+
+150
+00:12:46,320 --> 00:12:51,040
+typically not necessarily going to be the same as we would see in production. And the patterns
+
+151
+00:12:51,040 --> 00:12:56,320
+of usage might differ as well. So having monitoring in production for existing applications before
+
+152
+00:12:56,320 --> 00:13:01,760
+you start this journey is pretty useful. Just basic things like maybe measures of memory, CPU,
+
+153
+00:13:02,560 --> 00:13:08,400
+usage, throughput of an application, if it's an ASP and ECOR type app, can be really useful. Because
+
+154
+00:13:08,400 --> 00:13:12,960
+you can see if you're positively or negatively affecting them in the direction that you hope you are.
+
+155
+00:13:13,120 --> 00:13:18,560
+So the tool that we will spend a little bit of time with today just because less people are
+
+156
+00:13:18,560 --> 00:13:25,040
+familiar with it is benchmark.net. So this is a library for typically micro-bent remarking our code.
+
+157
+00:13:25,040 --> 00:13:29,040
+So this is where we all want to measure small chunks of code, maybe individual methods,
+
+158
+00:13:29,040 --> 00:13:34,480
+maybe even individual lines of code, and compare them to how they're sort of working after we've
+
+159
+00:13:34,480 --> 00:13:40,240
+optimised them. It's a highly precise tool. So it does a lot of things to give us accurate
+
+160
+00:13:40,240 --> 00:13:44,480
+measurements. Technically you could just use like a stopwatch or a timer around some code,
+
+161
+00:13:44,480 --> 00:13:48,400
+and that would give you a rough measure. But what benchmark.net is doing is it's going to run
+
+162
+00:13:48,400 --> 00:13:53,040
+many different stages as it goes through benchmarking. It does a warm up phase to make sure that the
+
+163
+00:13:53,040 --> 00:13:58,000
+code you're testing is pre-gitted so that the just-in-time compiler has run for its very
+
+164
+00:13:58,000 --> 00:14:03,520
+tiered compilation levels and your code is the most optimal that it would be in a real scenario.
+
+165
+00:14:03,520 --> 00:14:08,160
+It runs its own overhead measurements, so it checks how it's overhead of actually inspecting
+
+166
+00:14:08,640 --> 00:14:13,440
+and monitoring. Your application while it's running might take into effect, and it can remove that
+
+167
+00:14:13,440 --> 00:14:19,120
+overhead. And then it will run each of your benchmark methods, many tens, hundreds,
+
+168
+00:14:19,120 --> 00:14:24,080
+thousands of times, to make sure it's giving you good statistical averages for the data that you're
+
+169
+00:14:24,080 --> 00:14:28,640
+measuring. So when we start getting down to those kind of nanosecond tiny measurements of time,
+
+170
+00:14:28,640 --> 00:14:34,000
+we need that highly precise measurement process to make sure that what we're getting is accurate.
+
+171
+00:14:34,080 --> 00:14:41,680
+There's various other pieces of data that we can collect in the form of diagnoses. So we'll see one
+
+172
+00:14:41,680 --> 00:14:50,800
+in action shortly, but these are things like GCN memory. So we can change the GC modes that we're
+
+173
+00:14:50,800 --> 00:14:56,880
+running our benchmarks under. We can look at different JIT modes and things, and this can be useful.
+
+174
+00:14:56,880 --> 00:15:01,200
+Sometimes we can then replicate more closely what would be a production system when we're doing our
+
+175
+00:15:01,200 --> 00:15:07,920
+benchmarking. We can prepare for performance on all the different platforms as well, so you might
+
+176
+00:15:07,920 --> 00:15:12,720
+be developing on a Windows machine, but you might be running your benchmarks against Linux mode as
+
+177
+00:15:12,720 --> 00:15:18,880
+well, and you can run these then in CI and compare how those things run. This tool is the tool that's
+
+178
+00:15:18,880 --> 00:15:24,560
+very extensive of use by the Microsoft Teams. You'll see it in all of Stephen Talb's annual performance
+
+179
+00:15:24,560 --> 00:15:30,240
+blog posts, and it's been used heavily through the .NET runtime code base as well as ASP in
+
+180
+00:15:30,240 --> 00:15:37,040
+a core as the teams have been optimizing those. So this is kind of the hello world of benchmarking.
+
+181
+00:15:37,040 --> 00:15:42,240
+So up the top here we start with a main method, and that's just invoking this benchmark runner.run
+
+182
+00:15:42,240 --> 00:15:46,960
+method. And in this case, what we're doing is passing in a type that contains some benchmarks.
+
+183
+00:15:46,960 --> 00:15:51,280
+Now there's various different ways that you can configure benchmark.NET to run. You can have it
+
+184
+00:15:51,280 --> 00:15:55,200
+in kind of an interactive mode where it does discover all of your benchmarks in the system and let
+
+185
+00:15:55,200 --> 00:15:59,840
+you choose what you run. You can have it in a more CLI mode where you, if you're doing it,
+
+186
+00:15:59,840 --> 00:16:04,880
+sort of CI environments and you want to run specific benchmarks, you can do that by passing in the name
+
+187
+00:16:04,880 --> 00:16:09,120
+of those as arguments. But in this mode, we're just going to run everything that's in that class
+
+188
+00:16:09,120 --> 00:16:14,080
+below. The name, pars, or benchmarks. And what I've added here is that memory diagnoses attribute,
+
+189
+00:16:14,080 --> 00:16:19,520
+which allows us to say that in addition to execution time measurements, we want to do a run that
+
+190
+00:16:19,520 --> 00:16:25,520
+measures the allocation overhead of this code as well. I have a little bit of setup code here,
+
+191
+00:16:25,520 --> 00:16:29,840
+so these are set up as constant or static pieces of data. They're not things that I'm actually
+
+192
+00:16:29,840 --> 00:16:34,240
+measuring as part of my benchmark, but they're things I need to do the benchmark. So I need some
+
+193
+00:16:34,240 --> 00:16:40,000
+input data and I need an instance of a name, parser. And then my actual benchmark is below. So it's
+
+194
+00:16:40,000 --> 00:16:44,880
+just a regular method with the benchmark attribute applied to it. And in this case, we're calling
+
+195
+00:16:44,880 --> 00:16:49,760
+the get last name method of that parser, parsing in a full name, and we're going to then see what the
+
+196
+00:16:50,480 --> 00:16:55,600
+execution time and memory overhead of that particular method is. We're going to run this. It's
+
+197
+00:16:55,600 --> 00:17:00,000
+going to take some time to run. You want to do it on a release build. You also ideally want to do it
+
+198
+00:17:00,000 --> 00:17:05,120
+on a system that's not running other stuff. So in an ideal world, you disable every other application,
+
+199
+00:17:05,120 --> 00:17:10,400
+even maybe antivirus, because all of those things could kick in and affect nanosecond level measurements.
+
+200
+00:17:11,360 --> 00:17:16,000
+But generally, as long as you've turned off most of the other apps that could consume memory or
+
+201
+00:17:16,000 --> 00:17:22,320
+maybe jump in and affect CPU scheduling and things, you'll get fairly accurate results. And after
+
+202
+00:17:22,320 --> 00:17:26,880
+a few minutes, because of all those warm up phases, all of those many executions that it will do,
+
+203
+00:17:26,880 --> 00:17:31,360
+we end up with this basic summary results. And there's a much richer set of results that you can
+
+204
+00:17:31,360 --> 00:17:37,200
+pull from the output folder. But in this case, what it's giving is a quick summary of that particular
+
+205
+00:17:37,200 --> 00:17:44,000
+method takes 116 nanoseconds to run. We don't know if that's good, bad, it's pretty fast, but
+
+206
+00:17:44,000 --> 00:17:49,040
+could we make it quicker? Do we need to make it quicker? That's a decision for us to decide later on.
+
+207
+00:17:49,040 --> 00:17:53,280
+Because we added the memory diagnoses, we have a few extra columns on the end. So in this case,
+
+208
+00:17:53,280 --> 00:17:58,560
+we have a single column for Gen 0, which is a rough approximation as best it can kind of estimate of
+
+209
+00:17:58,560 --> 00:18:05,520
+how many per 1000 operations, how many Gen 0 collections would be incurred. So in this case, we're
+
+210
+00:18:05,520 --> 00:18:10,480
+saying that you'd have to run that method roughly 29,000 times to have induced enough pressure
+
+211
+00:18:10,480 --> 00:18:16,880
+of Gen 0 objects for that to then need freeing. It's not an exact measure because the GC uses a bunch
+
+212
+00:18:16,880 --> 00:18:23,520
+of heuristics and sort of adaptive technologies behind the scenes to try and make it as efficient as
+
+213
+00:18:23,520 --> 00:18:28,000
+possible. But it gives you a bit of an indication. And the fact that we're not seeing a Gen 1 or Gen 2
+
+214
+00:18:28,000 --> 00:18:32,480
+column here shows us that none of our objects are long lived or particularly large necessarily.
+
+215
+00:18:33,200 --> 00:18:37,840
+We can see how many bytes was actually allocated as a result of calling that method. Again,
+
+216
+00:18:37,840 --> 00:18:42,320
+we don't know if this is good or bad, but we do know that we've got 144 bytes allocated
+
+217
+00:18:42,320 --> 00:18:45,440
+by this particular method. So this would be a good starting point for us.
+
+218
+00:18:47,120 --> 00:18:52,080
+So now that we've had a brief introduction to sort of benchmark code, let's look at some
+
+219
+00:18:52,080 --> 00:18:56,560
+high performance code. And then I'll hopefully show you some demonstrations of where I've applied
+
+220
+00:18:56,560 --> 00:19:02,240
+that in the past and how I've made those gains pay off for me. So the first type I want to
+
+221
+00:19:02,240 --> 00:19:06,560
+spend probably most time on is span of T. I'm always curious, how many people in the room would say
+
+222
+00:19:06,560 --> 00:19:12,400
+that they've heard of this span of T concept already? I'll show you hands. Maybe half-ish.
+
+223
+00:19:12,400 --> 00:19:17,600
+How many people have used span of T in their own code base so far? It's not bad, but far fewer. And
+
+224
+00:19:17,600 --> 00:19:22,880
+that's, I've been doing this talk on and off for probably four or five years now. And it's
+
+225
+00:19:22,880 --> 00:19:27,440
+pretty much always the same proportion. A lot of people have heard of span of T or a reasonable
+
+226
+00:19:27,440 --> 00:19:31,520
+number because it's always mentioned in things like those annual blog posts by Stephen Talb,
+
+227
+00:19:31,520 --> 00:19:36,000
+it's always mentioned quite heavily in any post that discusses performance in relation to
+
+228
+00:19:36,000 --> 00:19:42,240
+.NET and the runtime based class libraries. Because it was quite a revolutionary addition to
+
+229
+00:19:42,240 --> 00:19:47,280
+.NET that has led to many improvements to the runtime that we've seen in precincts.NET sort of
+
+230
+00:19:47,280 --> 00:19:53,360
+free one sort of timeframe. But I also find that not many people have actually used it in code,
+
+231
+00:19:53,360 --> 00:19:57,360
+partly because they may not need to, but also partly because I think Microsoft tended to caution
+
+232
+00:19:58,160 --> 00:20:03,520
+away from using it. And I've always been a little bit less on the caution side. It's not
+
+233
+00:20:03,520 --> 00:20:08,480
+hugely complex to get started with span of T and you can apply it quite easily in a code base is
+
+234
+00:20:08,480 --> 00:20:16,240
+to reduce allocations as we'll see. So this was built in .NET Core 2.1 and since then. So we've
+
+235
+00:20:16,240 --> 00:20:21,920
+got it on all latest versions of .NET sort of runtime. It's also available as a system memory
+
+236
+00:20:21,920 --> 00:20:26,160
+package. So you can actually use this with .NET framework applications and netstandard libraries.
+
+237
+00:20:26,960 --> 00:20:31,680
+There is a subtle difference in the level of performance. So in .NET Core, what they did is
+
+238
+00:20:31,680 --> 00:20:37,440
+actually make some runtime changes to optimize for this type in the best way possible. We don't
+
+239
+00:20:37,440 --> 00:20:41,520
+tend to see runtime changes in .NET framework partly because it's mostly maintenance mode and
+
+240
+00:20:41,520 --> 00:20:46,320
+partly because of fears around how that ships. With .NET Core, we have a much easier system of
+
+241
+00:20:46,320 --> 00:20:51,920
+upgrading and running side by side versions. And so they felt safe in actually optimizing this
+
+242
+00:20:51,920 --> 00:21:00,080
+with actual runtime changes. And it's hard what it does. It provides a read right view over some
+
+243
+00:21:00,080 --> 00:21:04,880
+contiguous region of memory. The nice thing about span of T is it's kind of agnostic to what
+
+244
+00:21:04,880 --> 00:21:11,840
+that memory is. So we can actually use this over traditional heap allocated memory. So things
+
+245
+00:21:11,840 --> 00:21:16,240
+like strings or arrays, which are contiguous blocks of memory off the heap. But we can also use
+
+246
+00:21:16,240 --> 00:21:21,680
+it to reference memory that's allocated directly on the stack. And even native and unmanaged
+
+247
+00:21:21,680 --> 00:21:26,240
+memory if you're working in those types of environments. But we work with this one type that's
+
+248
+00:21:26,240 --> 00:21:33,120
+both type safe and memory safe in all of those scenarios. So one of the key things it offers to us
+
+249
+00:21:33,120 --> 00:21:39,040
+is this ability to avoid allocations and data copying, which can be quite significant in reducing
+
+250
+00:21:39,680 --> 00:21:45,840
+the overhead of application code. So we can work with it in a very similar way to traditional array
+
+251
+00:21:45,840 --> 00:21:51,840
+based data structures. We can index into it. We can iterate through that data. There's pretty much
+
+252
+00:21:51,840 --> 00:21:56,800
+almost no overhead versus using a native array. And all of the operations on here have been highly
+
+253
+00:21:56,800 --> 00:22:01,360
+optimized to be as efficient as possible, which is why it's used throughout the runtime libraries.
+
+254
+00:22:03,040 --> 00:22:08,400
+One of the key operations on span that's the most valuable really is this idea of slicing data
+
+255
+00:22:08,400 --> 00:22:13,200
+or slicing memory. So here what we do is we start by creating a new integer array of nine elements.
+
+256
+00:22:13,840 --> 00:22:20,480
+And then we call our span on there to get a span of T, a span of int in this case over that data.
+
+257
+00:22:20,480 --> 00:22:25,280
+And so these two local variables here would point to the same portion of memory.
+
+258
+00:22:25,280 --> 00:22:30,080
+The first thing you might worry about is this creation of this span of int that we're creating as a
+
+259
+00:22:30,080 --> 00:22:36,000
+result of that new as span call. The thing about span is it isn't ever allocated on the heap. So
+
+260
+00:22:36,000 --> 00:22:41,600
+there's never any GC overhead from creating an instance of a span. It's a specialized type that
+
+261
+00:22:41,600 --> 00:22:45,920
+only ever appears on the stack. And we'll see later why that introduces some limitations.
+
+262
+00:22:45,920 --> 00:22:49,840
+But it also offers this guarantee that actually it's a very cheap thing to do. There's never any
+
+263
+00:22:49,840 --> 00:22:55,120
+heap costs that we should be worrying about. Now once we have that span based view over the data,
+
+264
+00:22:55,120 --> 00:22:59,920
+any point in time we can call slice on there to give us a different view over that same block of
+
+265
+00:22:59,920 --> 00:23:05,120
+memory. So in this case we're slicing in to a starting position of two in a length of five.
+
+266
+00:23:05,120 --> 00:23:10,800
+And so this new span to here references a different portion of the existing memory. We haven't
+
+267
+00:23:10,800 --> 00:23:14,880
+done any data copying. We've just changed our view. And this is extremely powerful if you're
+
+268
+00:23:14,880 --> 00:23:20,480
+processing bytes that may be a streaming off the wire or you're processing through large strings,
+
+269
+00:23:20,480 --> 00:23:25,920
+which are just, you know, ultimately just characters in a system. Because you can just change your
+
+270
+00:23:25,920 --> 00:23:31,280
+view over that data very quickly. The nice thing about slicing isn't constant time, constant cost
+
+271
+00:23:31,280 --> 00:23:35,760
+operation as well. So it doesn't matter if this array is nine elements or nine million. The
+
+272
+00:23:35,760 --> 00:23:42,240
+cost of slicing into it for any length is pretty much exactly the same each time. And that makes
+
+273
+00:23:42,240 --> 00:23:46,080
+it very powerful because we're never copying anything. We're basically just holding a pointer
+
+274
+00:23:46,080 --> 00:23:50,800
+within that memory portion. And then the length, that's pretty easy to maintain.
+
+275
+00:23:51,920 --> 00:23:56,640
+The analogy I use for slicing, if it hasn't quite sort of fit into your mental model yet, is of
+
+276
+00:23:56,640 --> 00:24:01,280
+maybe taking some photographs. So I've been out in Porto. We've been taking some photographs
+
+277
+00:24:01,280 --> 00:24:06,160
+around the city. And sometimes there might be a building or some piece of architecture that we
+
+278
+00:24:06,160 --> 00:24:11,440
+want to get a nice close up picture of. And one option we have is to walk closer to the object.
+
+279
+00:24:11,440 --> 00:24:15,760
+And once we're close to it, we can take our photo. And depending on how far away that object is,
+
+280
+00:24:15,760 --> 00:24:19,760
+it might have taken us a fair amount of time, a fair amount of energy to get there. But eventually,
+
+281
+00:24:19,760 --> 00:24:24,640
+we will get our close up. The alternative on our phone is that we just pinched in and ignoring the
+
+282
+00:24:24,640 --> 00:24:29,360
+fact that we have, you know, potentially some degradation of image quality that doesn't come
+
+283
+00:24:29,360 --> 00:24:34,240
+across in this analogy. The key thing there is a pinch zoom is pretty much a constant time,
+
+284
+00:24:34,240 --> 00:24:38,880
+constant cost operation. We can very quickly change our field of view over a scene. And then we
+
+285
+00:24:38,880 --> 00:24:43,600
+have a different view of that same scene from the same position with very low effort. And that's
+
+286
+00:24:43,600 --> 00:24:50,080
+kind of the idea we're slicing. So I'm going to begin with a brief overview of what it looks
+
+287
+00:24:50,080 --> 00:24:55,120
+like to optimize some code. Now this particular example, as you caution, is very contriot, very trivial.
+
+288
+00:24:55,840 --> 00:25:00,560
+This is just to get us started. And then we'll look at some real world code later on.
+
+289
+00:25:01,600 --> 00:25:06,800
+So let's imagine, on Monday, you return to work and your manager tells you that if
+
+290
+00:25:06,800 --> 00:25:11,680
+the somehow that they found a way that if you could have a method that takes an array of elements,
+
+291
+00:25:11,680 --> 00:25:16,000
+even number of elements, and then starts taking a quarter of those elements from the middle,
+
+292
+00:25:16,000 --> 00:25:20,960
+you're going to have some major business advantage over your competitor. So let's imagine that's
+
+293
+00:25:20,960 --> 00:25:26,320
+the scenario you're given. One pretty reasonable way that you could achieve that without thinking too
+
+294
+00:25:26,320 --> 00:25:31,120
+hard is, okay, well, we'll get the length, we'll skip halfway into that array, we'll take the number
+
+295
+00:25:31,120 --> 00:25:36,080
+of elements or quarter of the elements, and then we'll return the new array. And that's perfectly
+
+296
+00:25:36,080 --> 00:25:40,560
+valid code. It will do the job. But then maybe your manager comes to you and says, actually, if we
+
+297
+00:25:40,560 --> 00:25:45,280
+can make this code really, really fast, maybe we can make a huge amount of money. So I told you
+
+298
+00:25:45,280 --> 00:25:49,840
+it's contrived, but let's go with this. So the first thing we should do in this scenario is measure.
+
+299
+00:25:49,840 --> 00:25:54,080
+Before we even begin optimizing, we want to start with measuring our current assumption.
+
+300
+00:25:54,720 --> 00:26:00,160
+And so what we do here in this benchmark is there's a few new elements that I'll introduce. Again,
+
+301
+00:26:00,160 --> 00:26:06,160
+it's still a class, but this time we've got this size property on here with the Prams attribute
+
+302
+00:26:06,160 --> 00:26:10,160
+with three different values. What this lets us say to benchmark.net is that we want to run these
+
+303
+00:26:10,160 --> 00:26:15,520
+benchmarks with these three different values for that size property. So run these benchmarks three
+
+304
+00:26:15,520 --> 00:26:20,880
+times essentially with those different sizes. And this allows us to kind of test edge cases.
+
+305
+00:26:20,880 --> 00:26:26,160
+Sometimes testing your kind of expected value is fine, but maybe there are edge cases to what
+
+306
+00:26:26,160 --> 00:26:31,600
+your system accepts that actually might result in different measures of performance. And so by
+
+307
+00:26:31,600 --> 00:26:36,000
+testing your kind of middle case plus your edge cases, you can get make sure that you've got a
+
+308
+00:26:36,000 --> 00:26:41,600
+representative view that the changes apply in all scenarios. Because we're setting this up,
+
+309
+00:26:41,600 --> 00:26:46,720
+we now need an array of these different lengths as our input. And so what we do in this global setup
+
+310
+00:26:47,440 --> 00:26:51,920
+method here, which is just a regular method with the global setup attribute, we can pre-create that
+
+311
+00:26:51,920 --> 00:26:58,320
+array of the right size and populate it. This runs once for the benchmark run actually kicks in,
+
+312
+00:26:58,320 --> 00:27:02,000
+so there's no measurement overhead here. This isn't part of what you're measuring as part of your
+
+313
+00:27:02,000 --> 00:27:08,160
+benchmark. It's just setup code. And then to do the benchmark, we can just run that piece of code
+
+314
+00:27:08,160 --> 00:27:12,880
+that we saw earlier. The only difference from what we looked at earlier is that we're now putting
+
+315
+00:27:12,880 --> 00:27:18,240
+this baseline equals true to say this is our starting point. And once we run this, we see that
+
+316
+00:27:18,240 --> 00:27:23,600
+okay, for an input array of 100 elements, it's about 100 nanoseconds, 224 bytes allocated,
+
+317
+00:27:23,600 --> 00:27:28,800
+and we see what we'd kind of expect even to code. If we reason about it, as we increase the
+
+318
+00:27:28,800 --> 00:27:34,800
+input array size, then by factors, the execution time and the allocations are going up, because we're
+
+319
+00:27:34,800 --> 00:27:39,200
+creating a newer array at the end of the day without new data in it. And so that's giving us our
+
+320
+00:27:39,200 --> 00:27:44,240
+starting point, our baseline. So maybe the first theory we have is, well, we've heard that Link
+
+321
+00:27:44,240 --> 00:27:48,880
+has some overhead to it, and maybe we should avoid using that, and that will make our lives better.
+
+322
+00:27:48,880 --> 00:27:53,200
+So in this case, what we do is create a new array pre-sized. We then use a array copy
+
+323
+00:27:54,320 --> 00:27:59,600
+to copy the data from one array to the other, and then we see if this works better. So we run our
+
+324
+00:27:59,600 --> 00:28:04,640
+benchmarks again, now with our new version added. And we can see that for 100 elements, it looks
+
+325
+00:28:04,640 --> 00:28:10,720
+pretty good. We've reduced our execution time by about 86%. And it looks like our allocation
+
+326
+00:28:10,720 --> 00:28:16,000
+ratio is improving massively as well, by 43. The good thing is we've tested other sizes here,
+
+327
+00:28:16,000 --> 00:28:21,360
+and we can see that while the execution time is still a good improvement, the allocation ratio
+
+328
+00:28:21,360 --> 00:28:26,480
+is getting less than that's valuable. And that's because all we've done is remove the small 96 bytes
+
+329
+00:28:26,480 --> 00:28:30,720
+of overhead of using that link expression versus what we're doing with the array copy approach.
+
+330
+00:28:30,720 --> 00:28:36,000
+But we're still creating a new array, we're still copying data in there. So in this final example,
+
+331
+00:28:36,000 --> 00:28:40,720
+let's assume that we can change the return type. So I'm changing the return type here to the
+
+332
+00:28:40,720 --> 00:28:45,600
+span of int. So let's assume that there's further processing that happens after this occurs,
+
+333
+00:28:45,600 --> 00:28:51,360
+and our callers can accept a span of int back. So in this case, we now use the as span, and then we
+
+334
+00:28:51,360 --> 00:28:55,440
+can slice in. You can also use the range operator here if you prefer the syntax, so you don't need to
+
+335
+00:28:55,440 --> 00:29:01,040
+slice. You can just do square braces dot dot length, and that's quite nice as well, or starting
+
+336
+00:29:01,040 --> 00:29:06,560
+position and in position. And so in this example, we now move to kind of a span based approach,
+
+337
+00:29:07,440 --> 00:29:12,720
+and we'll see that now the execution time is 99% improved, so we're less than an anno second,
+
+338
+00:29:12,720 --> 00:29:17,680
+which I think most people will agree is pretty reasonable. And the allocation overhead now is zero.
+
+339
+00:29:17,680 --> 00:29:22,080
+We've not got any bytes allocated, because all we're doing is returning a new view over that
+
+340
+00:29:22,080 --> 00:29:26,880
+existing array from that stop position halfway in for that length of the call to the elements.
+
+341
+00:29:26,880 --> 00:29:31,440
+And we can see that as we move through the different sizes, this constant time, constant cost
+
+342
+00:29:31,440 --> 00:29:36,720
+operation of slicing doesn't matter how big that input array is, the savings are the same.
+
+343
+00:29:36,720 --> 00:29:40,240
+And so this is now massively reduced that portion of codes overhead.
+
+344
+00:29:42,640 --> 00:29:45,600
+As I say, a little contrived, but we'll get to some better examples soon.
+
+345
+00:29:46,880 --> 00:29:51,440
+Now the other nice thing we can do with span is we can work with strings. So on a string literal,
+
+346
+00:29:51,440 --> 00:29:55,360
+or a string variable, we can call as span, and we get back a read only span of char.
+
+347
+00:29:56,240 --> 00:30:00,960
+So char is fairly obvious. Strings are made up of characters. The read only span,
+
+348
+00:30:01,600 --> 00:30:06,320
+because the runtime will enforce the safety here that strings are immutable. So it's never
+
+349
+00:30:06,320 --> 00:30:11,360
+going to allow us to get a read write view with a span over the memory occupied by a string,
+
+350
+00:30:11,360 --> 00:30:15,280
+because that would let us effectively mutate that string's data, and that would break pretty
+
+351
+00:30:15,280 --> 00:30:20,800
+much every assumption we have in our code base about safety of strings. So we get back a read only view.
+
+352
+00:30:20,800 --> 00:30:24,560
+And so this still is useful, because we can pass through the existing strings,
+
+353
+00:30:24,560 --> 00:30:29,280
+finding the pieces of data that we want. So in this, again, very basic example, maybe we just want
+
+354
+00:30:29,280 --> 00:30:33,600
+to get the portion of that string that represents the surname, so that we can do some further analysis
+
+355
+00:30:33,600 --> 00:30:38,480
+on it. In this case, we could say, let's find the index of the last space character, and then slice
+
+356
+00:30:38,480 --> 00:30:43,440
+from that position onwards. And now we're still working with the same block of memory, but we're
+
+357
+00:30:43,440 --> 00:30:50,160
+able to do it on strings as well. Now there are some limitations of span of T that are worth
+
+358
+00:30:50,160 --> 00:30:54,320
+pointing out. And as I go through these, you might get more and more concerned about where this
+
+359
+00:30:54,320 --> 00:30:59,520
+look can actually be applied, but don't worry, it is fine. So the first thing is, I mentioned earlier
+
+360
+00:30:59,520 --> 00:31:05,600
+that the guarantee that we have that a span is never going to end up on the heap, so we can use
+
+361
+00:31:05,600 --> 00:31:10,480
+it safely at any point in our code without worrying about heap allocations. And that's enforced by
+
+362
+00:31:10,480 --> 00:31:14,880
+the fact that it's not just a normal struct, it's actually got this ref struct keyword that was
+
+363
+00:31:14,880 --> 00:31:20,800
+introduced in C-shop 7.2, that enables a kind of guarantee that the runtime will enforce that
+
+364
+00:31:20,800 --> 00:31:25,680
+this type can never end up on the heap, because there's various ways that a value type would end up
+
+365
+00:31:25,680 --> 00:31:30,960
+there. And so what this effectively means is we can't ever let a span of byte or a span of
+
+366
+00:31:30,960 --> 00:31:35,840
+int or whatever it is be boxed, because that would be then stored on the heap. One of the main
+
+367
+00:31:35,840 --> 00:31:42,240
+reasons for this limitation, this kind of stack only limitation, is that it can be pointing at
+
+368
+00:31:42,240 --> 00:31:47,280
+stack allocated memory, so we can never allow this span of T thing to live longer than the stack
+
+369
+00:31:47,280 --> 00:31:52,880
+frame that it is built, is used on, because it might then be pointing at data that's no longer valid
+
+370
+00:31:52,880 --> 00:31:58,320
+if it outlives that stack frame. So that's one of the reasons we can't do boxing. It also means that
+
+371
+00:31:58,320 --> 00:32:03,760
+it can't be used as a field in a class or a non-ref struct, because again that data is living on the heap.
+
+372
+00:32:05,200 --> 00:32:09,360
+This is the one that tends to trip people up, because of the way that async works,
+
+373
+00:32:09,360 --> 00:32:14,000
+it can't be used as an argument or a local variable in async methods, because async methods behind
+
+374
+00:32:14,000 --> 00:32:18,400
+the scenes eventually get compiled down to that state machine that you may or may not sort of be
+
+375
+00:32:18,400 --> 00:32:24,080
+aware of, but on most code that will be a struct, but it's still not a struct that's guaranteed to be
+
+376
+00:32:24,080 --> 00:32:29,600
+stack only. And so for the same reasons that it can't be a field in a class, it can't be used in
+
+377
+00:32:29,600 --> 00:32:35,200
+those environments, because it those basically get hoisted up as fields on that state machine object
+
+378
+00:32:35,200 --> 00:32:40,320
+that gets created. For a very similar reason it can't be captured by lambda expressions because of
+
+379
+00:32:40,320 --> 00:32:46,880
+the closure that would be created around those. And up until this version of .NET that's coming
+
+380
+00:32:47,600 --> 00:32:52,240
+sort of in November, it couldn't be used as a generic type of argument. Now that's actually being,
+
+381
+00:32:52,240 --> 00:32:56,880
+that limitation is being removed, because we're getting this new sort of now new combination of
+
+382
+00:32:56,880 --> 00:33:02,640
+keywords as a where constraint on generics where we can say we do allow a ref struct, as long as we
+
+383
+00:33:02,640 --> 00:33:07,840
+know that our method is never going to let that escape the safety, the safe context of being within
+
+384
+00:33:07,840 --> 00:33:13,760
+the same stack frame. And so in C-shop 13 you can start to use it in certain new environments.
+
+385
+00:33:15,760 --> 00:33:19,840
+And there's other limitations I'm not even starting to hint at here that get much more
+
+386
+00:33:19,840 --> 00:33:25,200
+sort of deeper about how this functions. But the key thing is that we'll ask some limitations to
+
+387
+00:33:25,200 --> 00:33:30,480
+it. Fortunately at the same time as you're introducing span, the team introduced this other type
+
+388
+00:33:30,480 --> 00:33:36,400
+called memory of T, which has very similar semantics to span. The main difference though is it
+
+389
+00:33:36,400 --> 00:33:43,760
+can live on the heap if it needs to. So it's defined in a different way, which does make it a little
+
+390
+00:33:43,760 --> 00:33:48,240
+less versatile because you can't necessarily point it at stack allocated memory anymore.
+
+391
+00:33:49,120 --> 00:33:54,080
+And the performance is not quite as good. There's certain guarantees about the stack only nature of
+
+392
+00:33:54,080 --> 00:33:58,640
+span that have allowed the runtime to be modified to make it highly efficient. And we don't get all
+
+393
+00:33:58,640 --> 00:34:04,960
+of those same guarantees with this memory T version. So it's defined in the code as a read-only
+
+394
+00:34:04,960 --> 00:34:09,120
+struct but not a rest struct. So we still generally don't see it being copied too often hopefully,
+
+395
+00:34:10,000 --> 00:34:14,880
+but it might eventually end up being boxed in certain scenarios. Because of that if we're working
+
+396
+00:34:14,880 --> 00:34:18,720
+with it directly, then it's going to be slightly slower if we do things like slicing into it.
+
+397
+00:34:19,520 --> 00:34:24,320
+But fortunately at any point in time we can call span on there and get the span property, which
+
+398
+00:34:24,320 --> 00:34:29,280
+represents the span-based portion of the same block of memory. And so this kind of comes into effect
+
+399
+00:34:29,280 --> 00:34:33,520
+if we're trying to do something in say an async method, and we'd really like to take some data in
+
+400
+00:34:33,520 --> 00:34:38,640
+in this new sort of highly optimized form. If we try and pile up a span of byte here, then we get
+
+401
+00:34:38,640 --> 00:34:44,320
+this compiler error because we're now trying to create this parameter of a type span. But what we
+
+402
+00:34:44,320 --> 00:34:49,200
+can do instead is switch our code to accept a memory of byte and we're still fine. And things like a
+
+403
+00:34:49,200 --> 00:34:54,880
+byte array, etc., will implicitly convert to this quite happily. And that means that we could
+
+404
+00:34:54,880 --> 00:35:00,400
+just work with that memory directly. If we're not worried about the final nanosecond of performance,
+
+405
+00:35:00,400 --> 00:35:05,040
+then usually working with memory is reasonable. But if you want to, what you can do is create
+
+406
+00:35:05,040 --> 00:35:10,720
+a non-async method where you can accept a span and then switch to that at any point in your code
+
+407
+00:35:10,720 --> 00:35:14,880
+that you can do so. Typically we're only in an async context during some IO operation. We're
+
+408
+00:35:14,880 --> 00:35:20,560
+getting some bytes off the wire through a stream or we're reading in a file or whatever it might be.
+
+409
+00:35:20,560 --> 00:35:25,280
+But once we've done that sort of initial read and we've got some data buffered into memory somewhere,
+
+410
+00:35:25,280 --> 00:35:30,080
+at that point we can switch to non-async code while we're processing. And so in this code base,
+
+411
+00:35:30,080 --> 00:35:34,560
+one option you might attempt to do is try and create an instance of a span sliced at a certain
+
+412
+00:35:34,560 --> 00:35:39,360
+point that you're going to pass into that async, non-async method, which again you can't do because
+
+413
+00:35:39,360 --> 00:35:43,920
+it can't be a local. But what we can do is pass in that slice expression directly and the
+
+414
+00:35:43,920 --> 00:35:48,480
+compiler is totally happy that it can make all the right guarantees about this now. And then that
+
+415
+00:35:48,480 --> 00:35:52,640
+non-async method can do all of the processing using the high performance span based approach.
+
+416
+00:35:53,280 --> 00:35:56,240
+And we can switch back to the async method when we're done.
+
+417
+00:35:57,680 --> 00:36:01,520
+So I'm going to start putting this into practice with a more real world example.
+
+418
+00:36:02,720 --> 00:36:06,080
+And this is based on something for a project I worked on at a previous company.
+
+419
+00:36:07,040 --> 00:36:11,120
+So I'm going to switch over to Visual Studio, which looks okay there. It's the code okay at the back
+
+420
+00:36:11,200 --> 00:36:17,680
+for everyone. Good. Cool. So what I'm going to do is show you, I'll give you the quick summary of
+
+421
+00:36:17,680 --> 00:36:23,120
+what this is doing actually. I'll show you this slide. So the context for this service,
+
+422
+00:36:23,120 --> 00:36:27,680
+which is a microservice I used to work on, is that we were reading messages of a key. In this case,
+
+423
+00:36:27,680 --> 00:36:32,960
+it was Amazon SQLS. We de-serialized that JSON data from the key. And we wanted them to store it
+
+424
+00:36:32,960 --> 00:36:38,400
+into the Amazon S3 blob store a copy of that message, basically as a backup process. And in order
+
+425
+00:36:38,400 --> 00:36:43,520
+to ensure that we were only storing one copy, we derived a unique object key, basically a file name
+
+426
+00:36:43,520 --> 00:36:49,440
+for that blob from some of the properties on the message. And so the existing code that we had
+
+427
+00:36:49,440 --> 00:36:53,600
+looked a bit like this, this is sort of simplified down a bit, but we have this event context, which
+
+428
+00:36:53,600 --> 00:36:58,320
+you can imagine represents the de-serialized message coming in. In this case, it's got five properties
+
+429
+00:36:58,320 --> 00:37:04,000
+in the real system. It has a few hundred. But the key thing is we wanted to use just a few of
+
+430
+00:37:04,000 --> 00:37:08,560
+those for the object key. So if the date was present, we'd use the date, but it wasn't always
+
+431
+00:37:08,560 --> 00:37:13,360
+guaranteed, hence why this code deals with that possibility. But the main way this code worked
+
+432
+00:37:13,360 --> 00:37:17,600
+is that we basically created a string array to hold all of the parts that were going to be used in
+
+433
+00:37:17,600 --> 00:37:23,520
+that object key. And then for each index of that string array, we used this get part method
+
+434
+00:37:23,520 --> 00:37:28,720
+to take the input string. So in this case, for example, this is coming from the product or the
+
+435
+00:37:28,720 --> 00:37:33,600
+site key that's coming off that object. That would come in, if it was null or empty, then we would
+
+436
+00:37:33,600 --> 00:37:38,720
+just fill that particular element we've just unknown because for some reason we didn't have the data.
+
+437
+00:37:39,360 --> 00:37:43,600
+Otherwise, we'd call remove spaces, which just did a replace of spaces with underscores.
+
+438
+00:37:43,600 --> 00:37:48,240
+And then once we've done that, we did this is valid, check basically using rejects to make
+
+439
+00:37:48,240 --> 00:37:52,880
+sure that it matched a particular set of characters when you were safe for a history object keys.
+
+440
+00:37:53,520 --> 00:37:59,440
+So we did that with all of the main pieces of data coming in. We then used the date time
+
+441
+00:37:59,440 --> 00:38:04,240
+two string just to form it out the date if it was present. And then we put the message ID in a
+
+442
+00:38:04,240 --> 00:38:08,640
+suffix on that file. So once we've got all of the individual pieces, we just used string join to
+
+443
+00:38:08,640 --> 00:38:14,800
+join them together, lowercase everything, and that then became the object key. So a few of you might
+
+444
+00:38:14,800 --> 00:38:18,480
+have already spotted where that might allocate and why that could potentially be optimized.
+
+445
+00:38:19,520 --> 00:38:24,320
+And so I'll show you the new code up here. So there's a few differences. So this code has been
+
+446
+00:38:24,320 --> 00:38:28,640
+updated for like dotnet eight. And so one of the things that I did in here was move to the new
+
+447
+00:38:28,640 --> 00:38:35,040
+source generated reject stuff, which basically pre-computes the rejects expressions and the code needed
+
+448
+00:38:35,040 --> 00:38:40,560
+to do a rejects match in an optimal way. And it does it at compile time rather than run time.
+
+449
+00:38:40,560 --> 00:38:44,800
+So you can remove some of the runtime cost of rejects by using it.
+
+450
+00:38:45,760 --> 00:38:51,200
+The other thing it does here is use this kind of special sort of technique for basically defining
+
+451
+00:38:51,200 --> 00:38:57,040
+these read only span static properties. And what this does is the compiler knows how to handle this
+
+452
+00:38:57,040 --> 00:39:02,480
+and basically treats this as specialized data that gets stored into the actual binary data for the
+
+453
+00:39:02,480 --> 00:39:07,360
+DLL. And so at any time that we're using these in code, it's just pointing to an existing memory
+
+454
+00:39:07,360 --> 00:39:13,120
+location within that DLL, which lets us be very optimal and avoid allocating those when we're comparing.
+
+455
+00:39:14,080 --> 00:39:23,360
+The main bulk of the code then use this new string create feature. So basically what string
+
+456
+00:39:23,360 --> 00:39:29,760
+create lets us do is to pre-allocate some memory on the heap that's going to be used to create a
+
+457
+00:39:29,760 --> 00:39:36,560
+string. But it lets us mutate that memory directly and work with it as a span while we're creating
+
+458
+00:39:36,560 --> 00:39:41,600
+the string. So once it's created, it becomes a regular immutable string. But during that creation
+
+459
+00:39:41,600 --> 00:39:46,640
+method, the code actually can mutate the various bytes or various characters within that.
+
+460
+00:39:46,640 --> 00:39:50,880
+So in order for that to work, it has to pre-compute the length because we need to know the right length
+
+461
+00:39:50,880 --> 00:39:57,040
+that we need for that string to occupy. I won't show you that code, it's fairly boring. But then we do
+
+462
+00:39:57,040 --> 00:40:02,240
+string create. And what string create takes is this key builder action, which is this special span
+
+463
+00:40:02,240 --> 00:40:08,640
+action type that basically gives us, let's have passed in our state, which is our event context.
+
+464
+00:40:08,640 --> 00:40:13,760
+And it gives us access to a span here, a span of characters, which is that pre-allocated
+
+465
+00:40:13,760 --> 00:40:19,920
+heap memory for the string. And so in here what we do is for each of those pieces of data that we
+
+466
+00:40:19,920 --> 00:40:24,960
+want to use in the string key, we call build part. And we pass in a current position as we do this,
+
+467
+00:40:24,960 --> 00:40:29,600
+which is what's going to allow us to slice through that memory as we're adding new elements to it.
+
+468
+00:40:30,240 --> 00:40:35,920
+And so we take the input string and we do basically what the original code is. But we're now doing a
+
+469
+00:40:35,920 --> 00:40:40,640
+more sort of basic check to see if it's null or empty by checking if it's the length of zero or
+
+470
+00:40:40,640 --> 00:40:47,040
+white space. We then run the source generated rejects for the validation piece. We then call this
+
+471
+00:40:47,040 --> 00:40:51,520
+memory extensions to low invariant, which lets us take a string, copy the characters out and
+
+472
+00:40:51,520 --> 00:40:57,920
+lowercase them into our span pre-allocated memory in one operation. Every time we do something
+
+473
+00:40:57,920 --> 00:41:01,680
+where we're writing, we're incrementing our position by how much we've written. So we're slowly
+
+474
+00:41:01,680 --> 00:41:07,440
+moving through that span of memory as we add more elements to it. And basically we do this for each
+
+475
+00:41:07,440 --> 00:41:13,680
+item. Then up here we do a string, sorry, a span replace. So this new replace operation added in
+
+476
+00:41:13,680 --> 00:41:19,040
+.NET 8 is very optimized way of replacing certain characters within a span. So we replace all the
+
+477
+00:41:19,040 --> 00:41:24,080
+spaces with underscores. For dates we can use this new tri format or newer tri format method, which
+
+478
+00:41:24,080 --> 00:41:30,800
+lets us format a date directly into again a span of characters. And gives us back how many bytes we're
+
+479
+00:41:30,800 --> 00:41:37,200
+written as doing that. We then lowercase the message ID and we copy on that JSON suffix. And in
+
+480
+00:41:37,200 --> 00:41:42,880
+this case we're just slicing, in this case using a range based operator for the last five characters
+
+481
+00:41:42,880 --> 00:41:48,080
+where we put the suffix in that. So what this is doing is basically moving us to a span based
+
+482
+00:41:48,800 --> 00:41:53,040
+way of building up that string. Now I promise we benchmarked and we did all the right things as we
+
+483
+00:41:53,040 --> 00:41:56,880
+went ahead with this. And I'll just show you the results so you can kind of see the gains.
+
+484
+00:41:57,280 --> 00:42:03,920
+So with the new code we were about 26% quicker. Actually our improvements were like three times faster
+
+485
+00:42:03,920 --> 00:42:07,840
+when we did this back in the free one days. I've updated this code a few times to move to new
+
+486
+00:42:07,840 --> 00:42:12,880
+versions of .NET and Microsoft keep improving even those built in operations like string replace
+
+487
+00:42:12,880 --> 00:42:17,920
+for example. So the gain is going down but there's still a gain to be had by manually doing this.
+
+488
+00:42:18,480 --> 00:42:23,360
+And the key thing is that we then removed about 74% of the allocations. So we're down to 192 bytes.
+
+489
+00:42:23,360 --> 00:42:28,560
+And when we would profile the memory that 192 bytes was the actual object key string that we
+
+490
+00:42:28,560 --> 00:42:34,080
+were creating and we had to create to pass into the Amazon S3 API. So that means that we've
+
+491
+00:42:34,080 --> 00:42:37,840
+got rid of all the overhead of creating that. We're just down to the actual cost of the string
+
+492
+00:42:37,840 --> 00:42:42,400
+creation that we actually want. Now on its own this might not seem like it's worthwhile. It's a
+
+493
+00:42:42,400 --> 00:42:46,960
+few hundred bytes, right? But this service was doing 18 million messages a day. So this one
+
+494
+00:42:46,960 --> 00:42:51,840
+subtle change to the code based in how we manage this object key creation saved us 10 gig of daily
+
+495
+00:42:51,840 --> 00:42:56,160
+allocations. And that's going to contribute to a number of GCs that we're no longer having to
+
+496
+00:42:56,160 --> 00:43:01,840
+do in that application as a result. So we got quite a nice gain there. So the next type I want to
+
+497
+00:43:01,840 --> 00:43:06,480
+talk about is called ArrayPool. The name kind of gives us one away. It's a pool of arrays.
+
+498
+00:43:07,440 --> 00:43:11,440
+And this can be used anywhere in your code based where you need those kind of like temporary
+
+499
+00:43:11,440 --> 00:43:16,160
+buffers of either bytes or characters as you're doing some processing. Typically where we see this is
+
+500
+00:43:16,160 --> 00:43:20,480
+if we're doing anything within an iteration where we might be working with stream based data where
+
+501
+00:43:20,480 --> 00:43:26,400
+we have to pass it a temporary buffer to work with. And what we can use the RrayPool to do is
+
+502
+00:43:26,400 --> 00:43:31,200
+instead of incurring the cost of those temporary arrays each time we're doing that processing work,
+
+503
+00:43:31,200 --> 00:43:36,720
+we can use a rented array which is coming from this shared pool to avoid that sort of cost. So
+
+504
+00:43:36,720 --> 00:43:42,800
+over time we sort of amortize away the cost of creating those temporary buffers. So it's found in
+
+505
+00:43:42,800 --> 00:43:47,920
+the system buffers name space. Renting is pretty straightforward. We access the array pool of T. So
+
+506
+00:43:48,000 --> 00:43:54,320
+whatever the type we want an array to hold. We generally use this shared version. So this is a
+
+507
+00:43:54,320 --> 00:43:59,920
+pre-built sort of in the box implementation of an array pool that uses a predefined set of
+
+508
+00:43:59,920 --> 00:44:04,880
+buckets for the sizes of the arrays that it can store. And then we just rent the one that we want
+
+509
+00:44:04,880 --> 00:44:08,800
+with the length we need. The key thing is that we might and generally we'll get an array that's
+
+510
+00:44:08,800 --> 00:44:14,320
+larger than what we ask for. And the reason is for a pool to be useful it has to bucket into
+
+511
+00:44:14,320 --> 00:44:19,040
+particular sizes. It can't have every possible size array that we might ever need because the
+
+512
+00:44:19,040 --> 00:44:24,480
+chances of us needing the same exact size every time isn't necessarily consistent. So it's going
+
+513
+00:44:24,480 --> 00:44:29,920
+to give us the closest array size it has that's at least big enough to hold what we've asked for.
+
+514
+00:44:29,920 --> 00:44:34,000
+Which means that when we're working with an array pool based piece of data we're typically
+
+515
+00:44:34,000 --> 00:44:37,760
+then going to need to track the length of the data that we've actually written into that temporary
+
+516
+00:44:37,760 --> 00:44:42,640
+buffer so that we can always slice it later on and just view the portion that we know we've written.
+
+517
+00:44:43,040 --> 00:44:48,720
+When we're done we return it, we return the array and we optionally can pass this clear array
+
+518
+00:44:49,440 --> 00:44:55,600
+switch here as well. So by default the clear array is set to false which does mean that by default
+
+519
+00:44:55,600 --> 00:45:00,240
+when you return an array the data is still left in there as it was when you worked with it before.
+
+520
+00:45:01,040 --> 00:45:04,560
+So for sensitive systems that might be something you need to think about. The reason this is
+
+521
+00:45:04,560 --> 00:45:09,360
+done is that zeroing out an array has a cost and so by default for this to be as optimal as
+
+522
+00:45:09,360 --> 00:45:14,960
+possible it doesn't zero out those pieces of data. Generally that's not going to be a problem but
+
+523
+00:45:14,960 --> 00:45:20,480
+again if you need to switch to the kind of safer mode you can do so. So what this looks like is
+
+524
+00:45:20,480 --> 00:45:25,360
+here for example imagine we have a method it's going to be called by some type loop as processing
+
+525
+00:45:25,360 --> 00:45:29,040
+is being done and it needs a temporary buffer that it's going to pass into another method.
+
+526
+00:45:29,680 --> 00:45:35,840
+So here we're allocating each time the thousand bytes for this buffer. We can very easily
+
+527
+00:45:35,840 --> 00:45:41,680
+switch that to instead prefer using the shared array pool and renting a thousand. Now the main
+
+528
+00:45:41,680 --> 00:45:46,160
+difference here is that when we then want to work with that buffer we now have to pass in the
+
+529
+00:45:46,160 --> 00:45:50,400
+actual length so that we know we only get we're going to only work with a thousand elements which
+
+530
+00:45:50,400 --> 00:45:54,720
+is the piece that we know we're going to populate it because typically if we rent one thousand the
+
+531
+00:45:54,720 --> 00:45:59,680
+minimum size that array pool can give us is one oh two four bytes and it might even be larger if
+
+532
+00:45:59,680 --> 00:46:04,320
+there's none of those available in it moves a size up and so it doesn't mean that when we're working
+
+533
+00:46:04,320 --> 00:46:09,440
+with the data below we have to then slice into it for the length that we actually know we've populated
+
+534
+00:46:09,440 --> 00:46:14,880
+in the previous method. We do need to remember to return the array for the pool to have any real
+
+535
+00:46:14,880 --> 00:46:20,800
+benefit. I'm showing it here with a tri-finally Microsoft have actually moved away from this guidance
+
+536
+00:46:20,800 --> 00:46:25,440
+fairly recently and tend not to bother with it so the idea of doing it in a tri-finally is you always
+
+537
+00:46:25,440 --> 00:46:30,240
+guarantee if there's an exception in that other method we're returning the array to the pool but
+
+538
+00:46:30,240 --> 00:46:36,400
+actually the cost of doing a tri-finally and the operations needed is usually not necessary for
+
+539
+00:46:36,400 --> 00:46:40,080
+the number of times that might actually cause an exception so unless that method could really
+
+540
+00:46:40,080 --> 00:46:46,000
+cause an exception very often it's better to just do the method that you want and then return it
+
+541
+00:46:46,000 --> 00:46:51,440
+afterwards and on the few cases where an exception were to occur it doesn't matter if that buffer
+
+542
+00:46:51,440 --> 00:46:57,200
+doesn't go back into the pool it will eventually for its finalizer by collected by GC anyway so
+
+543
+00:46:58,160 --> 00:47:04,560
+it's up to you it doesn't really matter either way I still sometimes do it this way to just to protect myself
+
+544
+00:47:05,920 --> 00:47:13,200
+so the other type I want to show is system IO pipelines this one's good if you ever work with like
+
+545
+00:47:13,200 --> 00:47:20,240
+streaming data or sort of data coming across the wire and so this was originally created by the ASP
+
+546
+00:47:20,240 --> 00:47:26,000
+net team I think it was pretty much David Fowler's kind of child that he sort of built into the
+
+547
+00:47:26,000 --> 00:47:30,160
+dot net system so it was originally in the ASP net code base and then has been shifted into the
+
+548
+00:47:30,160 --> 00:47:35,280
+runtime code base and the key reason it was kind of introduced was around Kestrel so Kestrel is
+
+549
+00:47:35,280 --> 00:47:39,520
+the web server in ASP net core it's obviously dealing with lots of bytes coming off a wire that
+
+550
+00:47:39,520 --> 00:47:44,080
+then go through the ASP net core pipeline internally and one of the things the team wanted to do was
+
+551
+00:47:44,080 --> 00:47:49,200
+trying to avoid all of those costs of switching between different streams as that data gets processed
+
+552
+00:47:49,200 --> 00:47:54,480
+through the pipeline so they found that by moving to this new sort of pipelines library they could
+
+553
+00:47:54,480 --> 00:47:59,840
+roughly improve their performance by about 2x in the kind of Kestrel scenario and typically it's
+
+554
+00:47:59,840 --> 00:48:04,240
+just done by removing what would otherwise be code you could write yourself to manage streams and
+
+555
+00:48:04,240 --> 00:48:09,680
+temporary buffers and use the array pool to try and avoid allocations but it would actually have a
+
+556
+00:48:09,680 --> 00:48:14,080
+lot of boilerplate and edge cases that you'd have to consider so it just wraps that all up for you
+
+557
+00:48:14,080 --> 00:48:18,640
+and does all of the heavy lifting so the main difference is that unlike when you're using streams
+
+558
+00:48:18,640 --> 00:48:23,840
+yourself with pipelines it's managing those buffers for you so you don't create the the buffers that
+
+559
+00:48:23,840 --> 00:48:29,440
+you'd pass in as you're processing the stream you just work with this pipe concept and internally
+
+560
+00:48:29,440 --> 00:48:34,320
+it's using what's known as a memory pool which basically is backed by an array pool behind the scenes
+
+561
+00:48:34,320 --> 00:48:40,080
+to actually manage those buffers without allocating. Two ends to a pipe as you might guess so there's
+
+562
+00:48:40,080 --> 00:48:44,880
+a writing end and when we write as a few ways we can do it there are sort of shortcut methods for
+
+563
+00:48:44,880 --> 00:48:51,280
+writing small blocks of data directly with write or write async or in most scenarios what you might
+
+564
+00:48:51,280 --> 00:48:55,360
+want to do is actually just ask the pipe for a block of memory in this case it comes back as a
+
+565
+00:48:55,360 --> 00:49:00,320
+memory of byte that you can then populate so it's a memory of byte typically because pipelines is
+
+566
+00:49:00,320 --> 00:49:05,120
+going to be used in these async scenarios where you're getting data off of IO network connections
+
+567
+00:49:05,120 --> 00:49:11,280
+etc but of course you can switch from that memory of byte to a non async method at any point
+
+568
+00:49:11,280 --> 00:49:15,920
+and start working with that same data as a span. Once you've worked with some of the data you just
+
+569
+00:49:15,920 --> 00:49:20,960
+advance the pipe right by how much you've written and then flush it and as soon as you flush it
+
+570
+00:49:20,960 --> 00:49:26,400
+that awakens the reading end that will be sitting there waiting so on the reader we called read async
+
+571
+00:49:26,400 --> 00:49:31,520
+and that will then just asynchronously await data being available from the pipe so it's non-blocking
+
+572
+00:49:31,520 --> 00:49:36,000
+and eventually we get back a read result once the data is flushed in for us we can access the buffer
+
+573
+00:49:36,000 --> 00:49:40,960
+on that read result which comes back as this read only sequence of byte so wire sequence down here
+
+574
+00:49:40,960 --> 00:49:45,280
+in a memory on the way in and the reason is ahead of time the pipe doesn't know how much data is going
+
+575
+00:49:45,280 --> 00:49:50,240
+to fill it typically if you're reading off of the wire for example then you might be dealing with
+
+576
+00:49:50,240 --> 00:49:55,200
+chunk data and you don't know the content length yet and so what it does internally is it will
+
+577
+00:49:55,200 --> 00:50:00,400
+rent a block of memory and start filling it for you and if you're keeping up with the reading
+
+578
+00:50:00,400 --> 00:50:04,640
+and the writing then that might be sufficient but if at any point the reading end slows down and
+
+579
+00:50:04,640 --> 00:50:09,520
+isn't actually processing all of that block in time then it will just rent another block of memory
+
+580
+00:50:09,520 --> 00:50:14,080
+and then another block of memory and keep filling it and then on the reading end what it gives you is
+
+581
+00:50:14,320 --> 00:50:19,520
+essentially a linked list of those blocks of memory as this read only sequence and gives us a way
+
+582
+00:50:19,520 --> 00:50:25,840
+to view that data in the correct sequence so the example that sort of demonstrates usage of this
+
+583
+00:50:26,720 --> 00:50:31,760
+again similar to the last one same sort of microservice we were dealing with retrieving objects
+
+584
+00:50:31,760 --> 00:50:37,760
+from s3 in this case it was a tab separated file so we wanted to get free columns of data from
+
+585
+00:50:37,840 --> 00:50:45,280
+separated file and index them into elastic search so I shall show you the before code
+
+586
+00:50:48,000 --> 00:50:51,360
+I didn't write this I'm going to tell you that in advance because you might spot the problems
+
+587
+00:50:52,400 --> 00:50:56,480
+so this is roughly what the original code was doing so here I'm using a file stream in this
+
+588
+00:50:56,480 --> 00:51:04,000
+demo app but it was basically an s3 stream from the s3 API instead it needed to be decompressed
+
+589
+00:51:04,000 --> 00:51:10,080
+because it was zipped gzipped for decompression and then this is where the code gets a bit interesting
+
+590
+00:51:10,080 --> 00:51:15,520
+so it then after decompressing it creates a new memory stream and it copies from the decompressed
+
+591
+00:51:15,520 --> 00:51:22,160
+stream into the memory stream it then calls to array to get the entire bytes from that memory stream
+
+592
+00:51:22,160 --> 00:51:27,920
+and then called get string to then get the string representation of that file and then it was
+
+593
+00:51:27,920 --> 00:51:32,400
+passing it into this parser thing now the reason it was doing that I think at the time is that it was
+
+594
+00:51:32,400 --> 00:51:36,560
+using this library called tiny csv parser that I think only took string inputs at one point
+
+595
+00:51:37,440 --> 00:51:42,000
+at least that's the explanation I was given and I will trust the engineer did this for a good reason
+
+596
+00:51:42,000 --> 00:51:45,760
+but if you're looking at this code you can probably spot where this might allocate we're copying
+
+597
+00:51:45,760 --> 00:51:50,560
+memory we are creating a new array which again is copying we're getting a string that represents
+
+598
+00:51:50,560 --> 00:51:55,200
+the entire contents of a large file so all of these allocations that occur here also occur on the
+
+599
+00:51:55,200 --> 00:51:59,680
+large object heap because typically these files were about a thousand ten thousand rows each time
+
+600
+00:52:00,560 --> 00:52:06,240
+so the new code that we switched to slightly more complex if you look at the length compared to
+
+601
+00:52:06,240 --> 00:52:12,320
+the last one but what we did instead was we still need the decompressed stream but as soon as we've
+
+602
+00:52:12,320 --> 00:52:17,280
+got that we get the users pipe reader create here to just create a reader over that stream so that
+
+603
+00:52:17,280 --> 00:52:22,240
+gives us a pipe reader that's accessing the stream as the data becomes available and so we do the
+
+604
+00:52:22,240 --> 00:52:26,960
+read async we access the buffer and as soon as we've got the buffer we can call paths lines to see
+
+605
+00:52:27,040 --> 00:52:31,600
+what lines we've got and so this is dealing with that read only sequence that was coming off the pipe
+
+606
+00:52:31,600 --> 00:52:37,040
+reader and it uses a sequence reader as a helper type that allows us to more easily parse through
+
+607
+00:52:37,040 --> 00:52:40,800
+these sequences because we have to deal with a scenario that we might have one block of memory or
+
+608
+00:52:40,800 --> 00:52:45,600
+multiple blocks that we have to work through so the sequence reader deals with that and so it gives
+
+609
+00:52:45,600 --> 00:52:51,120
+us this convenience that we can just loop through the reader until we've read everything we can try and
+
+610
+00:52:51,120 --> 00:52:55,440
+read out an entire line so what we want to essentially get is one line of the file
+
+611
+00:52:55,440 --> 00:53:00,960
+delimited by the new line so if it finds a new line give me the span of that file or of that line
+
+612
+00:53:01,680 --> 00:53:06,720
+that represents the data that I can then process with paths line down below and then paths line is
+
+613
+00:53:06,720 --> 00:53:12,560
+just manually doing what that tiny see as fee paths the library was doing where it's basically
+
+614
+00:53:12,560 --> 00:53:18,400
+accessing the free tabs or columns of data that we actually care about so it basically
+
+615
+00:53:18,400 --> 00:53:24,240
+finds the index of the tab character checks if that current tab count that we're at is a piece of
+
+616
+00:53:24,240 --> 00:53:28,800
+data that we care about and if it is at that point it does get the string by slicing the line
+
+617
+00:53:28,800 --> 00:53:33,200
+from the current position to where that tab appears and that gets us our string that we need to
+
+618
+00:53:33,200 --> 00:53:38,080
+populate our objects going to elastic search so it only does that for the three columns we care
+
+619
+00:53:38,080 --> 00:53:42,720
+about 0, 1 and 10 and as soon as we reach that we actually then just break out of this loop because
+
+620
+00:53:42,720 --> 00:53:48,720
+we're not going to go past the columns that we care about when we're reading that line that's
+
+621
+00:53:48,720 --> 00:53:53,680
+pretty much what it does and I'll show you the before and after of that so that's just switching to
+
+622
+00:53:53,680 --> 00:54:01,040
+those pipelines and again spam based optimizations so the original code versus the new code about 81
+
+623
+00:54:01,040 --> 00:54:06,000
+percent quicker we weren't going for speed the reason we investigated this service was that it was
+
+624
+00:54:06,000 --> 00:54:11,360
+running as a container we had memory limits set on it and quite regularly it was hitting those
+
+625
+00:54:11,360 --> 00:54:15,840
+memory limits and killing the container and so we constantly seem to find ourselves increasing the
+
+626
+00:54:15,840 --> 00:54:20,400
+the container limits of that container and that's why we looked at it we saw that code and we
+
+627
+00:54:20,480 --> 00:54:25,840
+then realized that actually by switching to this new version we could remove 97 percent of the
+
+628
+00:54:25,840 --> 00:54:31,360
+allocations just by switching to something that wasn't allocating as much and when I did a profile
+
+629
+00:54:31,360 --> 00:54:36,080
+on that it was about 2.85 of that with the data that we actually needed the strings that we did
+
+630
+00:54:36,080 --> 00:54:41,680
+want to push into elastic search so there was about 0.45 negative overhead some of that comes from
+
+631
+00:54:41,680 --> 00:54:47,040
+the pipe reader types and the sequence reader types I did I still do want to check and see if I can
+
+632
+00:54:47,040 --> 00:54:51,280
+get that down any lower but this is a good example of like sometimes stopping when it you've done
+
+633
+00:54:51,280 --> 00:54:57,120
+enough is perfectly fine we'd solve the main problem that 0.45 negative overhead is insignificant
+
+634
+00:54:57,120 --> 00:55:01,520
+compared to the problem we started with and so we didn't feel that need to go any further with this
+
+635
+00:55:01,520 --> 00:55:07,680
+one so we've got a few minutes left so I'll very quickly try and go over the system text
+
+636
+00:55:07,680 --> 00:55:12,400
+j's of stuff with a quick demo of what that can do for your code so these have been in the box
+
+637
+00:55:12,400 --> 00:55:18,560
+since don't call free oh so traditionally most people will probably be familiar with new soft
+
+638
+00:55:18,560 --> 00:55:26,800
+json for doing json parsing Microsoft introduced this is in in the box API in free oh to start giving us
+
+639
+00:55:27,760 --> 00:55:32,800
+new version of json parsing that could take advantage of these new high performance techniques
+
+640
+00:55:33,520 --> 00:55:37,920
+and so it gives us free levels to work with we can work at a very low level with directly with
+
+641
+00:55:37,920 --> 00:55:42,880
+some kind of uTF8 bytes for the json reader and writer we can work at a middle-level when we're
+
+642
+00:55:42,880 --> 00:55:47,920
+reading using this json document object model that we can then process our way through in a
+
+643
+00:55:47,920 --> 00:55:53,120
+kind of read forward fashion and then we also have a regular kind of serializer where you can just say
+
+644
+00:55:53,120 --> 00:55:57,760
+give give me an object and serialize it or give me some json and d serialize it into an object
+
+645
+00:55:58,480 --> 00:56:03,280
+even that new higher level one is going to be more optimal than using new soft json just because
+
+646
+00:56:03,280 --> 00:56:08,000
+it tries to avoid allocations behind the scenes as much as possible but the real gains come if you
+
+647
+00:56:08,000 --> 00:56:14,720
+really need them from those low level types so the example I have for this again similar scenario
+
+648
+00:56:14,720 --> 00:56:18,560
+to the last one I was working on a scenario where we were bulk indexing some data into elastic
+
+649
+00:56:18,560 --> 00:56:23,600
+search when you do that with elastic search it gives you a response back that tells you did any of
+
+650
+00:56:23,600 --> 00:56:29,440
+the maybe hundred one thousand whatever it is you're sending in operations the indexing operations
+
+651
+00:56:30,320 --> 00:56:34,800
+have an error and if and then it also gives you a summary for each operation as to what the
+
+652
+00:56:34,800 --> 00:56:39,440
+status codes were for them so what we wanted to do is just find out if any of the data we tried to
+
+653
+00:56:39,440 --> 00:56:43,760
+index was failing so that we could track the IDs and essentially dead letter those items and deal
+
+654
+00:56:43,760 --> 00:56:50,400
+with them later so I'll give you a quick tour of the before and after code so the original code
+
+655
+00:56:51,040 --> 00:56:54,640
+is really terse it was using new use and source json that's all the code there is
+
+656
+00:56:55,600 --> 00:57:00,400
+ultimately it was getting to the point where we had a json serializer decerializing the
+
+657
+00:57:01,360 --> 00:57:06,160
+json response that comes back into this type which has the length of time it took whether or not
+
+658
+00:57:06,160 --> 00:57:11,200
+there were errors and then for each item each indexing operation what was the result
+
+659
+00:57:12,720 --> 00:57:16,800
+and then what we do is check that errors property and if there's no errors it's given us a force
+
+660
+00:57:16,800 --> 00:57:21,040
+on that errors property then we can just say that yes this was successful and there's no IDs to
+
+661
+00:57:21,040 --> 00:57:27,040
+return otherwise we have to process those items to find the IDs of the ones that failed so that
+
+662
+00:57:27,040 --> 00:57:32,080
+is pretty easy code now the new code I'll grant you is a good example of where moving to the
+
+663
+00:57:32,080 --> 00:57:39,520
+higher performance code is less terse and this would be less maintainable right but if you need
+
+664
+00:57:39,520 --> 00:57:43,680
+the performance then this is the kind of thing you might end up doing so what this does that's
+
+665
+00:57:43,680 --> 00:57:49,280
+different is we read a stream in this case directly and we go into this parse errors where we've
+
+666
+00:57:49,280 --> 00:57:54,640
+read some data off the stream we just use the rented array from the array pool for that buffer
+
+667
+00:57:54,640 --> 00:58:01,040
+for the streaming in this case and so what we do here is we switch to that low level json reader type
+
+668
+00:58:02,160 --> 00:58:07,280
+and at that point what we can do is basically ask it to read through the the bytes that it's received
+
+669
+00:58:08,000 --> 00:58:13,520
+giving us each json token as we reach it so this reads forward a json token at a time
+
+670
+00:58:14,160 --> 00:58:18,640
+but we track a bunch of states so you can see I'm passing in a bunch of my own state in here
+
+671
+00:58:18,640 --> 00:58:24,160
+mostly as by reference as well as this json reader state object which allows us to make that
+
+672
+00:58:24,160 --> 00:58:30,560
+a utfa json reader re-enterable so the state tracks where it is in that json structure so if you're
+
+673
+00:58:30,560 --> 00:58:35,520
+getting data in chunks off of the wire you can start processing the json and then return to this
+
+674
+00:58:35,520 --> 00:58:40,560
+method later on to continue with the next chunk and the basic premise of what this code does is it
+
+675
+00:58:40,560 --> 00:58:46,800
+switches on the json token and so I can kind of track my way through that that expected json data
+
+676
+00:58:46,960 --> 00:58:54,080
+I'm getting so am I into into the start object am I into the array have I reached certain properties so does the token
+
+677
+00:58:54,720 --> 00:59:02,400
+value text of the string match this predefined in this case this u8 here basically converts this string
+
+678
+00:59:02,400 --> 00:59:08,640
+literal into a utfa json byte as a read-only span again using that same technique to kind of cash
+
+679
+00:59:08,640 --> 00:59:14,560
+those in the binary and so what this does is basically track when we've read the ID properties
+
+680
+00:59:14,560 --> 00:59:20,000
+and the status properties of that item checks if we've read like a true or false result for example
+
+681
+00:59:20,000 --> 00:59:25,280
+and the key really is down here that when once we've checked that errors property on the message
+
+682
+00:59:25,280 --> 00:59:29,920
+and if it's false either there's no errors we can stop processing the rest of this json data
+
+683
+00:59:30,480 --> 00:59:37,440
+and so even further up the code here we do another check and we break out of this other
+
+684
+00:59:37,440 --> 00:59:42,960
+while loop here as we're reading that data through the off the stream so we can short circuit in the
+
+685
+00:59:42,960 --> 00:59:47,680
+happy path where we generally expect all items to have been indexed successfully and that's kind
+
+686
+00:59:47,680 --> 00:59:53,520
+of the crux of the improvement there I'll show you the numbers before we switch to the last couple of slides
+
+687
+00:59:54,880 --> 01:00:00,640
+so in the unhappy path where there are errors on the response then we still see that there's a 67
+
+688
+01:00:00,640 --> 01:00:06,480
+percent reduction in execution time and still a very good reduction in the overhead of the json
+
+689
+01:00:06,480 --> 01:00:10,720
+passing we still have some allocations because we need to capture all of those IDs of the failed
+
+690
+01:00:10,720 --> 01:00:15,520
+messages or the failed operations and so that that means we've saved 84 percent but not
+
+691
+01:00:16,160 --> 01:00:20,880
+completely saved our allocations but for the 99 percent case where we expect everything to be
+
+692
+01:00:20,880 --> 01:00:25,680
+indexed successfully because of that early exiting as we've read the first few tokens of json which
+
+693
+01:00:25,680 --> 01:00:31,120
+is roughly the first I think 20 something bytes of json data we exit really early so now we've
+
+694
+01:00:31,120 --> 01:00:36,160
+we've exited in 200 nanoseconds from that processing loop and we've got zero allocations now because
+
+695
+01:00:36,880 --> 01:00:40,480
+that sort of success path there's nothing to gather we don't actually need to allocate any
+
+696
+01:00:40,480 --> 01:00:44,960
+instances of objects to track their data and so very quickly we can get some real gains with that
+
+697
+01:00:44,960 --> 01:00:50,960
+utfh json reading approach so to wrap up in the last minute or two maybe you like what you've
+
+698
+01:00:50,960 --> 01:00:55,200
+seen today and you want to go and get business buying how do you do that I recommend starting with
+
+699
+01:00:55,200 --> 01:00:59,680
+quick wins so think of services you know have performance issues within your organization people
+
+700
+01:00:59,680 --> 01:01:04,560
+complain how long they take or how much have any instances you have to run to process your data
+
+701
+01:01:04,560 --> 01:01:10,960
+that kind of thing then use a scientific approach to work out the gains and then change that
+
+702
+01:01:10,960 --> 01:01:14,240
+into a monetary value so the main problem we're going to a business owner and saying hey I can
+
+703
+01:01:14,240 --> 01:01:19,280
+remove all byte allocations on this code path is that business owners probably don't really care
+
+704
+01:01:19,280 --> 01:01:24,000
+what that means or might not understand but if you show the monetary value it tends to make a
+
+705
+01:01:24,000 --> 01:01:29,120
+bigger difference so give them a cost of benefit ratio so all of the stuff I've shown you today plus
+
+706
+01:01:29,120 --> 01:01:34,000
+other techniques went into one key microservice we had that one that was dealing with 18 million
+
+707
+01:01:34,000 --> 01:01:39,120
+messages a day and through various experiments with these small changes worked out we could save
+
+708
+01:01:39,120 --> 01:01:43,840
+about half of the allocation and roughly double the per instance throughput of those processing
+
+709
+01:01:43,840 --> 01:01:48,960
+services and what that led to is reducing one vm a year that we needed to run that particular
+
+710
+01:01:48,960 --> 01:01:54,160
+microservices a container now $1,700 on its own might will be worth the engineering effort that
+
+711
+01:01:54,160 --> 01:01:58,960
+it took to introduce this but we had hundreds of microservices doing very similar things and we
+
+712
+01:01:58,960 --> 01:02:03,680
+could reapply this pattern and so this then can start to scale so these kind of gains can really
+
+713
+01:02:03,680 --> 01:02:08,640
+have an impact as you move to multiple instances where you're applying these same kind of techniques
+
+714
+01:02:08,640 --> 01:02:14,720
+over and over again so in summary when you're doing this kind of stuff don't assume don't make
+
+715
+01:02:14,720 --> 01:02:19,840
+assumptions measure with profiling tools measure with benchmarking before and after doing things
+
+716
+01:02:19,840 --> 01:02:25,920
+be scientific so small changes each time have a theory validate the theory and move on focus on
+
+717
+01:02:25,920 --> 01:02:30,800
+the hot paths because they're the areas that you're going to get the most gain from don't copy memory
+
+718
+01:02:30,800 --> 01:02:36,000
+so using things like span to just slice your way into existing memories a very good way of reducing
+
+719
+01:02:36,000 --> 01:02:41,200
+allocation overhead do use a raples where it's appropriate to do so to avoid those short live
+
+720
+01:02:41,200 --> 01:02:45,920
+buffer type allocations if you're doing anything with sort of regular streaming of data then
+
+721
+01:02:48,080 --> 01:02:54,080
+and off no come on and yeah consider system text json apis is a quick swap out for new and soft
+
+722
+01:02:54,080 --> 01:02:58,880
+json for some wins if you want to go deeper this book by conrad there's a new addition coming
+
+723
+01:02:58,880 --> 01:03:03,920
+this year i highly recommend it it's about that thick it's about thousand pages in english it's
+
+724
+01:03:03,920 --> 01:03:10,080
+fantastic to read and it's also great to carry around as a weapon and it has all of the stuff i've
+
+725
+01:03:10,080 --> 01:03:15,600
+shown you today and more so that's it i'll give you the link to the slides i don't have time for
+
+726
+01:03:15,600 --> 01:03:21,920
+questions but i'm happy to kind of answer them off to the side afterwards thank you
+
