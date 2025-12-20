@@ -1,0 +1,4420 @@
+1
+00:00:00,000 --> 00:00:06,040
+Sorry, we're going to move fast because when I dry run this talk it goes about an hour
+
+2
+00:00:06,040 --> 00:00:08,440
+20, but I still want to get you guys out an hour.
+
+3
+00:00:08,440 --> 00:00:11,960
+So like I said, welcome everybody, my name is Brad Dominic.
+
+4
+00:00:11,960 --> 00:00:16,920
+In this session today we're talking about correcting common async await mistakes in .NET.
+
+5
+00:00:16,920 --> 00:00:21,180
+Now we are moving fast, but don't worry about taking notes, don't worry about memorizing
+
+6
+00:00:21,180 --> 00:00:23,760
+anything today because I've already done that for you.
+
+7
+00:00:23,760 --> 00:00:27,600
+You just have to go to this QR code or specifically do this link here.
+
+8
+00:00:27,600 --> 00:00:30,760
+We'll take you to a webpage where you can find all the materials from today.
+
+9
+00:00:30,760 --> 00:00:32,640
+So this is where you can find a recording.
+
+10
+00:00:32,640 --> 00:00:35,560
+Yeah, you can go take a nap, whatever you want.
+
+11
+00:00:35,560 --> 00:00:37,600
+This is where you can find the open source samples.
+
+12
+00:00:37,600 --> 00:00:41,680
+This is where you can find a actual four hour course I recently published where we go
+
+13
+00:00:41,680 --> 00:00:43,800
+even deeper into this stuff.
+
+14
+00:00:43,800 --> 00:00:47,520
+So hopefully you get excited about what we learned today and you want to learn more.
+
+15
+00:00:47,520 --> 00:00:48,760
+You can find it all there.
+
+16
+00:00:48,760 --> 00:00:51,880
+And if you have any friends or co-workers who couldn't make it today, you can also forward
+
+17
+00:00:51,880 --> 00:00:52,880
+that on to them as well.
+
+18
+00:00:52,880 --> 00:00:57,120
+And like I said, we probably won't have time for Q&A at the end, but you can find me online.
+
+19
+00:00:57,120 --> 00:00:59,360
+This is my Blue Sky Handle, co-travel for .io.
+
+20
+00:00:59,360 --> 00:01:03,080
+I'll also be around all day today and all day tomorrow if you want to hang out and chat.
+
+21
+00:01:03,080 --> 00:01:05,640
+But let's get rolling.
+
+22
+00:01:05,640 --> 00:01:08,280
+So let's start by looking at this method called Git Libraries.
+
+23
+00:01:08,280 --> 00:01:10,440
+This is an async task method.
+
+24
+00:01:10,440 --> 00:01:18,120
+And it's a fairly common use case for using HTTP client to call Git async to return information
+
+25
+00:01:18,120 --> 00:01:19,600
+from an API.
+
+26
+00:01:19,600 --> 00:01:23,960
+But what's really going on here under the hood with multi-threading and async await and
+
+27
+00:01:23,960 --> 00:01:24,960
+.net?
+
+28
+00:01:24,960 --> 00:01:29,960
+Well, to simplify the example a little bit, let's assume thread 1 kicks off this method.
+
+29
+00:01:29,960 --> 00:01:32,120
+So thread 1 calls Git libraries.
+
+30
+00:01:32,120 --> 00:01:36,240
+And so what happens is thread 1 enters this method and initializes this variable called
+
+31
+00:01:36,240 --> 00:01:37,440
+response.
+
+32
+00:01:37,440 --> 00:01:42,000
+But then as soon as thread 1 hits that await keyword, thread 1 returns.
+
+33
+00:01:42,000 --> 00:01:47,000
+And now thread 2 or any background thread is now running Git async.
+
+34
+00:01:47,000 --> 00:01:52,560
+And this is really, really good because we don't want thread 1 to be making any API calls
+
+35
+00:01:52,560 --> 00:01:56,080
+because thread 1 is a very, very special thread in .net.
+
+36
+00:01:56,080 --> 00:01:57,440
+It's also known as the main thread.
+
+37
+00:01:57,440 --> 00:01:59,320
+It's also known as the UI thread.
+
+38
+00:01:59,320 --> 00:02:03,080
+Thread 1 is the only thread that can interact with the user.
+
+39
+00:02:03,080 --> 00:02:06,840
+And it's also the only thread that can draw the UI on the screen.
+
+40
+00:02:06,840 --> 00:02:11,680
+So if we were not using async await for some reason and thread 1 was calling Git async,
+
+41
+00:02:11,680 --> 00:02:16,600
+well, if Git async takes 5, 10 seconds, well, in those 5, 10 seconds, if thread 1 is
+
+42
+00:02:16,600 --> 00:02:20,640
+busy doing that, if the user is scrolling the screen, tapping buttons, nothing is going
+
+43
+00:02:20,640 --> 00:02:24,560
+to happen because only thread 1 could respond to those button taps.
+
+44
+00:02:24,560 --> 00:02:29,280
+And so with async await, we don't have to worry about that because now thread 1 is free.
+
+45
+00:02:29,280 --> 00:02:30,720
+It's back interactive with the user.
+
+46
+00:02:30,720 --> 00:02:35,080
+So while Git async is running in the background, thread 1, or if the user can swipe and tap
+
+47
+00:02:35,080 --> 00:02:38,840
+buttons into whatever they want, and our app is still nice and responsive.
+
+48
+00:02:38,840 --> 00:02:44,160
+Now what happens when Git async is done, we return back to the calling thread for the
+
+49
+00:02:44,160 --> 00:02:45,320
+next line of code.
+
+50
+00:02:45,320 --> 00:02:50,280
+So thread 1 jumps back in here and makes sure that we have a successful response code.
+
+51
+00:02:50,280 --> 00:02:52,280
+And then initializes this variable stream.
+
+52
+00:02:52,280 --> 00:02:54,960
+And then just like last time, it hits this await keyword.
+
+53
+00:02:54,960 --> 00:02:56,720
+Thread 1 returns.
+
+54
+00:02:56,720 --> 00:02:58,840
+And we run this on a background thread again.
+
+55
+00:02:58,840 --> 00:03:00,080
+We'll call this thread 5.
+
+56
+00:03:00,080 --> 00:03:03,200
+Again, this can be any thread from the thread pool.
+
+57
+00:03:03,200 --> 00:03:06,480
+It doesn't have to be thread 5 and it won't be thread 5 every time.
+
+58
+00:03:06,480 --> 00:03:10,520
+Certainly, but when it's done, again, we return back to the calling thread.
+
+59
+00:03:10,520 --> 00:03:12,080
+Thread 1 jumps back in.
+
+60
+00:03:12,080 --> 00:03:13,720
+Initializes this variable libraries.
+
+61
+00:03:13,720 --> 00:03:15,240
+Hit see await keyword again.
+
+62
+00:03:15,240 --> 00:03:17,680
+De-serialize async runs on a background thread.
+
+63
+00:03:17,680 --> 00:03:23,320
+We come back again to thread 1 to return the value or to throw an invalid operation exception,
+
+64
+00:03:23,320 --> 00:03:25,160
+just in case something went wrong.
+
+65
+00:03:25,160 --> 00:03:30,040
+Now to really understand what's going on here and how this works, we actually need to look
+
+66
+00:03:30,040 --> 00:03:32,200
+at the compiler generated code.
+
+67
+00:03:32,200 --> 00:03:39,160
+So what I've done is I've gone to sharplab.io, which is an awesome, awesome website if you've
+
+68
+00:03:39,160 --> 00:03:40,560
+never heard of it.
+
+69
+00:03:40,560 --> 00:03:43,480
+Because we can put in our code here on the left.
+
+70
+00:03:43,480 --> 00:03:48,040
+So this is the same code that we're just looking at in nice, beautiful C-sharp.
+
+71
+00:03:48,040 --> 00:03:51,920
+And on the right, this is the compiler generated code.
+
+72
+00:03:51,920 --> 00:03:56,240
+And the first thing you'll notice, there's a lot more code on this side than I wrote on
+
+73
+00:03:56,240 --> 00:03:57,560
+my side.
+
+74
+00:03:57,560 --> 00:04:00,960
+And it's got like weird variable names in compiler generated code.
+
+75
+00:04:00,960 --> 00:04:03,920
+You'll see these weird angle brackets and underscores.
+
+76
+00:04:03,920 --> 00:04:06,280
+And these are actually illegal variable names in C-sharp.
+
+77
+00:04:06,280 --> 00:04:09,640
+But the compiler does this on purpose when it generates our code or generates code
+
+78
+00:04:09,640 --> 00:04:14,280
+for us so that we don't have any accidentally accidental naming collisions.
+
+79
+00:04:14,280 --> 00:04:17,840
+But if you squint your eyes and look close enough, this really is our code.
+
+80
+00:04:17,840 --> 00:04:19,040
+Here's get async.
+
+81
+00:04:19,040 --> 00:04:23,600
+And if we scroll down a little bit, we can see that JSON serializer in here.
+
+82
+00:04:23,600 --> 00:04:29,680
+But the big, big thing we'll notice first is we now have this private struct that inherits
+
+83
+00:04:29,680 --> 00:04:32,040
+from IAsync state machine.
+
+84
+00:04:32,040 --> 00:04:36,120
+And just a fun fact in release configuration that's a struct.
+
+85
+00:04:36,120 --> 00:04:38,840
+If we switch this to debug mode, this is actually a class.
+
+86
+00:04:38,840 --> 00:04:42,480
+And you can see the code even gets even bigger.
+
+87
+00:04:42,480 --> 00:04:48,000
+And this is just because when we debug our code, the debugger has to remember what the
+
+88
+00:04:48,000 --> 00:04:50,040
+compiler, what the variable names are.
+
+89
+00:04:50,040 --> 00:04:55,400
+Whereas when we're running in release config, then the .NET runtime can optimize this
+
+90
+00:04:55,400 --> 00:04:56,920
+a little bit more for us.
+
+91
+00:04:56,920 --> 00:05:03,800
+But before we look at this IAsync state machine, let's scroll down because we still do have
+
+92
+00:05:03,800 --> 00:05:08,040
+a method called a public async task method called get libraries.
+
+93
+00:05:08,040 --> 00:05:09,120
+It's down here.
+
+94
+00:05:09,120 --> 00:05:12,960
+But you'll notice this method looks completely different.
+
+95
+00:05:12,960 --> 00:05:17,960
+In fact, none of the code I wrote is in my method get libraries anymore.
+
+96
+00:05:17,960 --> 00:05:22,080
+And that's because what's happening is .NET is building a state machine for us under
+
+97
+00:05:22,080 --> 00:05:23,320
+the hood.
+
+98
+00:05:23,320 --> 00:05:28,200
+And before we get too deep into this, I do want to say this is really cool stuff because
+
+99
+00:05:28,200 --> 00:05:33,760
+C-sharp.NET, this was all invented before asynchronous, multi-threading was a thing.
+
+100
+00:05:33,760 --> 00:05:35,920
+Back when it first came out, CPUs were simple.
+
+101
+00:05:35,920 --> 00:05:39,320
+Just single core processors, they did one thing.
+
+102
+00:05:39,320 --> 00:05:44,200
+But the really smart folks at Microsoft figure out a way that we could write nice, elegant,
+
+103
+00:05:44,200 --> 00:05:45,840
+readable code here on the left.
+
+104
+00:05:45,840 --> 00:05:49,560
+And then they handle all the mess for us under the need the hood by creating this giant
+
+105
+00:05:49,560 --> 00:05:50,560
+state machine.
+
+106
+00:05:50,560 --> 00:05:57,400
+So what happens now inside of the compiler generated get libraries method is we create our
+
+107
+00:05:57,400 --> 00:05:59,000
+new state machine.
+
+108
+00:05:59,000 --> 00:06:05,080
+And inside of it, we have a async task builder created where we set the current state to
+
+109
+00:06:05,080 --> 00:06:06,880
+be negative one.
+
+110
+00:06:06,880 --> 00:06:08,920
+And then we kick off our code here.
+
+111
+00:06:08,920 --> 00:06:11,160
+We used to tell the builder to go ahead and start.
+
+112
+00:06:11,160 --> 00:06:14,440
+And what we're actually returning now is the state machine's task.
+
+113
+00:06:14,440 --> 00:06:19,720
+So this task is actually what we're awaiting here when we say await get libraries.
+
+114
+00:06:19,720 --> 00:06:27,800
+Now if I scroll all the way back up, this is where that isync state machine is created.
+
+115
+00:06:27,800 --> 00:06:33,840
+And the big part of the isync state machine is this move next method.
+
+116
+00:06:33,840 --> 00:06:37,320
+This is what is going to iterate over our code.
+
+117
+00:06:37,320 --> 00:06:42,160
+And you'll see in a second how this thread switching gets enabled under the hood here.
+
+118
+00:06:42,160 --> 00:06:47,320
+Because when move next starts, the first thing it does is it grabs a state, which remember
+
+119
+00:06:47,320 --> 00:06:50,600
+this was always initialized to negative one.
+
+120
+00:06:50,600 --> 00:06:54,600
+And then we enter this giant switch where we have multiple cases.
+
+121
+00:06:54,600 --> 00:06:56,320
+So we have our default case.
+
+122
+00:06:56,320 --> 00:06:59,040
+But then we have case 0, case 1, case 2.
+
+123
+00:06:59,040 --> 00:07:00,480
+And for us, that's it.
+
+124
+00:07:00,480 --> 00:07:03,640
+Because we only use the await keyword three times.
+
+125
+00:07:03,640 --> 00:07:08,680
+So we have case 0, case 1, case 2.
+
+126
+00:07:08,680 --> 00:07:10,160
+So three cases.
+
+127
+00:07:10,160 --> 00:07:12,120
+Because we use the await keyword three times.
+
+128
+00:07:12,120 --> 00:07:16,320
+If we use the await keyword fourth time, we'd have case 4.
+
+129
+00:07:16,320 --> 00:07:21,560
+But again, we start with case negative one, which is our default here.
+
+130
+00:07:21,560 --> 00:07:26,800
+And this is where we start by calling our code finally, where we say get async.
+
+131
+00:07:26,800 --> 00:07:29,120
+And so now we've kicked off this task.
+
+132
+00:07:29,120 --> 00:07:31,160
+It's running on a background thread.
+
+133
+00:07:31,160 --> 00:07:37,600
+But the first thing that the .NET runtime does is actually look to see is that task completed.
+
+134
+00:07:37,600 --> 00:07:39,600
+Because we're going to be doing a lot of thread switching here.
+
+135
+00:07:39,600 --> 00:07:41,000
+And thread switching is expensive.
+
+136
+00:07:41,000 --> 00:07:45,760
+And we want to avoid switching threads if we can, because our code will run faster.
+
+137
+00:07:45,760 --> 00:07:49,760
+So here in this release config, it's highly optimized for us.
+
+138
+00:07:49,760 --> 00:07:50,760
+Fantastic.
+
+139
+00:07:50,760 --> 00:07:53,560
+And so the first thing it does is see, is that already completed?
+
+140
+00:07:53,560 --> 00:07:57,520
+Because if it is, then it'll use this go to statement.
+
+141
+00:07:57,520 --> 00:08:02,200
+And it'll jump down to this IL underscore 0, 0, 7e tag.
+
+142
+00:08:02,200 --> 00:08:04,120
+So 0, 0, 7e is down here.
+
+143
+00:08:04,120 --> 00:08:07,560
+Where so if that task is already completed, it'll just get the result.
+
+144
+00:08:07,560 --> 00:08:11,520
+And then it'll run the next line of code, where it ensures that we had a successful status
+
+145
+00:08:11,520 --> 00:08:12,520
+code.
+
+146
+00:08:12,520 --> 00:08:14,240
+But we know this is calling get async.
+
+147
+00:08:14,240 --> 00:08:16,120
+This has to go out to an API on the internet.
+
+148
+00:08:16,120 --> 00:08:17,640
+So this will never be completed.
+
+149
+00:08:17,640 --> 00:08:22,040
+So what really happens is we're going to enter this if statement, where now we're going
+
+150
+00:08:22,040 --> 00:08:23,960
+to update the state to 0.
+
+151
+00:08:23,960 --> 00:08:27,480
+Because when we come back, we're going to jump back in to state 0 to pick up where we
+
+152
+00:08:27,480 --> 00:08:28,640
+left off.
+
+153
+00:08:28,640 --> 00:08:34,320
+But before we do, we have to save some values here, where we have a couple fields up above
+
+154
+00:08:34,320 --> 00:08:39,640
+like this U underscore underscore 1, where we're going to store the HTTP response task
+
+155
+00:08:39,640 --> 00:08:41,920
+awaiter until it comes back.
+
+156
+00:08:41,920 --> 00:08:47,320
+And then we're going to let .NET know that we are waiting on the result, or waiting on
+
+157
+00:08:47,320 --> 00:08:49,040
+that task to be completed.
+
+158
+00:08:49,040 --> 00:08:50,640
+And then finally, we return.
+
+159
+00:08:50,640 --> 00:08:54,800
+So this is how that calling thread, in this case, thread 1, is able to escape.
+
+160
+00:08:54,800 --> 00:08:57,640
+Well, everything's running out of background thread for get async.
+
+161
+00:08:57,640 --> 00:09:01,640
+And then when it's completed, we now know we're on state 0.
+
+162
+00:09:01,640 --> 00:09:04,000
+So we jump back into move next.
+
+163
+00:09:04,000 --> 00:09:05,520
+And we do it all over again.
+
+164
+00:09:05,520 --> 00:09:09,840
+But this time, we come straight in the case 0, where we grab that value that we saved
+
+165
+00:09:09,840 --> 00:09:12,040
+in the private field up above.
+
+166
+00:09:12,040 --> 00:09:18,080
+And then we reset that field to, again, performance memory optimization here, help the garbage collector
+
+167
+00:09:18,080 --> 00:09:19,400
+out a little bit.
+
+168
+00:09:19,400 --> 00:09:23,080
+And they'll set the state back to negative 1, just in case something bad happens if this
+
+169
+00:09:23,080 --> 00:09:30,040
+task throws an exception or the app crashes, then we want to return back to, or we don't
+
+170
+00:09:30,040 --> 00:09:33,680
+want to continue this task if something happens like that.
+
+171
+00:09:33,680 --> 00:09:39,080
+And now we can finally go to IL007E, where just like we looked at earlier, we essentially
+
+172
+00:09:39,080 --> 00:09:40,800
+pick up where our code left off.
+
+173
+00:09:40,800 --> 00:09:47,560
+Now, I won't run through all of this, but eventually, we'll end up down here, where we finally
+
+174
+00:09:47,560 --> 00:09:49,680
+get our list of library models.
+
+175
+00:09:49,680 --> 00:09:51,200
+We check to see if it's null.
+
+176
+00:09:51,200 --> 00:09:54,720
+If it is, we'll throw an invalid operation exception, just like we said, we would do in
+
+177
+00:09:54,720 --> 00:09:55,840
+our code.
+
+178
+00:09:55,840 --> 00:09:59,480
+And then we will save that result to result 3.
+
+179
+00:09:59,480 --> 00:10:04,880
+We're finally, finally, finally, down here, we call BuilderSetResult and pass in the list
+
+180
+00:10:04,880 --> 00:10:05,880
+of library models.
+
+181
+00:10:05,880 --> 00:10:10,680
+So this BuilderSetResult, remember, this is the actual task that we're really awaiting
+
+182
+00:10:10,680 --> 00:10:15,040
+under the hood, and that's how we get our list of library models up here.
+
+183
+00:10:15,040 --> 00:10:21,720
+Now, there's one really, really big gotcha that if you've never looked at the compiler-generated
+
+184
+00:10:21,720 --> 00:10:26,200
+code for an async method before, you probably didn't know this existed, and that's this
+
+185
+00:10:26,200 --> 00:10:28,640
+giant tri-catch block right here.
+
+186
+00:10:28,640 --> 00:10:33,480
+So all of our code, all of the get async, the read-a-stream async, deserialize async,
+
+187
+00:10:33,480 --> 00:10:39,200
+all the code that we wrote gets put inside of this giant tri-catch block inside and move
+
+188
+00:10:39,200 --> 00:10:40,280
+next.
+
+189
+00:10:40,280 --> 00:10:44,360
+And so what this means is, let's say we didn't get a successful status code back, it throws
+
+190
+00:10:44,360 --> 00:10:49,880
+an HTTP response exception, so that exception will be caught here in this tri-catch block.
+
+191
+00:10:49,880 --> 00:10:54,760
+And normally, that's fine, because as long as when we call get libraries, we await it,
+
+192
+00:10:54,760 --> 00:10:59,880
+as long as we say, await get libraries, that exception gets three-throw.
+
+193
+00:10:59,880 --> 00:11:03,160
+But this is where async-a-way becomes dangerous.
+
+194
+00:11:03,160 --> 00:11:08,280
+Because if you don't await that task, that exception will never be propagated back to us,
+
+195
+00:11:08,280 --> 00:11:13,240
+the developers, and it'll just be swallowed up here in this tri-catch block, and essentially
+
+196
+00:11:13,240 --> 00:11:14,640
+gone forever.
+
+197
+00:11:14,640 --> 00:11:16,720
+And this is what I didn't know.
+
+198
+00:11:16,720 --> 00:11:21,400
+When I first started writing C-sharp code over a decade ago, I published my first apps
+
+199
+00:11:21,400 --> 00:11:26,740
+to the App Store back in 2016, and Xamarin back then, now I've ported them since the
+
+200
+00:11:26,740 --> 00:11:31,160
+Donut Mallee, and I would occasionally, like, weird things would happen, because I thought
+
+201
+00:11:31,160 --> 00:11:32,880
+I knew what I was doing with Async-a-wait, right?
+
+202
+00:11:32,880 --> 00:11:35,360
+I was like, oh, I want this to run in the background.
+
+203
+00:11:35,360 --> 00:11:39,480
+I don't care when it finishes, so I'd say task.run, I'd put a bunch of code inside
+
+204
+00:11:39,480 --> 00:11:42,480
+a task.run, and I was like, who cares when it finishes?
+
+205
+00:11:42,480 --> 00:11:45,080
+It'll just finish, so I'm not going to await it.
+
+206
+00:11:45,080 --> 00:11:49,720
+But what was really happening was sometimes my code just threw an exception.
+
+207
+00:11:49,720 --> 00:11:51,440
+But I didn't know that as the developer.
+
+208
+00:11:51,440 --> 00:11:54,560
+And now, you might be thinking to yourself, this is great.
+
+209
+00:11:54,560 --> 00:11:57,920
+I hate exceptions, they crash my app, this is fantastic.
+
+210
+00:11:57,920 --> 00:12:00,080
+I wish we could do this for all the code.
+
+211
+00:12:00,080 --> 00:12:02,680
+But that's not the right way to think about exceptions.
+
+212
+00:12:02,680 --> 00:12:04,400
+exceptions are a good thing.
+
+213
+00:12:04,400 --> 00:12:09,160
+The only way .NET can tell us it's something exceptional, something unexpected happened,
+
+214
+00:12:09,160 --> 00:12:11,320
+that .NET doesn't know what to do.
+
+215
+00:12:11,320 --> 00:12:15,120
+And as advanced C-sharp developers, we should be catching those exceptions.
+
+216
+00:12:15,120 --> 00:12:18,120
+We should be catching that HTTP response exception.
+
+217
+00:12:18,120 --> 00:12:23,160
+We should be catching that in Valent-Aprilation exception so that we can handle it.
+
+218
+00:12:23,160 --> 00:12:28,320
+Because I wasn't awaiting those tasks, and the first apps that I was writing in C-sharp,
+
+219
+00:12:28,320 --> 00:12:31,000
+I didn't know these exceptions even existed.
+
+220
+00:12:31,000 --> 00:12:34,240
+My app would get these weird states where some buttons would be enabled,
+
+221
+00:12:34,240 --> 00:12:36,880
+some would have the activity indicator still running.
+
+222
+00:12:36,880 --> 00:12:40,240
+And that was because some code thought it was successful.
+
+223
+00:12:40,240 --> 00:12:42,400
+But in reality, it had failed.
+
+224
+00:12:42,400 --> 00:12:47,440
+So again, the good news is, as long as we await tasks,
+
+225
+00:12:47,440 --> 00:12:52,520
+that exception gets re-throwed to us, we can catch it, and then we can handle it appropriately.
+
+226
+00:12:52,520 --> 00:12:56,480
+So quick review.
+
+227
+00:12:56,480 --> 00:13:00,200
+The Async keyword adds about 80 bytes.
+
+228
+00:13:00,200 --> 00:13:03,640
+This is just because of all that compiler-generated code.
+
+229
+00:13:03,640 --> 00:13:05,000
+Now, this is 80 bytes.
+
+230
+00:13:05,000 --> 00:13:06,400
+This is really not a big deal.
+
+231
+00:13:06,400 --> 00:13:08,920
+I'm not talking 80 megabytes, I'm not talking 80 gigabytes.
+
+232
+00:13:08,920 --> 00:13:10,240
+It's just 80 bytes.
+
+233
+00:13:10,240 --> 00:13:16,600
+So for most of us, even me doing mobile, which is less horsepower than making websites
+
+234
+00:13:16,600 --> 00:13:18,800
+or running on a server, I don't care about 80 bytes.
+
+235
+00:13:18,800 --> 00:13:21,040
+Use the Async keyword as much as you want.
+
+236
+00:13:21,040 --> 00:13:24,840
+But more of a fun fact that it turns our Async methods into a struct
+
+237
+00:13:24,840 --> 00:13:28,280
+specifically in that release configuration.
+
+238
+00:13:28,280 --> 00:13:33,400
+And we want to await every task because not-a-weighted tasks hide exceptions.
+
+239
+00:13:33,400 --> 00:13:37,680
+And that's the most painful thing you can do as a developer,
+
+240
+00:13:37,680 --> 00:13:41,720
+is try and hunt down these bugs because somebody forgot to await a task.
+
+241
+00:13:41,720 --> 00:13:47,040
+In fact, any time I review a pull request and I see a task that's not-a-weighted,
+
+242
+00:13:47,040 --> 00:13:49,160
+immediately fail that pull request.
+
+243
+00:13:49,160 --> 00:13:55,000
+The worst thing I've seen, and actually, I was just joking that I saw it in Steve's keynote this morning,
+
+244
+00:13:55,000 --> 00:13:58,760
+is where that pattern where people say underscore equals task.run.
+
+245
+00:13:58,760 --> 00:14:02,720
+So not only are you not awaiting the task, but you're discarding it when it's done.
+
+246
+00:14:02,720 --> 00:14:05,920
+So again, any exception that gets caught in there is gone forever.
+
+247
+00:14:05,920 --> 00:14:07,040
+So don't ever do that.
+
+248
+00:14:07,040 --> 00:14:10,520
+If you ever see those in pull requests, you should always fail that pull request
+
+249
+00:14:10,520 --> 00:14:15,080
+because we need to await every task to get those exceptions.
+
+250
+00:14:15,080 --> 00:14:16,440
+Okay, but enough talking about it.
+
+251
+00:14:16,440 --> 00:14:19,640
+Let's actually jump into some code here.
+
+252
+00:14:19,680 --> 00:14:28,560
+And I have with us today a .NET Maui app that I've created that pulls down the top stories from Hacker News.
+
+253
+00:14:28,560 --> 00:14:33,560
+So if you've never heard of Hacker News, it's essentially a forum where folks can post
+
+254
+00:14:33,560 --> 00:14:35,520
+all the latest text stories of the day.
+
+255
+00:14:35,520 --> 00:14:37,200
+Other users can upvote and downvote them.
+
+256
+00:14:37,200 --> 00:14:39,440
+So that's why you see there's points here.
+
+257
+00:14:39,440 --> 00:14:43,360
+And so this app just goes and gets the top stories from the Hacker News API.
+
+258
+00:14:43,360 --> 00:14:46,880
+And then I can click on any of the stories here and then read them in my app.
+
+259
+00:14:46,920 --> 00:14:49,560
+So pretty simple one-page app.
+
+260
+00:14:49,560 --> 00:14:54,720
+And what we're going to play around with today is inside of the .NET Maui app,
+
+261
+00:14:54,720 --> 00:14:57,880
+specifically inside the ViewModel layer,
+
+262
+00:14:57,880 --> 00:15:01,880
+I have a class called NewsViewModel bad async await best practices.
+
+263
+00:15:01,880 --> 00:15:04,880
+This is what we're going to fix today together.
+
+264
+00:15:04,880 --> 00:15:07,440
+But there's also good async await best practices.
+
+265
+00:15:07,440 --> 00:15:12,400
+So again, don't worry about memorizing anything because you can always just look at these two side-by-side when we're done.
+
+266
+00:15:12,400 --> 00:15:14,800
+And so let's jump into it.
+
+267
+00:15:14,800 --> 00:15:19,080
+So scrolling all the way up here, we have a bunch of two-dos we're going to fix together.
+
+268
+00:15:19,080 --> 00:15:24,600
+Now, the first one here, we're inside of the constructor for our NewsViewModel.
+
+269
+00:15:24,600 --> 00:15:27,800
+And I'm trying to call the refresh method.
+
+270
+00:15:27,800 --> 00:15:30,960
+This is the method that is called when the user does a pull-to-refrash.
+
+271
+00:15:30,960 --> 00:15:35,240
+So this is what goes and gets the latest top stories and displays them on the page.
+
+272
+00:15:35,240 --> 00:15:40,400
+And I'm calling it here in the constructor because I don't want the user to load a blank app
+
+273
+00:15:40,400 --> 00:15:44,920
+and have to pull-to-refrash just to see the data they want to see by launching the app.
+
+274
+00:15:44,920 --> 00:15:49,200
+Now, we're just saying we need to await every task.
+
+275
+00:15:49,200 --> 00:15:51,200
+So I mean, it seems pretty obvious, right?
+
+276
+00:15:51,200 --> 00:15:54,920
+We would say async here, we would say await here.
+
+277
+00:15:54,920 --> 00:15:57,520
+But no, we're in the constructor.
+
+278
+00:15:57,520 --> 00:16:03,080
+We can't use async await in the constructor because constructors aren't meant for that.
+
+279
+00:16:03,080 --> 00:16:09,120
+Constructors are literally just designed to initialize an object and maybe assign a couple variables.
+
+280
+00:16:09,120 --> 00:16:13,960
+And really, what's going on in the hood is dotnet's assigning a location and memory
+
+281
+00:16:13,960 --> 00:16:15,920
+for this newly initialized object.
+
+282
+00:16:15,920 --> 00:16:18,760
+So there's no async await in the constructor.
+
+283
+00:16:18,760 --> 00:16:20,400
+So we can't await it here.
+
+284
+00:16:20,400 --> 00:16:26,200
+But one thing I could do is I could create another refresh method down here
+
+285
+00:16:26,200 --> 00:16:32,320
+where we'll call a wait refresh here.
+
+286
+00:16:32,320 --> 00:16:38,160
+And then we'll just call this new refresh method here in Happy Days.
+
+287
+00:16:38,160 --> 00:16:40,040
+We don't get those yellow squiggles anymore.
+
+288
+00:16:40,040 --> 00:16:41,200
+We're not getting yelled at.
+
+289
+00:16:41,200 --> 00:16:45,280
+We're still awaiting that task and everything's great, right?
+
+290
+00:16:45,280 --> 00:16:47,560
+Well, yeah, I could see some people shaking their heads.
+
+291
+00:16:47,560 --> 00:16:51,360
+I could feel the tension building because what did I do?
+
+292
+00:16:51,360 --> 00:16:53,520
+I just created an async void method.
+
+293
+00:16:53,520 --> 00:16:57,200
+And what are we taught when we're taught to BAC sharp developers?
+
+294
+00:16:57,200 --> 00:16:59,120
+They say don't ever use async void.
+
+295
+00:16:59,120 --> 00:17:00,160
+It's bad.
+
+296
+00:17:00,160 --> 00:17:01,720
+It's only meant for event handlers.
+
+297
+00:17:01,720 --> 00:17:08,120
+And that's not bad advice because actually, this is a valid use case for async void.
+
+298
+00:17:08,280 --> 00:17:12,760
+But the problem I have with telling people just don't use it is nobody goes another step further
+
+299
+00:17:12,760 --> 00:17:14,160
+and says, why?
+
+300
+00:17:14,160 --> 00:17:16,160
+So why is this dangerous?
+
+301
+00:17:16,160 --> 00:17:19,320
+Well, let's look at a couple scenarios here.
+
+302
+00:17:19,320 --> 00:17:24,120
+What if I added some code here where I'm going to clear that top story collection
+
+303
+00:17:24,120 --> 00:17:26,040
+and I'm going to do some initialization here.
+
+304
+00:17:26,040 --> 00:17:29,360
+We'll just add some dummy code here.
+
+305
+00:17:29,360 --> 00:17:32,880
+And if we remember what we were just talking about, well, let's say thread one
+
+306
+00:17:32,880 --> 00:17:34,080
+initializes the constructor.
+
+307
+00:17:34,080 --> 00:17:36,280
+So thread one enters the constructor.
+
+308
+00:17:36,280 --> 00:17:41,280
+Thread one hits the refresh method, enters the refresh method down here, hits the await keyword.
+
+309
+00:17:41,280 --> 00:17:43,160
+So thread one returns.
+
+310
+00:17:43,160 --> 00:17:54,240
+But because nothing's awaiting refresh, thread one continues running here
+
+311
+00:17:54,240 --> 00:18:00,000
+while refresh runs in the background.
+
+312
+00:18:00,000 --> 00:18:02,320
+Hopefully most of that's spelled right.
+
+313
+00:18:02,320 --> 00:18:06,480
+So essentially what we've done is we've just created a fun little race condition
+
+314
+00:18:06,480 --> 00:18:11,600
+where this refresh method is running in the background and it's editing the top story collection.
+
+315
+00:18:11,600 --> 00:18:15,600
+But thread one is still running in the constructor at the same time.
+
+316
+00:18:15,600 --> 00:18:18,280
+And it's modifying the top story collection.
+
+317
+00:18:18,280 --> 00:18:23,640
+And if you've ever had to debug and solve a race condition, those are the worst, the hardest problems
+
+318
+00:18:23,640 --> 00:18:25,960
+to solve because they're so hard to reproduce.
+
+319
+00:18:25,960 --> 00:18:27,560
+They only happen occasionally.
+
+320
+00:18:27,560 --> 00:18:29,080
+Some people think you're going crazy.
+
+321
+00:18:29,080 --> 00:18:32,720
+Like I swear one time I saw it happen and I was like, no, I don't ever happen.
+
+322
+00:18:32,720 --> 00:18:38,320
+But that's a race condition where we have two threads doing conflicting things that interfere with each other.
+
+323
+00:18:38,320 --> 00:18:41,320
+So this is one reason why async voids dangerous.
+
+324
+00:18:41,320 --> 00:18:46,200
+Another reason async voids dangerous is what happens if refresh throws an exception, right?
+
+325
+00:18:46,200 --> 00:18:47,840
+Like this is going out to the internet.
+
+326
+00:18:47,840 --> 00:18:55,800
+It's getting an HTTP response and maybe the user is on a bus and the mobile app can't connect to the internet.
+
+327
+00:18:55,800 --> 00:19:03,160
+Or maybe we just do this to ensure that an exception we now know we're guaranteed to throw an exception and refresh.
+
+328
+00:19:03,160 --> 00:19:05,040
+So, okay, no problem, right?
+
+329
+00:19:05,040 --> 00:19:07,040
+I'll just wrap in a try, catch block.
+
+330
+00:19:07,040 --> 00:19:08,160
+That's what these are there for.
+
+331
+00:19:08,160 --> 00:19:10,480
+So we'll say try, we'll say catch.
+
+332
+00:19:10,480 --> 00:19:12,920
+We'll handle that exception.
+
+333
+00:19:12,920 --> 00:19:19,160
+But again, remember what's going on here is that thread one is going to come in here, hit refresh.
+
+334
+00:19:19,160 --> 00:19:23,000
+Thread one is going to enter the refresh method, hit the wait keyword, return.
+
+335
+00:19:23,000 --> 00:19:25,200
+And then thread one keeps going.
+
+336
+00:19:25,200 --> 00:19:27,800
+And so now thread one's down here.
+
+337
+00:19:27,800 --> 00:19:30,160
+Meanwhile, this method is still running.
+
+338
+00:19:30,160 --> 00:19:34,600
+So when this exception is thrown, we can't catch it.
+
+339
+00:19:34,600 --> 00:19:39,720
+And this is really, really big problem because that's going to crash our app.
+
+340
+00:19:39,720 --> 00:19:47,840
+And probably the worst part to bring this all together around async void is if we look at IntelliSense,
+
+341
+00:19:47,840 --> 00:19:52,000
+what does IntelliSense tell us about this method?
+
+342
+00:19:52,000 --> 00:19:53,320
+And do more patience, come on.
+
+343
+00:19:53,320 --> 00:19:54,400
+There we go.
+
+344
+00:19:54,400 --> 00:19:57,160
+It just tells us this is a private void method.
+
+345
+00:19:57,160 --> 00:20:04,600
+And as advanced C-sharp developers, it's completely valid for us to assume that this refresh method
+
+346
+00:20:04,600 --> 00:20:09,560
+will finish running, will run to completion before the next line of code.
+
+347
+00:20:09,560 --> 00:20:15,560
+So it's totally valid to assume refresh has completed here.
+
+348
+00:20:15,560 --> 00:20:17,960
+But it doesn't tell us that it's async void.
+
+349
+00:20:17,960 --> 00:20:23,320
+So right here in this silly little sample, the async voids in our face.
+
+350
+00:20:23,320 --> 00:20:24,560
+We can see it right here.
+
+351
+00:20:24,560 --> 00:20:25,400
+It's tough to miss.
+
+352
+00:20:25,400 --> 00:20:27,040
+But maybe it's not.
+
+353
+00:20:27,040 --> 00:20:28,200
+Maybe it's in a different class.
+
+354
+00:20:28,200 --> 00:20:30,480
+Maybe it's in somebody else's library.
+
+355
+00:20:30,480 --> 00:20:32,840
+So we don't even have the source code for it.
+
+356
+00:20:32,840 --> 00:20:35,840
+And all we know is that this is a method returns void.
+
+357
+00:20:35,840 --> 00:20:40,880
+And again, it's completely valid for us to assume that the method completes before the next
+
+358
+00:20:40,880 --> 00:20:42,080
+line of code runs.
+
+359
+00:20:42,080 --> 00:20:45,360
+But as we see now with async void, that's just not the case.
+
+360
+00:20:45,360 --> 00:20:47,520
+So this is all bad.
+
+361
+00:20:48,080 --> 00:20:50,440
+We don't want any of this.
+
+362
+00:20:50,440 --> 00:20:55,240
+You want to avoid async void for all of these reasons, especially because eventually,
+
+363
+00:20:55,240 --> 00:20:56,800
+somebody news going to join your team.
+
+364
+00:20:56,800 --> 00:21:01,080
+And if you have a new junior developer who doesn't understand all this, and they're going
+
+365
+00:21:01,080 --> 00:21:04,680
+to start copy-pasting your code, or they're going to be reusing your code, and they're going
+
+366
+00:21:04,680 --> 00:21:06,840
+to run into all these same problems we just talked about.
+
+367
+00:21:06,840 --> 00:21:09,560
+So let's avoid async void here.
+
+368
+00:21:09,560 --> 00:21:11,640
+And what's something else we can do?
+
+369
+00:21:11,640 --> 00:21:13,760
+Because I don't want to do any of this.
+
+370
+00:21:13,760 --> 00:21:18,160
+I don't want to risk future bugs, future work for me.
+
+371
+00:21:18,160 --> 00:21:19,760
+That sounds terrible.
+
+372
+00:21:19,760 --> 00:21:26,240
+Well, what I've done is I've actually created an extension method called Safe Fire and Forget.
+
+373
+00:21:26,240 --> 00:21:31,080
+Now this is available in a Nuke package that I named Async-8Best Practices.
+
+374
+00:21:31,080 --> 00:21:38,400
+And if we dive into the implementation here under the hood, this is literally just an async
+
+375
+00:21:38,400 --> 00:21:39,600
+void method.
+
+376
+00:21:40,320 --> 00:21:46,600
+This has all the guard rails in place to follow all the best practices where if we do use async
+
+377
+00:21:46,600 --> 00:21:48,080
+void, this is what we got to do.
+
+378
+00:21:48,080 --> 00:21:52,160
+So for example, one of the things if you do use an async void method, you have to wrap
+
+379
+00:21:52,160 --> 00:21:54,280
+everything inside of a tri-catch block.
+
+380
+00:21:54,280 --> 00:22:00,160
+Because again, anything, any method calling your async void method will almost never be
+
+381
+00:22:00,160 --> 00:22:02,960
+able to catch an exception.
+
+382
+00:22:02,960 --> 00:22:05,640
+So here, there we go.
+
+383
+00:22:05,640 --> 00:22:08,920
+So here we're going to still await the task.
+
+384
+00:22:08,920 --> 00:22:12,120
+If it throws an exception, we can actually catch it.
+
+385
+00:22:12,120 --> 00:22:15,200
+And with Safe Fire and Forget, we can even do whatever we want.
+
+386
+00:22:15,200 --> 00:22:20,280
+So maybe we just say trace right line as a simple example here, handle that exception.
+
+387
+00:22:20,280 --> 00:22:26,320
+And the best part is by having it as an extension method, it's very explicit in your face.
+
+388
+00:22:26,320 --> 00:22:30,680
+It says, hey, I know this task is going to run in the background.
+
+389
+00:22:30,680 --> 00:22:31,680
+That's what I want.
+
+390
+00:22:31,680 --> 00:22:36,920
+It's very much signal to the other developers on your team is, I want this to run in the
+
+391
+00:22:36,920 --> 00:22:38,680
+background and that's okay.
+
+392
+00:22:38,680 --> 00:22:40,680
+And hey, let's handle the exceptions if we need it.
+
+393
+00:22:40,680 --> 00:22:46,880
+So I know I'm a little biased because I created the NuGet package, but it is available on NuGet
+
+394
+00:22:46,880 --> 00:22:48,920
+and it does have over 3 million downloads.
+
+395
+00:22:48,920 --> 00:22:51,400
+So hopefully I'm doing something right.
+
+396
+00:22:51,400 --> 00:22:54,800
+Last I checked, there's some crazy companies like I think I saw in Mozilla's using it now,
+
+397
+00:22:54,800 --> 00:22:56,120
+which is wild.
+
+398
+00:22:56,120 --> 00:23:00,640
+This is actually just a NuGet package I made for a talk back in 2018.
+
+399
+00:23:00,640 --> 00:23:03,280
+And here we are, still talking about it.
+
+400
+00:23:03,280 --> 00:23:05,480
+So that's to do is done.
+
+401
+00:23:05,480 --> 00:23:06,480
+Let's scroll down.
+
+402
+00:23:06,480 --> 00:23:07,480
+What else do we have here?
+
+403
+00:23:07,480 --> 00:23:08,480
+All right.
+
+404
+00:23:08,480 --> 00:23:11,320
+So now we're in our async task method called refresh.
+
+405
+00:23:11,320 --> 00:23:14,360
+Again, this is what gets called when the user does a pull to refresh.
+
+406
+00:23:14,360 --> 00:23:19,920
+Now the first thing I want to mention is this method is an async task method and you'll
+
+407
+00:23:19,920 --> 00:23:23,240
+see the parameter cancellation token.
+
+408
+00:23:23,240 --> 00:23:29,360
+As good C sharp developers, anytime we have an asynchronous method, so anything that returns
+
+409
+00:23:29,360 --> 00:23:33,240
+to this task, value task, I think a new mobile will touch on those in just a minute, you
+
+410
+00:23:33,240 --> 00:23:38,040
+always want to allow the user or the other developer consuming this to pass into cancellation
+
+411
+00:23:38,040 --> 00:23:42,080
+token because we don't know how long this task is going to run.
+
+412
+00:23:42,080 --> 00:23:46,120
+Or rather, if you wrote this code, I don't know how long your task is going to run.
+
+413
+00:23:46,120 --> 00:23:51,760
+And specifically for my mobile app, mobile apps or mobile devices are notorious for having
+
+414
+00:23:51,760 --> 00:23:53,080
+bad internet connectivity.
+
+415
+00:23:53,080 --> 00:23:57,720
+So if one of my users is on a bus and there's phone switching between towers going through
+
+416
+00:23:57,720 --> 00:24:02,160
+tunnels and it's going to take two minutes to load all these stories, I don't want my
+
+417
+00:24:02,160 --> 00:24:06,720
+user sitting there watching this task just spend for two minutes.
+
+418
+00:24:06,720 --> 00:24:10,400
+Like, I'm just going to cancel the task and let the user know, hey, sorry, looks like
+
+419
+00:24:10,400 --> 00:24:13,000
+you got a poor internet connection, try again later.
+
+420
+00:24:13,000 --> 00:24:16,560
+Because otherwise, what's going to happen is the user blames me and gives me a one-star
+
+421
+00:24:16,560 --> 00:24:18,680
+review because I couldn't cancel your task.
+
+422
+00:24:18,680 --> 00:24:22,720
+So as a good C sharp developer, we're always going to allow or always going to have cancellation
+
+423
+00:24:22,720 --> 00:24:24,840
+token as a parameter here.
+
+424
+00:24:24,840 --> 00:24:28,440
+And in fact, that's what we're getting yelled at for here.
+
+425
+00:24:28,440 --> 00:24:33,120
+And fortunately, IntelliSense says, hey, don't worry, the smart folks in Microsoft and
+
+426
+00:24:33,120 --> 00:24:36,080
+Task.delay also allow you to pass in your token.
+
+427
+00:24:36,080 --> 00:24:38,680
+But let's pretend they didn't, right?
+
+428
+00:24:38,680 --> 00:24:42,280
+Let's pretend we're using somebody else's library, we have no control over this and they
+
+429
+00:24:42,280 --> 00:24:44,960
+don't allow us to pass in the cancellation token.
+
+430
+00:24:44,960 --> 00:24:45,960
+What do we do?
+
+431
+00:24:45,960 --> 00:24:52,160
+Well, there's a cool extension method called weight async where we can pass in the cancellation
+
+432
+00:24:52,160 --> 00:24:53,160
+token here.
+
+433
+00:24:53,440 --> 00:24:58,520
+And essentially what this does, it bolts on that cancellation token to this task.
+
+434
+00:24:58,520 --> 00:25:04,240
+So even if there's a task where we can't pass in the token, we can still make sure to cancel
+
+435
+00:25:04,240 --> 00:25:06,000
+it by using weight async.
+
+436
+00:25:06,000 --> 00:25:07,880
+But there is a catch here.
+
+437
+00:25:07,880 --> 00:25:11,000
+And this is a really subtle thing.
+
+438
+00:25:11,000 --> 00:25:13,680
+And that is, if the task is already completed.
+
+439
+00:25:13,680 --> 00:25:15,280
+So I'm not going to keep this going.
+
+440
+00:25:15,280 --> 00:25:19,360
+I just want to explicitly show this as a completed task.
+
+441
+00:25:19,360 --> 00:25:25,240
+So if you're running a task and it has already completed, or sometimes async task methods
+
+442
+00:25:25,240 --> 00:25:27,000
+return task that completed.
+
+443
+00:25:27,000 --> 00:25:28,600
+Sometimes that's valid.
+
+444
+00:25:28,600 --> 00:25:31,360
+If the task is already completed, weight async will never run.
+
+445
+00:25:31,360 --> 00:25:37,080
+So this actually won't cancel the task because, well, it's already completed.
+
+446
+00:25:37,080 --> 00:25:42,920
+So sometimes if you know that the task might already be complete, you can bolt on weight
+
+447
+00:25:42,920 --> 00:25:43,920
+async.
+
+448
+00:25:43,920 --> 00:25:49,280
+But it might also be a good idea to just check to see if that tokens canceled anyways.
+
+449
+00:25:49,280 --> 00:25:56,880
+So the next line of code will cancel it anyways.
+
+450
+00:25:56,880 --> 00:26:01,720
+But for this app, in this example, let's put it all back because we don't need to worry
+
+451
+00:26:01,720 --> 00:26:05,280
+about any of that because we could just pass in our token happy days.
+
+452
+00:26:05,280 --> 00:26:06,280
+Okay.
+
+453
+00:26:06,280 --> 00:26:09,680
+So the next to do, we're awaiting top stories.
+
+454
+00:26:09,680 --> 00:26:12,480
+So we're getting the top stories from the hacker news API.
+
+455
+00:26:12,480 --> 00:26:17,720
+We're clearing the collection and then we're adding in the stories into a sorted collection
+
+456
+00:26:17,720 --> 00:26:18,720
+here.
+
+457
+00:26:18,720 --> 00:26:20,080
+This looks pretty good, right?
+
+458
+00:26:20,080 --> 00:26:21,240
+We're awaiting the task.
+
+459
+00:26:21,240 --> 00:26:22,840
+Like how could this be any better?
+
+460
+00:26:22,840 --> 00:26:26,440
+Well, let's again think about what's going on here.
+
+461
+00:26:26,440 --> 00:26:29,320
+So let's say thread one calls refresh.
+
+462
+00:26:29,320 --> 00:26:30,760
+Thread one comes all the way into here.
+
+463
+00:26:30,760 --> 00:26:33,240
+Eventually hits us away keyword returns.
+
+464
+00:26:33,240 --> 00:26:37,480
+Let's say get top stories is running on background thread and then when it's done, it goes back
+
+465
+00:26:37,480 --> 00:26:42,040
+to the calling thread and thread one jumps back in here to pick up where it left off.
+
+466
+00:26:42,040 --> 00:26:45,160
+But then thread one's going to enter this for each loop.
+
+467
+00:26:45,160 --> 00:26:48,160
+And what if there's a thousand stories in this top story list?
+
+468
+00:26:48,160 --> 00:26:51,160
+Well, now thread one has to iterate over all of them.
+
+469
+00:26:51,160 --> 00:26:56,160
+And in the meantime, what that means is thread one's busy, our app is frozen.
+
+470
+00:26:56,160 --> 00:26:59,160
+So again, our users are just going to be sitting staring at an app, trying to tap buttons,
+
+471
+00:26:59,160 --> 00:27:01,160
+trying to swipe, nothing's going to happen.
+
+472
+00:27:01,160 --> 00:27:06,160
+And again, we get a one star review and they force quit the app never to come back again.
+
+473
+00:27:06,160 --> 00:27:13,160
+So what we can do to improve this code right here is tack on configure await false.
+
+474
+00:27:13,160 --> 00:27:16,160
+So configure rate false is an extension method on tag.
+
+475
+00:27:16,160 --> 00:27:22,160
+Where we can tell .NET, hey, I don't care about returning to the calling thread.
+
+476
+00:27:22,160 --> 00:27:26,160
+Now, there will still be a thread switch when it's done.
+
+477
+00:27:26,160 --> 00:27:31,160
+But now if thread one kicks off this task, kicks off this method, I should say, comes in here
+
+478
+00:27:31,160 --> 00:27:36,160
+and hits the await keyword, thread one will return, get top stories, runs in the background thread.
+
+479
+00:27:36,160 --> 00:27:42,160
+And then when it's done, get top stories or rather .NET will say, okay, great.
+
+480
+00:27:42,160 --> 00:27:43,160
+Thanks, get top stories.
+
+481
+00:27:43,160 --> 00:27:48,160
+What thread called you? What was the calling thread that I should return to?
+
+482
+00:27:48,160 --> 00:27:50,160
+Well, configure await false says, don't even worry about it.
+
+483
+00:27:50,160 --> 00:27:56,160
+Just go to the thread pool and grab whatever threads available and then continue running the code down here.
+
+484
+00:27:56,160 --> 00:28:03,160
+So now, instead of returning back to thread one and maybe forcing thread one to do a thousand iterations in this four-reach loop,
+
+485
+00:28:03,160 --> 00:28:06,160
+a background thread will pick up where we left off.
+
+486
+00:28:06,160 --> 00:28:10,160
+And this is also nice because what if thread one's busy?
+
+487
+00:28:10,160 --> 00:28:16,160
+Like maybe the user scrolling vigorously and we need to return back to the calling thread.
+
+488
+00:28:16,160 --> 00:28:20,160
+Well, if thread one's busy, we also have to wait for it to free up.
+
+489
+00:28:20,160 --> 00:28:25,160
+So with configure await false, we get the benefit of not overworking the calling thread,
+
+490
+00:28:25,160 --> 00:28:33,160
+or rather not overworking the main thread, but also we don't have to wait for that calling thread to be finished, to be free.
+
+491
+00:28:33,160 --> 00:28:37,160
+Because it's just going to kick, it's going to pick up.
+
+492
+00:28:37,160 --> 00:28:42,160
+If any available thread from the thread pool.
+
+493
+00:28:42,160 --> 00:28:44,160
+So highly recommend configure await false.
+
+494
+00:28:44,160 --> 00:28:48,160
+And specifically in my world and the Donut Maui world and the mobile world,
+
+495
+00:28:48,160 --> 00:28:50,160
+we do everything in MVVM architecture.
+
+496
+00:28:50,160 --> 00:28:51,160
+So model view model.
+
+497
+00:28:51,160 --> 00:28:54,160
+If that means nothing to do you, that's fine.
+
+498
+00:28:54,160 --> 00:28:57,160
+As long as you remember the view, is where all your UI code lives.
+
+499
+00:28:57,160 --> 00:29:00,160
+And here where we are in the view model, this is all business logic.
+
+500
+00:29:00,160 --> 00:29:02,160
+So none of this code touches the UI.
+
+501
+00:29:02,160 --> 00:29:06,160
+So my rule of thumb is in the view model layer, I configure await false and everything.
+
+502
+00:29:06,160 --> 00:29:09,160
+In my services layer, I configure await false and everything.
+
+503
+00:29:09,160 --> 00:29:14,160
+And it does suck a little bit because you're going to start using configure await false,
+
+504
+00:29:14,160 --> 00:29:17,160
+probably 90, 95% of the time in your app.
+
+505
+00:29:17,160 --> 00:29:19,160
+And there's no way to change the default.
+
+506
+00:29:19,160 --> 00:29:22,160
+Because configure await true is just the default.
+
+507
+00:29:22,160 --> 00:29:25,160
+So if you do nothing, that's configure await true.
+
+508
+00:29:25,160 --> 00:29:27,160
+So if you don't need to return to the calling thread,
+
+509
+00:29:27,160 --> 00:29:31,160
+and in fact, if you do want to avoid overworking the UI thread,
+
+510
+00:29:31,160 --> 00:29:34,160
+configure await false is your best friend.
+
+511
+00:29:34,160 --> 00:29:39,160
+Now, something really cool that was recently added in .NET 8
+
+512
+00:29:39,160 --> 00:29:41,160
+are these configure await options.
+
+513
+00:29:41,160 --> 00:29:46,160
+So we have four enums here now that we can also play with.
+
+514
+00:29:46,160 --> 00:29:49,160
+So this first one, configure await options.none.
+
+515
+00:29:52,160 --> 00:29:54,160
+Whew, I should just copy face of that.
+
+516
+00:29:54,160 --> 00:29:55,160
+There we go.
+
+517
+00:29:55,160 --> 00:29:56,160
+So configure await options.none.
+
+518
+00:29:56,160 --> 00:30:01,160
+This is the same thing as configure await false.
+
+519
+00:30:01,160 --> 00:30:04,160
+It's a little unintuitive. The naming it none.
+
+520
+00:30:04,160 --> 00:30:08,160
+Probably not the best naming choice, but I've been on the other side of the naming battle.
+
+521
+00:30:08,160 --> 00:30:09,160
+It's hard. I get it.
+
+522
+00:30:09,160 --> 00:30:13,160
+But if you look at it, you'll also see continue on captured context.
+
+523
+00:30:13,160 --> 00:30:17,160
+And that one is the same as configure await true.
+
+524
+00:30:17,160 --> 00:30:20,160
+And you might start to be thinking, well, okay, I mean, that's cool,
+
+525
+00:30:20,160 --> 00:30:23,160
+but why are we just renaming things for no reason?
+
+526
+00:30:23,160 --> 00:30:26,160
+Well, the cool thing is here, there's, well, there's two more.
+
+527
+00:30:26,160 --> 00:30:27,160
+The way we haven't talked about yet.
+
+528
+00:30:27,160 --> 00:30:28,160
+But also, these are enums.
+
+529
+00:30:28,160 --> 00:30:29,160
+So we can chain these together.
+
+530
+00:30:30,160 --> 00:30:36,160
+So I can also say configure await options, continue on captured context, and force yielding.
+
+531
+00:30:36,160 --> 00:30:41,160
+So remember when we looked at the compiled code earlier, we said .NET first looks to see,
+
+532
+00:30:41,160 --> 00:30:43,160
+is that task already completed?
+
+533
+00:30:43,160 --> 00:30:45,160
+Because if it is, no thread switch. Great.
+
+534
+00:30:45,160 --> 00:30:47,160
+Optimization, we're going to keep rolling.
+
+535
+00:30:47,160 --> 00:30:51,160
+But maybe we still want to force a thread switch.
+
+536
+00:30:51,160 --> 00:30:55,160
+And this might seem a little bit weird, but I promise I've used this before,
+
+537
+00:30:55,160 --> 00:30:58,160
+or if you've ever used a, a wait task.yield.
+
+538
+00:30:58,160 --> 00:31:02,160
+Basically the same idea, because sometimes you need to update the UI.
+
+539
+00:31:02,160 --> 00:31:07,160
+You want to yield the UI thread so that can update something based on the result of the task,
+
+540
+00:31:07,160 --> 00:31:09,160
+whether it had already completed or not.
+
+541
+00:31:09,160 --> 00:31:16,160
+So we also get configure await options.forced yielding, which is essentially test.yield,
+
+542
+00:31:16,160 --> 00:31:18,160
+but in line, which is kind of cool.
+
+543
+00:31:18,160 --> 00:31:26,160
+And then the other one, which scares the pants off me, is configure await office.suppress throwing,
+
+544
+00:31:26,160 --> 00:31:28,160
+which what do we just talk about?
+
+545
+00:31:28,160 --> 00:31:32,160
+We always want to await every task, so we'll re-throw the exceptions so that we can handle it.
+
+546
+00:31:32,160 --> 00:31:34,160
+We want to do that as good C-sharp developers.
+
+547
+00:31:34,160 --> 00:31:37,160
+Well, now you can tell it, no, I don't care.
+
+548
+00:31:37,160 --> 00:31:39,160
+Don't re-throw any exception.
+
+549
+00:31:39,160 --> 00:31:47,160
+But first, before I go on a rant about this, I am getting yelled at here, and I want to show you why.
+
+550
+00:31:47,160 --> 00:31:51,160
+And it's because suppressed throwing only works in some scenarios. There we go.
+
+551
+00:31:51,160 --> 00:31:55,160
+So suppressed throwing is not supported, or rather is only supported,
+
+552
+00:31:55,160 --> 00:31:57,160
+with non-generic tasks.
+
+553
+00:31:57,160 --> 00:32:02,160
+So top stories returns a task of type, but list of story models.
+
+554
+00:32:02,160 --> 00:32:06,160
+So we can't actually use it here, but for something like task.delay,
+
+555
+00:32:06,160 --> 00:32:09,160
+it would actually be valid because this is just returning a task.
+
+556
+00:32:09,160 --> 00:32:14,160
+So, you know, it was suppressed throwing, actually speaking of task.delay,
+
+557
+00:32:14,160 --> 00:32:18,160
+like this is one of the places where I've used it in production code,
+
+558
+00:32:18,160 --> 00:32:23,160
+where I've said suppressed throwing, because, you know, if this token is canceled,
+
+559
+00:32:23,160 --> 00:32:27,160
+I really wanted to throw an exception here. Maybe, maybe not.
+
+560
+00:32:27,160 --> 00:32:34,160
+But the only other place where I've seen this as, we'll say a quasi-valid use case is,
+
+561
+00:32:34,160 --> 00:32:38,160
+let's say you have a bunch of tasks you're kicking off all at the same time,
+
+562
+00:32:38,160 --> 00:32:40,160
+and then you're just going to say, wait, task.delay.
+
+563
+00:32:40,160 --> 00:32:43,160
+So you're going to say, I've got five tasks, I want to wait them all at the same time.
+
+564
+00:32:43,160 --> 00:32:45,160
+So wait, task.delay.
+
+565
+00:32:45,160 --> 00:32:51,160
+But if one of those tasks throws an exception, that kicks out of your task.delay.
+
+566
+00:32:51,160 --> 00:32:55,160
+And doesn't allow the other tasks to complete. So if you want all the tasks to complete,
+
+567
+00:32:55,160 --> 00:32:59,160
+you could use suppressed throwing, but then remember to be a good C-sharp developer,
+
+568
+00:32:59,160 --> 00:33:03,160
+check each one of those tasks to see if it did fault, just in case,
+
+569
+00:33:03,160 --> 00:33:05,160
+so you can handle that exception.
+
+570
+00:33:05,160 --> 00:33:10,160
+Okay, so all that said, I'm just going to erase all this and go back to configureate false.
+
+571
+00:33:10,160 --> 00:33:14,160
+That's all I really want to do. I just want a little bit of that performance improvement here.
+
+572
+00:33:14,160 --> 00:33:18,160
+And that is good.
+
+573
+00:33:19,160 --> 00:33:23,160
+Oh, and I forgot to mention, we'll return back to this minimum refresh time task.
+
+574
+00:33:23,160 --> 00:33:27,160
+But if any of you are wondering why I'm doing this, I'm doing it.
+
+575
+00:33:27,160 --> 00:33:32,160
+It's kind of a little hack we do as mobile developers, where sometimes when you do a pull to refresh,
+
+576
+00:33:32,160 --> 00:33:37,160
+these values might get cached on an edge server, and they might come back within a couple hundred milliseconds.
+
+577
+00:33:37,160 --> 00:33:41,160
+And, you know, what, 300 milliseconds is how fast it takes to blink your eyes.
+
+578
+00:33:41,160 --> 00:33:46,160
+So literally, the user might not see that little spinning indicator or any of the animations happen.
+
+579
+00:33:46,160 --> 00:33:49,160
+And if that happens, then they're just going to keep pull over, fresh, shooting,
+
+580
+00:33:49,160 --> 00:33:53,160
+force our app to go out and make API calls a bunch of times.
+
+581
+00:33:53,160 --> 00:33:57,160
+So what I do is actually, I purposely slow down your app a little bit,
+
+582
+00:33:57,160 --> 00:34:02,160
+in this case, by two seconds, just to make sure you see that spinning indicator for a couple of seconds
+
+583
+00:34:02,160 --> 00:34:06,160
+so you don't start hammering my back end APIs.
+
+584
+00:34:06,160 --> 00:34:09,160
+Okay, moving on to the next to do.
+
+585
+00:34:09,160 --> 00:34:11,160
+Alright, so finally down here, right.
+
+586
+00:34:11,160 --> 00:34:14,160
+So speaking of that minimum refresh time task.
+
+587
+00:34:14,160 --> 00:34:19,160
+So one thing we're getting yelled at, which is kind of cool, is we want to put the token in.
+
+588
+00:34:19,160 --> 00:34:23,160
+Great. But we're using .weight here.
+
+589
+00:34:23,160 --> 00:34:25,160
+.weight's terrible. Don't ever use it.
+
+590
+00:34:25,160 --> 00:34:32,160
+I kind of wish it didn't exist, although it kind of has to .weight is what we call a,
+
+591
+00:34:32,160 --> 00:34:34,160
+it's a blocking call.
+
+592
+00:34:34,160 --> 00:34:39,160
+So the obvious solution here is we just, we just need to await that task.
+
+593
+00:34:39,160 --> 00:34:43,160
+So this is, there we go.
+
+594
+00:34:43,160 --> 00:34:50,160
+So, you know, fun fact, yes, you can use a weight, async a weight in the try catch and finally block.
+
+595
+00:34:50,160 --> 00:34:54,160
+But the reason .weight is bad is instead of the await keyword,
+
+596
+00:34:54,160 --> 00:34:58,160
+which releases the calling thread if the task hasn't yet completed,
+
+597
+00:34:58,160 --> 00:35:01,160
+.weight says, uh-uh, calling thread, you stay right here.
+
+598
+00:35:01,160 --> 00:35:05,160
+You're not going anywhere, but I'm still running this code on a background thread.
+
+599
+00:35:05,160 --> 00:35:11,160
+And so if you think about it, like, if that's thread one that we're holding hostage with .weight,
+
+600
+00:35:11,160 --> 00:35:14,160
+well, again, we're just freezing our app again.
+
+601
+00:35:14,160 --> 00:35:18,160
+But maybe you're thinking, okay, whatever, like, I don't write mobile apps.
+
+602
+00:35:18,160 --> 00:35:22,160
+I just do backend APIs. I never have to worry about a UI who cares about thread one.
+
+603
+00:35:22,160 --> 00:35:29,160
+I don't. Well, .weight's still bad, because now you're using two threads every time you should only be using one.
+
+604
+00:35:29,160 --> 00:35:34,160
+And so your backend API is going to reach what we call thread pool exhaustion even faster,
+
+605
+00:35:34,160 --> 00:35:38,160
+because you're essentially doubling the amount of threads that you should be using.
+
+606
+00:35:38,160 --> 00:35:41,160
+And so that way it's bad for everybody. Don't use it.
+
+607
+00:35:41,160 --> 00:35:43,160
+Avoid it if you can.
+
+608
+00:35:43,160 --> 00:35:46,160
+And just instead, await the task.
+
+609
+00:35:46,160 --> 00:35:50,160
+Okay. So the next refactor, get top stories here.
+
+610
+00:35:50,160 --> 00:35:52,160
+This one.
+
+611
+00:35:52,160 --> 00:35:55,160
+This one looks a little weird and it kind of is a little weird.
+
+612
+00:35:55,160 --> 00:35:59,160
+And it's kind of how the hacker API news, hacker news API works,
+
+613
+00:35:59,160 --> 00:36:02,160
+is that I have to first get the top story IDs.
+
+614
+00:36:02,160 --> 00:36:05,160
+And then once I have those top story IDs,
+
+615
+00:36:05,160 --> 00:36:08,160
+I get iterative API calls to get the information about the stories.
+
+616
+00:36:08,160 --> 00:36:11,160
+I wish they would just let me get the stories in one API call.
+
+617
+00:36:11,160 --> 00:36:14,160
+I don't understand why I have to make so many API calls to hacker news,
+
+618
+00:36:14,160 --> 00:36:18,160
+just for this very simple app, but that's the design they gave me.
+
+619
+00:36:18,160 --> 00:36:20,160
+So what we're doing here is we're getting the top story IDs.
+
+620
+00:36:20,160 --> 00:36:24,160
+And then one by one, we're going out and getting each story.
+
+621
+00:36:24,160 --> 00:36:28,160
+And this isn't great, because we're doing everything one by one.
+
+622
+00:36:28,160 --> 00:36:31,160
+You know, what we should be doing is getting all of the IDs,
+
+623
+00:36:31,160 --> 00:36:34,160
+or getting all the top stories at the same time.
+
+624
+00:36:34,160 --> 00:36:37,160
+So what I'm going to do is I'm going to jump over here
+
+625
+00:36:37,160 --> 00:36:43,160
+and I'm going to copy, paste some code from our good async-weight practices view model.
+
+626
+00:36:43,160 --> 00:36:51,160
+And this code uses iAsync-in-numerable.
+
+627
+00:36:51,160 --> 00:36:52,160
+And this is really cool.
+
+628
+00:36:52,160 --> 00:36:55,160
+Maybe you've never created an iAsync-in-numerable method before,
+
+629
+00:36:55,160 --> 00:36:59,160
+but I'll bet you've used it because with iAsync-in-numerable,
+
+630
+00:36:59,160 --> 00:37:02,160
+it unlocks the await for each loop.
+
+631
+00:37:02,160 --> 00:37:11,160
+So now we can say await for each var top story in get top stories.
+
+632
+00:37:16,160 --> 00:37:17,160
+There we go.
+
+633
+00:37:17,160 --> 00:37:24,160
+And then this code here, where we add in that story to the list,
+
+634
+00:37:24,160 --> 00:37:25,160
+we'll bump it up there.
+
+635
+00:37:25,160 --> 00:37:30,160
+And we should clear, clear list before we iterate,
+
+636
+00:37:30,160 --> 00:37:33,160
+and then delete all this code we don't need anymore.
+
+637
+00:37:33,160 --> 00:37:34,160
+So...
+
+638
+00:37:34,160 --> 00:37:37,160
+So I'm going to put in the whole loop into a thread.
+
+639
+00:37:37,160 --> 00:37:38,160
+Sorry?
+
+640
+00:37:38,160 --> 00:37:42,160
+Yes, and in the whole loop into a single thread.
+
+641
+00:37:42,160 --> 00:37:43,160
+Let's hang on on questions.
+
+642
+00:37:43,160 --> 00:37:46,160
+I'm sorry, I truly don't know what you're asking.
+
+643
+00:37:46,160 --> 00:37:48,160
+But...
+
+644
+00:37:48,160 --> 00:37:53,160
+So what we're doing here is now in get top stories,
+
+645
+00:37:53,160 --> 00:37:56,160
+we still have to get all the top story IDs.
+
+646
+00:37:56,160 --> 00:38:00,160
+But then what I do is I create a list of tasks,
+
+647
+00:38:00,160 --> 00:38:05,160
+and then I kick off, get story API call,
+
+648
+00:38:05,160 --> 00:38:07,160
+for every top story ID that I had.
+
+649
+00:38:07,160 --> 00:38:13,160
+So essentially, I'm firing off all these tasks at the same time.
+
+650
+00:38:13,160 --> 00:38:17,160
+And then down here, we're calling task.windeach.
+
+651
+00:38:17,160 --> 00:38:20,160
+So this is a cool new API introduced in .net9,
+
+652
+00:38:20,160 --> 00:38:21,160
+task.windeach.
+
+653
+00:38:21,160 --> 00:38:25,160
+So it just takes in our list of tasks,
+
+654
+00:38:25,160 --> 00:38:29,160
+and anytime or as soon as one of these tasks has completed,
+
+655
+00:38:29,160 --> 00:38:33,160
+then we can enter this await for each loop,
+
+656
+00:38:33,160 --> 00:38:36,160
+where let's rewrite this code just a little bit.
+
+657
+00:38:36,160 --> 00:38:39,160
+We'll say top story equals...
+
+658
+00:38:43,160 --> 00:38:45,160
+There we go.
+
+659
+00:38:45,160 --> 00:38:46,160
+That's a little easier to look at.
+
+660
+00:38:46,160 --> 00:38:49,160
+So basically, as soon as any of those are done,
+
+661
+00:38:49,160 --> 00:38:51,160
+it'll yield return the result.
+
+662
+00:38:51,160 --> 00:38:54,160
+Now this yield return, maybe you've never used it before,
+
+663
+00:38:54,160 --> 00:38:56,160
+maybe you've used it in IANumerable.
+
+664
+00:38:56,160 --> 00:38:58,160
+Yield return doesn't mean we're exiting this method.
+
+665
+00:38:58,160 --> 00:39:01,160
+It doesn't mean we're returning out of this method completely.
+
+666
+00:39:01,160 --> 00:39:04,160
+Essentially, means we're temporarily yielding
+
+667
+00:39:04,160 --> 00:39:07,160
+to whoever's calling this method to give this value.
+
+668
+00:39:07,160 --> 00:39:09,160
+So really what's going on here is,
+
+669
+00:39:09,160 --> 00:39:13,160
+as soon as one of these stories is finished downloading from the API,
+
+670
+00:39:13,160 --> 00:39:17,160
+we yield return, which means .net comes into here,
+
+671
+00:39:17,160 --> 00:39:19,160
+and then enters this await for each loop,
+
+672
+00:39:19,160 --> 00:39:21,160
+where it adds that top story to our list.
+
+673
+00:39:21,160 --> 00:39:25,160
+So as the results come in, I'm able to show that on the screen,
+
+674
+00:39:25,160 --> 00:39:29,160
+whereas before, the users just sit in there for like 20 seconds,
+
+675
+00:39:29,160 --> 00:39:32,160
+looking at a spinning indicator, seeing nothing change.
+
+676
+00:39:32,160 --> 00:39:36,160
+Whereas now, we can feed them and stream them the data as it comes in.
+
+677
+00:39:36,160 --> 00:39:39,160
+So even if it takes the same amount of time to get the data,
+
+678
+00:39:39,160 --> 00:39:41,160
+it feels like it takes less time,
+
+679
+00:39:41,160 --> 00:39:44,160
+and users can see those articles coming in,
+
+680
+00:39:44,160 --> 00:39:47,160
+and they can tap on them as they complete.
+
+681
+00:39:47,160 --> 00:39:50,160
+So it's a really, really cool stuff with IANumerable.
+
+682
+00:39:50,160 --> 00:39:53,160
+But there's a couple of things in here I want to call out,
+
+683
+00:39:53,160 --> 00:39:57,160
+the first thing being this enumerator cancellation attribute.
+
+684
+00:39:57,160 --> 00:40:01,160
+So if we didn't have it, we do get yelled at, which is good.
+
+685
+00:40:01,160 --> 00:40:06,160
+But what it does is it takes this cancellation token,
+
+686
+00:40:06,160 --> 00:40:11,160
+and it actually passes it down into the low level framework iterator.
+
+687
+00:40:11,160 --> 00:40:15,160
+So what does that mean? Well, more specifically,
+
+688
+00:40:15,160 --> 00:40:18,160
+what that means is every time this for-each-loop iterates,
+
+689
+00:40:18,160 --> 00:40:21,160
+.NET will automatically check this token for me.
+
+690
+00:40:21,160 --> 00:40:25,160
+So I never have to see if this token's been canceled,
+
+691
+00:40:25,160 --> 00:40:27,160
+because every time this loop iterates,
+
+692
+00:40:27,160 --> 00:40:30,160
+thanks to that enumerator cancellation attribute,
+
+693
+00:40:30,160 --> 00:40:32,160
+.NET's going to check it for me.
+
+694
+00:40:32,160 --> 00:40:35,160
+If we didn't have it here, then we would have to do,
+
+695
+00:40:35,160 --> 00:40:38,160
+we would want to do something like,
+
+696
+00:40:39,160 --> 00:40:42,160
+like this downer code, checking that token all the time.
+
+697
+00:40:42,160 --> 00:40:46,160
+But we don't have to, because we're using enumerator cancellation.
+
+698
+00:40:47,160 --> 00:40:51,160
+The other cool thing, or the other thing I want to highlight here for you,
+
+699
+00:40:51,160 --> 00:40:55,160
+is inside of this, test went each.
+
+700
+00:40:55,160 --> 00:40:58,160
+So again, this is a new API that just came to us in .NET 9.
+
+701
+00:40:58,160 --> 00:41:02,160
+And you might think, just based on every other method,
+
+702
+00:41:02,160 --> 00:41:05,160
+we've looked at today, is that we would pass in the token here.
+
+703
+00:41:05,160 --> 00:41:08,160
+But as you can see, you can't.
+
+704
+00:41:08,160 --> 00:41:12,160
+And that's because the way you bolt on cancellation tokens to test that went each,
+
+705
+00:41:12,160 --> 00:41:14,160
+is with this extension method.
+
+706
+00:41:15,160 --> 00:41:17,160
+And yes, you can also say configure await fall.
+
+707
+00:41:17,160 --> 00:41:20,160
+Things start getting a little long here,
+
+708
+00:41:20,160 --> 00:41:22,160
+but it's really, really cool.
+
+709
+00:41:22,160 --> 00:41:24,160
+It's for a really nice user experience,
+
+710
+00:41:24,160 --> 00:41:26,160
+so they can see the data coming in in real time,
+
+711
+00:41:26,160 --> 00:41:29,160
+and they don't have to just stare at a blank app.
+
+712
+00:41:29,160 --> 00:41:33,160
+Okay, so now let's refactor this Git story method.
+
+713
+00:41:33,160 --> 00:41:36,160
+This is the method that calls a hacker news API,
+
+714
+00:41:36,160 --> 00:41:38,160
+pulls down that story that we're looking for,
+
+715
+00:41:38,160 --> 00:41:40,160
+and we're using Async a way.
+
+716
+00:41:40,160 --> 00:41:43,160
+We could probably do a configure await false here.
+
+717
+00:41:43,160 --> 00:41:45,160
+It's pretty good, you know?
+
+718
+00:41:45,160 --> 00:41:47,160
+What could we do to improve this?
+
+719
+00:41:47,160 --> 00:41:49,160
+Well, again, let's think about what's happening here.
+
+720
+00:41:49,160 --> 00:41:51,160
+So the calling thread enters this method.
+
+721
+00:41:51,160 --> 00:41:54,160
+So let's say thread five enters Git story,
+
+722
+00:41:54,160 --> 00:41:56,160
+thread five hits you await keyword.
+
+723
+00:41:56,160 --> 00:41:57,160
+So it returns.
+
+724
+00:41:57,160 --> 00:41:59,160
+This is going to run on a background thread.
+
+725
+00:41:59,160 --> 00:42:02,160
+And then when it's done, we're going to switch back to,
+
+726
+00:42:02,160 --> 00:42:04,160
+we're going to do another thread switch.
+
+727
+00:42:04,160 --> 00:42:08,160
+And we've just had multiple thread switches inside of this method,
+
+728
+00:42:08,160 --> 00:42:10,160
+which isn't terrible.
+
+729
+00:42:10,160 --> 00:42:12,160
+But if we look a little closer,
+
+730
+00:42:12,160 --> 00:42:18,160
+we can see that Git story returns a type task of type story model.
+
+731
+00:42:18,160 --> 00:42:20,160
+Whoops, there we go.
+
+732
+00:42:20,160 --> 00:42:22,160
+A task of type story model.
+
+733
+00:42:22,160 --> 00:42:27,160
+And this method called Git story is also returning a task of type story model.
+
+734
+00:42:27,160 --> 00:42:32,160
+So what we can do, because we're only using a wait keyword here in the return statement,
+
+735
+00:42:32,160 --> 00:42:34,160
+we can actually get rid of a wait,
+
+736
+00:42:34,160 --> 00:42:37,160
+and we can get rid of Async, and just return the task.
+
+737
+00:42:37,160 --> 00:42:42,160
+So that saves us a thread switch, makes our code performance improved just a little bit more.
+
+738
+00:42:42,160 --> 00:42:46,160
+And it essentially defers that thread switching to now,
+
+739
+00:42:46,160 --> 00:42:49,160
+whoever's calling this method, Git story.
+
+740
+00:42:49,160 --> 00:42:52,160
+Okay, so one more refactor down here.
+
+741
+00:42:52,160 --> 00:42:55,160
+We have the GitHub story IDs,
+
+742
+00:42:55,160 --> 00:42:58,160
+whole talk after, we run out of time already.
+
+743
+00:42:58,160 --> 00:43:01,160
+So GitHub story IDs,
+
+744
+00:43:01,160 --> 00:43:03,160
+it kind of looks the same, right?
+
+745
+00:43:03,160 --> 00:43:06,160
+The only place we're using the wait keyword is in the return statement.
+
+746
+00:43:06,160 --> 00:43:10,160
+So it looks like Git top story IDs has the same method signature.
+
+747
+00:43:10,160 --> 00:43:14,160
+And so yeah, why not just get rid of Async, get rid of a wait.
+
+748
+00:43:14,160 --> 00:43:17,160
+You know, we got to do Tasta from result here,
+
+749
+00:43:17,160 --> 00:43:19,160
+but that's not too bad.
+
+750
+00:43:19,160 --> 00:43:21,160
+And has a performance improvement, right?
+
+751
+00:43:21,160 --> 00:43:23,160
+Well, this is actually a trick question,
+
+752
+00:43:23,160 --> 00:43:27,160
+because this is actually inside of a tri-catch block.
+
+753
+00:43:27,160 --> 00:43:31,160
+And so if we were to return the task, we would exit this method.
+
+754
+00:43:31,160 --> 00:43:34,160
+We would leave this method, we would leave the tri-catch block,
+
+755
+00:43:34,160 --> 00:43:38,160
+meaning if this did throw an exception, we would never catch it here.
+
+756
+00:43:38,160 --> 00:43:40,160
+So this is actually a bit of a trick question.
+
+757
+00:43:40,160 --> 00:43:43,160
+We do want to keep return await in these scenarios,
+
+758
+00:43:43,160 --> 00:43:46,160
+where we are wrapping our code inside of a tri-catch block,
+
+759
+00:43:46,160 --> 00:43:48,160
+or for disposing of anything.
+
+760
+00:43:48,160 --> 00:43:52,160
+But what we can do here is instead of using task,
+
+761
+00:43:52,160 --> 00:43:55,160
+we could use value task.
+
+762
+00:43:55,160 --> 00:43:57,160
+Now, value task is very similar to task,
+
+763
+00:43:57,160 --> 00:44:01,160
+but task is a reference type, and value task is a value type.
+
+764
+00:44:01,160 --> 00:44:04,160
+So value task lives on the stack,
+
+765
+00:44:04,160 --> 00:44:06,160
+whereas reference types live on the heap.
+
+766
+00:44:06,160 --> 00:44:08,160
+And if we look closely at this method here,
+
+767
+00:44:08,160 --> 00:44:12,160
+the first thing it does, it looks to see if is the data recent.
+
+768
+00:44:12,160 --> 00:44:16,160
+So if we've already pulled the top story IDs within the past hour,
+
+769
+00:44:16,160 --> 00:44:18,160
+we don't need to make another API call, right?
+
+770
+00:44:18,160 --> 00:44:20,160
+We can just grab the ones we already got.
+
+771
+00:44:20,160 --> 00:44:21,160
+It's fine.
+
+772
+00:44:21,160 --> 00:44:25,160
+But the first time this method runs, it's not going to have any data.
+
+773
+00:44:25,160 --> 00:44:28,160
+So the first time it runs, we're going to call that a wait keyword,
+
+774
+00:44:28,160 --> 00:44:29,160
+and go get the top stories.
+
+775
+00:44:29,160 --> 00:44:32,160
+So the second time it runs, we're not going to use the wait keyword.
+
+776
+00:44:32,160 --> 00:44:34,160
+And the third time it runs, we're not going to use the wait keyword
+
+777
+00:44:34,160 --> 00:44:35,160
+and the fourth time it runs.
+
+778
+00:44:35,160 --> 00:44:37,160
+So another way of saying that is,
+
+779
+00:44:37,160 --> 00:44:39,160
+this is the hot path of our method,
+
+780
+00:44:39,160 --> 00:44:42,160
+and our hot path does not use the wait keyword.
+
+781
+00:44:42,160 --> 00:44:47,160
+So if you have any code where the hot path does not use the wait keyword,
+
+782
+00:44:47,160 --> 00:44:49,160
+you can get a little bit of a performance booths
+
+783
+00:44:49,160 --> 00:44:53,160
+by using value task, because you don't have to do all the initialization
+
+784
+00:44:53,160 --> 00:44:55,160
+of building up a task and putting on the heap,
+
+785
+00:44:55,160 --> 00:44:57,160
+because that's more expensive,
+
+786
+00:44:57,160 --> 00:45:00,160
+because it's pushing onto the top of the stack, just O of 1.
+
+787
+00:45:00,160 --> 00:45:02,160
+So get a little performance improvement here.
+
+788
+00:45:02,160 --> 00:45:04,160
+Now, they're not exactly the same.
+
+789
+00:45:04,160 --> 00:45:06,160
+There's a couple of limitations of value task.
+
+790
+00:45:06,160 --> 00:45:08,160
+You can't pass around a value task.
+
+791
+00:45:08,160 --> 00:45:10,160
+You can't reuse a value task,
+
+792
+00:45:10,160 --> 00:45:13,160
+whereas you can do both of those things with task.
+
+793
+00:45:13,160 --> 00:45:18,160
+But if you just remember that having a hot path of a method
+
+794
+00:45:18,160 --> 00:45:20,160
+that doesn't use the wait keyword,
+
+795
+00:45:20,160 --> 00:45:23,160
+and just returns a value task instead,
+
+796
+00:45:23,160 --> 00:45:24,160
+you can just await it.
+
+797
+00:45:24,160 --> 00:45:27,160
+So happy days, get a nice little performance improvement here.
+
+798
+00:45:27,160 --> 00:45:30,160
+All right.
+
+799
+00:45:33,160 --> 00:45:36,160
+So, no, I threw a lot of stuff at you.
+
+800
+00:45:36,160 --> 00:45:37,160
+Let's sum it up.
+
+801
+00:45:37,160 --> 00:45:40,160
+Let's talk about these async-await best practices.
+
+802
+00:45:40,160 --> 00:45:42,160
+So never use.wait, never use.result.
+
+803
+00:45:42,160 --> 00:45:44,160
+They're both bad, they're both blocking.
+
+804
+00:45:44,160 --> 00:45:45,160
+Like we talked about earlier.
+
+805
+00:45:45,160 --> 00:45:47,160
+If you use.wait or.result,
+
+806
+00:45:47,160 --> 00:45:50,160
+it blocks the calling thread from returning.
+
+807
+00:45:50,160 --> 00:45:54,160
+Meanwhile, running all that code still on a background thread.
+
+808
+00:45:54,160 --> 00:45:56,160
+So you're using two threads.
+
+809
+00:45:56,160 --> 00:45:59,160
+We only need one and you risk locking up the UI thread.
+
+810
+00:45:59,160 --> 00:46:01,160
+So we should always just use async-await.
+
+811
+00:46:01,160 --> 00:46:04,160
+But to be fair, there are still some scenarios,
+
+812
+00:46:04,160 --> 00:46:07,160
+even in 2025, where we can't use async-await.
+
+813
+00:46:07,160 --> 00:46:11,160
+Like for me, usually I see those when I have to implement an interface
+
+814
+00:46:11,160 --> 00:46:13,160
+that has a method that just returns a bool.
+
+815
+00:46:13,160 --> 00:46:15,160
+You know, I can't, not a task of bool.
+
+816
+00:46:15,160 --> 00:46:16,160
+I can't await it.
+
+817
+00:46:16,160 --> 00:46:19,160
+So my recommendation there is you can actually replace
+
+818
+00:46:19,160 --> 00:46:23,160
+both.wait and.result with these two methods string together,
+
+819
+00:46:23,160 --> 00:46:25,160
+get a waiter, get result.
+
+820
+00:46:25,160 --> 00:46:27,160
+They actually do the exact same thing.
+
+821
+00:46:27,160 --> 00:46:29,160
+Get a waiter, get result is still just as bad.
+
+822
+00:46:29,160 --> 00:46:30,160
+It's blocking.
+
+823
+00:46:30,160 --> 00:46:32,160
+We shouldn't use it if we can just await it.
+
+824
+00:46:32,160 --> 00:46:34,160
+But the reason get a waiter, get results a little bit better
+
+825
+00:46:34,160 --> 00:46:37,160
+is if an exception gets thrown in that task,
+
+826
+00:46:37,160 --> 00:46:40,160
+get a waiter, get results, throws our exception.
+
+827
+00:46:40,160 --> 00:46:46,160
+So whereas if I use the.waiter.result keyword and exceptions thrown,
+
+828
+00:46:46,160 --> 00:46:49,160
+it throws a system.aggregate exception,
+
+829
+00:46:49,160 --> 00:46:52,160
+which is an exception that holds exceptions inside of it.
+
+830
+00:46:52,160 --> 00:46:55,160
+And so if you've ever had to debug those, you have to know you have to go
+
+831
+00:46:55,160 --> 00:46:57,160
+one level deeper into your call stack.
+
+832
+00:46:57,160 --> 00:47:00,160
+They're a little tough, especially for junior developers to figure out.
+
+833
+00:47:00,160 --> 00:47:02,160
+So don't use.wait, don't use.result.
+
+834
+00:47:02,160 --> 00:47:04,160
+But if you have to get a waiter, get result.
+
+835
+00:47:04,160 --> 00:47:06,160
+Well, at least give you a better exception,
+
+836
+00:47:06,160 --> 00:47:10,160
+although you're still blocking, you're still using too many, too many threads
+
+837
+00:47:10,160 --> 00:47:12,160
+when you shouldn't be.
+
+838
+00:47:12,160 --> 00:47:13,160
+Fire and forget tasks.
+
+839
+00:47:13,160 --> 00:47:16,160
+Again, I know I'm biased, but you can use.safetyonforget.
+
+840
+00:47:16,160 --> 00:47:19,160
+It's available on New Git as async.waitbest practices.
+
+841
+00:47:19,160 --> 00:47:22,160
+It's also an open source MIT license library.
+
+842
+00:47:22,160 --> 00:47:26,160
+If you just want to copy that little extension method,
+
+843
+00:47:26,160 --> 00:47:27,160
+you're more than welcome to.
+
+844
+00:47:27,160 --> 00:47:29,160
+But again, avoid async void.
+
+845
+00:47:29,160 --> 00:47:30,160
+It is dangerous.
+
+846
+00:47:30,160 --> 00:47:32,160
+I think we all know why now.
+
+847
+00:47:32,160 --> 00:47:36,160
+But what's nice with.safetyonforget is you have this explicit
+
+848
+00:47:36,160 --> 00:47:40,160
+in your face call that says, I know this is going to run in the background.
+
+849
+00:47:40,160 --> 00:47:43,160
+And I know my code is going to continue.
+
+850
+00:47:43,160 --> 00:47:46,160
+So you can avoid implementing async void.
+
+851
+00:47:46,160 --> 00:47:48,160
+We can avoid return-to-wait.
+
+852
+00:47:48,160 --> 00:47:52,160
+So if you only place your method where you're using the await keyword
+
+853
+00:47:52,160 --> 00:47:56,160
+is in the return statement, you can just instead return the task.
+
+854
+00:47:56,160 --> 00:47:59,160
+But remember, if you're inside of a tri-catch block,
+
+855
+00:47:59,160 --> 00:48:01,160
+you definitely still want to wait that task.
+
+856
+00:48:01,160 --> 00:48:02,160
+So you can catch the exception.
+
+857
+00:48:02,160 --> 00:48:05,160
+Or if you're inside of a using, like a disposable block,
+
+858
+00:48:05,160 --> 00:48:08,160
+you definitely still want to return to wait because you don't want
+
+859
+00:48:08,160 --> 00:48:11,160
+to dispose of an object that you're using inside of that method.
+
+860
+00:48:11,160 --> 00:48:16,160
+So we can avoid return-to-wait, except in those special cases.
+
+861
+00:48:16,160 --> 00:48:18,160
+You don't like to configure-wait false.
+
+862
+00:48:18,160 --> 00:48:20,160
+So if you don't need to return to the calling thread,
+
+863
+00:48:20,160 --> 00:48:24,160
+which for me, this is any time I don't need to return to the UI thread,
+
+864
+00:48:24,160 --> 00:48:26,160
+I can figure-wait false everywhere.
+
+865
+00:48:26,160 --> 00:48:28,160
+Now, there's a giant caveat here.
+
+866
+00:48:28,160 --> 00:48:32,160
+And that has to do with something called the synchronization context.
+
+867
+00:48:32,160 --> 00:48:35,160
+Now, like I said, I just published a four-hour course
+
+868
+00:48:35,160 --> 00:48:39,160
+where I literally spent a whole hour talking about synchronization context.
+
+869
+00:48:39,160 --> 00:48:41,160
+And we've got time for that right now.
+
+870
+00:48:41,160 --> 00:48:44,160
+But long story short, synchronization context is what.net uses
+
+871
+00:48:44,160 --> 00:48:47,160
+to return to the UI thread, return to the calling thread.
+
+872
+00:48:47,160 --> 00:48:51,160
+And in ASP.NET Core, it doesn't have a synchronization context.
+
+873
+00:48:51,160 --> 00:48:57,160
+So technically, an ASP.NET Core configure-wait false is the same as configure-wait true.
+
+874
+00:48:57,160 --> 00:49:01,160
+But on any other platform where we have a synchronization context,
+
+875
+00:49:01,160 --> 00:49:07,160
+configure-wait false is always best to use if you don't need to return to the calling thread.
+
+876
+00:49:07,160 --> 00:49:09,160
+And then also, we have configure-wait options.
+
+877
+00:49:09,160 --> 00:49:13,160
+So these are kind of the new hotness that came out in .NET 8.
+
+878
+00:49:13,160 --> 00:49:17,160
+So if you want to be a little bit more explicit instead of saying configure-wait true,
+
+879
+00:49:17,160 --> 00:49:20,160
+you can say configure-wait options.
+
+880
+00:49:20,160 --> 00:49:21,160
+Continue on captured context.
+
+881
+00:49:21,160 --> 00:49:24,160
+Or if you want to do crazy stuff like suppressed throwing,
+
+882
+00:49:24,160 --> 00:49:26,160
+which you better have a real good reason,
+
+883
+00:49:26,160 --> 00:49:29,160
+I'm going to ask some questions if I see that in a PR.
+
+884
+00:49:29,160 --> 00:49:32,160
+You can chain these together because they're all enum.
+
+885
+00:49:32,160 --> 00:49:35,160
+So you can force you a little, you can suppress throwing,
+
+886
+00:49:35,160 --> 00:49:38,160
+and you can now return to the calling thread all at the same time.
+
+887
+00:49:38,160 --> 00:49:41,160
+You utilize value task.
+
+888
+00:49:41,160 --> 00:49:45,160
+So like I mentioned, it's basically an optimized version of task.
+
+889
+00:49:45,160 --> 00:49:47,160
+It lives in the stack instead of on the heap.
+
+890
+00:49:47,160 --> 00:49:49,160
+But it does have some restrictions around it.
+
+891
+00:49:49,160 --> 00:49:52,160
+So don't go crazy, don't create new value tasks in your code.
+
+892
+00:49:52,160 --> 00:49:55,160
+Don't go passing around value tasks, don't reuse value tasks.
+
+893
+00:49:55,160 --> 00:49:56,160
+It's not what they're there for.
+
+894
+00:49:57,160 --> 00:50:01,160
+But you're totally safe if you just use it for your methods return value
+
+895
+00:50:01,160 --> 00:50:03,160
+and just think of it as async-a-wait.
+
+896
+00:50:03,160 --> 00:50:08,160
+But again, this is when your hot path doesn't need the await keyword.
+
+897
+00:50:09,160 --> 00:50:10,160
+I sync enum.
+
+898
+00:50:10,160 --> 00:50:14,160
+So if you want to stream data, if you want to give users updates in real time,
+
+899
+00:50:14,160 --> 00:50:17,160
+so they're not just looking at some spinning indicator,
+
+900
+00:50:17,160 --> 00:50:19,160
+I sync enum.able is really, really cool.
+
+901
+00:50:19,160 --> 00:50:22,160
+It allows us to show that data as it arrives.
+
+902
+00:50:22,160 --> 00:50:23,160
+It's a better user experience.
+
+903
+00:50:24,160 --> 00:50:27,160
+But keep in mind, you want to use that enumerator cancellation attribute
+
+904
+00:50:27,160 --> 00:50:28,160
+on your cancellation token.
+
+905
+00:50:28,160 --> 00:50:30,160
+Because again, we're good-see sharp developers.
+
+906
+00:50:30,160 --> 00:50:32,160
+Every time we create an asynchronous method,
+
+907
+00:50:32,160 --> 00:50:34,160
+we're going to have a cancellation token parameter.
+
+908
+00:50:34,160 --> 00:50:36,160
+But in this case, slap on that attribute,
+
+909
+00:50:36,160 --> 00:50:39,160
+and then we get a little performance bump from .NET,
+
+910
+00:50:39,160 --> 00:50:42,160
+checking if our tokens expired or not.
+
+911
+00:50:42,160 --> 00:50:43,160
+Wait async.
+
+912
+00:50:43,160 --> 00:50:46,160
+So again, if we're using somebody else's code,
+
+913
+00:50:46,160 --> 00:50:47,160
+and they're not good developers,
+
+914
+00:50:47,160 --> 00:50:49,160
+and they don't allow us to pass into cancellation token,
+
+915
+00:50:49,160 --> 00:50:52,160
+we can always bolt one on by using .wait async.
+
+916
+00:50:53,160 --> 00:50:56,160
+Just keep in mind if the task is already completed,
+
+917
+00:50:56,160 --> 00:51:01,160
+that way, async cancellation token will never throw that operation canceled exception.
+
+918
+00:51:01,160 --> 00:51:04,160
+So slight nuance there, but for more or less,
+
+919
+00:51:04,160 --> 00:51:07,160
+you can just bolt that on to cancel your tasks.
+
+920
+00:51:07,160 --> 00:51:08,160
+Okay.
+
+921
+00:51:09,160 --> 00:51:10,160
+I sync disposable.
+
+922
+00:51:10,160 --> 00:51:14,160
+So this is one I didn't have an example in the code to show you,
+
+923
+00:51:14,160 --> 00:51:16,160
+but wanted to go over it here,
+
+924
+00:51:16,160 --> 00:51:19,160
+because the syntax is a little wonky, right?
+
+925
+00:51:20,160 --> 00:51:24,160
+If we look at this, we have the .wait keyword here,
+
+926
+00:51:24,160 --> 00:51:28,160
+but the await is happening in the disposing.
+
+927
+00:51:28,160 --> 00:51:32,160
+But speaking of disposing, I should explain what I sync disposable is.
+
+928
+00:51:32,160 --> 00:51:34,160
+If you know what I disposable is,
+
+929
+00:51:34,160 --> 00:51:36,160
+this is just an asynchronous version of it.
+
+930
+00:51:36,160 --> 00:51:39,160
+So I disposable is where we can put a little extra code
+
+931
+00:51:39,160 --> 00:51:43,160
+that needs to maybe free up some resources when we're done using a class.
+
+932
+00:51:43,160 --> 00:51:46,160
+I sync disposable allows us to do the same thing,
+
+933
+00:51:46,160 --> 00:51:47,160
+but with .async await.
+
+934
+00:51:47,160 --> 00:51:50,160
+For IO heavy things like file stream, this is great,
+
+935
+00:51:50,160 --> 00:51:53,160
+because maybe you just read in a 30 megabyte file
+
+936
+00:51:53,160 --> 00:51:54,160
+and you got to dispose of it.
+
+937
+00:51:54,160 --> 00:51:56,160
+Well, if you just did that without disposable,
+
+938
+00:51:56,160 --> 00:51:59,160
+then you might block your UI thread.
+
+939
+00:51:59,160 --> 00:52:01,160
+But with .async disposable,
+
+940
+00:52:01,160 --> 00:52:04,160
+it'll do that using async await, which is great.
+
+941
+00:52:04,160 --> 00:52:06,160
+But look at the syntax.
+
+942
+00:52:06,160 --> 00:52:10,160
+It makes sense, but at the same time, it kind of doesn't.
+
+943
+00:52:10,160 --> 00:52:13,160
+But that's just because the await keyword goes here,
+
+944
+00:52:13,160 --> 00:52:17,160
+but the await doesn't actually execute until the disposing starts.
+
+945
+00:52:17,160 --> 00:52:19,160
+So when we exit the using block,
+
+946
+00:52:19,160 --> 00:52:22,160
+that's when the async await action is going to happen.
+
+947
+00:52:22,160 --> 00:52:26,160
+So yes, we can await, we can add configure await false,
+
+948
+00:52:26,160 --> 00:52:31,160
+but all of that is going to execute a little later with the async disposable.
+
+949
+00:52:31,160 --> 00:52:33,160
+But still really great stuff.
+
+950
+00:52:33,160 --> 00:52:36,160
+How they recommend it if you can take advantage of it.
+
+951
+00:52:36,160 --> 00:52:40,160
+Okay, so if you want to go even deeper,
+
+952
+00:52:40,160 --> 00:52:44,160
+you can find a link to the course that I've recently published on DOMTRAIN.
+
+953
+00:52:44,160 --> 00:52:47,160
+So it's available at DOMTRAIN.com.
+
+954
+00:52:47,160 --> 00:52:51,160
+Like I said, this is a four-hour course that I just published a couple of months ago,
+
+955
+00:52:51,160 --> 00:52:55,160
+really, really proud of this, because this is all the stuff that I wish I would have known.
+
+956
+00:52:55,160 --> 00:52:57,160
+When I started working with C-Sharp,
+
+957
+00:52:57,160 --> 00:53:01,160
+it would have saved me gosh, months of my life debugging things.
+
+958
+00:53:01,160 --> 00:53:05,160
+So this is where we go over some of the topics we talked about today,
+
+959
+00:53:05,160 --> 00:53:06,160
+but we go even deeper.
+
+960
+00:53:06,160 --> 00:53:08,160
+So like what is synchronization context?
+
+961
+00:53:08,160 --> 00:53:10,160
+What is execution context?
+
+962
+00:53:10,160 --> 00:53:13,160
+What is, how does async await even work?
+
+963
+00:53:13,160 --> 00:53:16,160
+Like how does the Rosalind compiler even know where to use it?
+
+964
+00:53:16,160 --> 00:53:18,160
+All these things called duck typing.
+
+965
+00:53:18,160 --> 00:53:19,160
+It's all there for you.
+
+966
+00:53:19,160 --> 00:53:20,160
+It is a paid course.
+
+967
+00:53:20,160 --> 00:53:21,160
+I don't control the platform.
+
+968
+00:53:21,160 --> 00:53:22,160
+I just made the content.
+
+969
+00:53:22,160 --> 00:53:25,160
+But it is something I'm really proud of and highly recommend it.
+
+970
+00:53:25,160 --> 00:53:29,160
+And if you want to spend four more hours with me, please do check it out.
+
+971
+00:53:29,160 --> 00:53:31,160
+Okay, so now's the time.
+
+972
+00:53:31,160 --> 00:53:35,160
+If you haven't had a chance to take a picture of this slide,
+
+973
+00:53:35,160 --> 00:53:39,160
+you can take out your phones, grab this QR code, it takes you to this URL.
+
+974
+00:53:39,160 --> 00:53:42,160
+And again, this is where you can find everything we covered today.
+
+975
+00:53:42,160 --> 00:53:44,160
+So this is where you can see the slides.
+
+976
+00:53:44,160 --> 00:53:46,160
+This is where you can find a recording of this talk.
+
+977
+00:53:46,160 --> 00:53:48,160
+This is where you can find all of the source code.
+
+978
+00:53:48,160 --> 00:53:50,160
+You can find the links to the async await best practices,
+
+979
+00:53:50,160 --> 00:53:53,160
+new get packages I've made, links to the dome train course.
+
+980
+00:53:53,160 --> 00:53:57,160
+And then I've also put a bunch of articles in here that were helpful for me
+
+981
+00:53:57,160 --> 00:54:00,160
+when I was first learning how to use async await and C-Sharp.
+
+982
+00:54:00,160 --> 00:54:02,160
+And I know they'll be helpful for you too.
+
+983
+00:54:02,160 --> 00:54:03,160
+Thank you.
+
+984
+00:54:03,160 --> 00:54:12,160
+All right.
+
+985
+00:54:12,160 --> 00:54:14,160
+We got five minutes.
+
+986
+00:54:14,160 --> 00:54:17,160
+Yes, sir.
+
+987
+00:54:17,160 --> 00:54:23,160
+So the animal budget by practice is there to the analyzing of the bolts,
+
+988
+00:54:23,160 --> 00:54:26,160
+one you for all of these, so we have the trunk.
+
+989
+00:54:26,160 --> 00:54:28,160
+Oh, man.
+
+990
+00:54:28,160 --> 00:54:29,160
+So analyzers.
+
+991
+00:54:29,160 --> 00:54:30,160
+Yeah.
+
+992
+00:54:30,160 --> 00:54:36,160
+There's a couple good ones that, you know, if you're using jetbrains,
+
+993
+00:54:36,160 --> 00:54:40,160
+jetbrains is really, really good about warning you about stuff.
+
+994
+00:54:40,160 --> 00:54:45,160
+But I do want to go on a quick rant if you allow me.
+
+995
+00:54:45,160 --> 00:54:47,160
+And that's the warning we get.
+
+996
+00:54:47,160 --> 00:54:49,160
+Remember back here, we weren't awaiting this call.
+
+997
+00:54:49,160 --> 00:54:53,160
+And by the way, there's better ways to kick off async task methods
+
+998
+00:54:53,160 --> 00:54:54,160
+than doing your construct.
+
+999
+00:54:54,160 --> 00:54:55,160
+You shouldn't do this in general.
+
+1000
+00:54:55,160 --> 00:54:56,160
+This is more for the demo.
+
+1001
+00:54:56,160 --> 00:55:00,160
+But if you look at the warning, it just says this call's not awaited.
+
+1002
+00:55:00,160 --> 00:55:03,160
+The execution of this method continues before the call is completed.
+
+1003
+00:55:03,160 --> 00:55:07,160
+And when I was a new developer, I said, yeah, no shit.
+
+1004
+00:55:07,160 --> 00:55:09,160
+That's why I didn't await it.
+
+1005
+00:55:09,160 --> 00:55:10,160
+Like, why is this even a warning?
+
+1006
+00:55:10,160 --> 00:55:12,160
+And I worked at Microsoft for seven years.
+
+1007
+00:55:12,160 --> 00:55:17,160
+And I tried to get the runtime team to add in more, just to say,
+
+1008
+00:55:17,160 --> 00:55:21,160
+and if an acceptance thrown inside this task, you'll never see it.
+
+1009
+00:55:21,160 --> 00:55:23,160
+Like, because to me, that's the big reason.
+
+1010
+00:55:23,160 --> 00:55:24,160
+Like, that's why we should be awaiting it.
+
+1011
+00:55:25,160 --> 00:55:30,160
+So, yeah, things like these, there's good analyzers like these
+
+1012
+00:55:30,160 --> 00:55:33,160
+that I turned on warnings as errors for.
+
+1013
+00:55:33,160 --> 00:55:39,160
+And that also saves you the headache of, like, looking through PR reviews
+
+1014
+00:55:39,160 --> 00:55:40,160
+with a fine tooth comb.
+
+1015
+00:55:40,160 --> 00:55:41,160
+Like, did you miss a task?
+
+1016
+00:55:41,160 --> 00:55:43,160
+Is there one hiding in there we didn't await?
+
+1017
+00:55:43,160 --> 00:55:46,160
+So, yeah, there's analyzers we can turn on for all of these.
+
+1018
+00:55:46,160 --> 00:55:51,160
+And other good ones are, like this one here where it says,
+
+1019
+00:55:51,160 --> 00:55:54,160
+hey, this has an overloaded method where you're not passing
+
+1020
+00:55:54,160 --> 00:55:55,160
+in your cancellation token.
+
+1021
+00:55:55,160 --> 00:55:59,160
+So, yeah, I turn on all of these in my apps.
+
+1022
+00:55:59,160 --> 00:56:01,160
+And it's really, really helpful.
+
+1023
+00:56:01,160 --> 00:56:03,160
+It kind of forces you into best practices.
+
+1024
+00:56:03,160 --> 00:56:08,160
+And if you turn them off, or, you know, if you do, like, a suppress,
+
+1025
+00:56:08,160 --> 00:56:12,160
+or if you suppress those warnings, like, you better have a good reason.
+
+1026
+00:56:12,160 --> 00:56:15,160
+But, yeah, definitely, there's some really good analyzers out there
+
+1027
+00:56:15,160 --> 00:56:20,160
+that you can make sure that any new pull request that comes in will still be good.
+
+1028
+00:56:21,160 --> 00:56:23,160
+Good question. Yes.
+
+1029
+00:56:23,160 --> 00:56:25,160
+Good. But more of a comment than a question.
+
+1030
+00:56:25,160 --> 00:56:32,160
+Just, one of your ones, you did a optimization of moving from an ASIC method
+
+1031
+00:56:32,160 --> 00:56:34,160
+awaiting when it was just one line.
+
+1032
+00:56:34,160 --> 00:56:35,160
+Yep.
+
+1033
+00:56:35,160 --> 00:56:40,160
+And, you know, a straight public task.
+
+1034
+00:56:40,160 --> 00:56:42,160
+Yeah, just returning the task.
+
+1035
+00:56:42,160 --> 00:56:48,160
+The, the called method pros and exception.
+
+1036
+00:56:48,160 --> 00:56:54,160
+You're not in the stack trunks, and you, uh, ASIC, away.
+
+1037
+00:56:54,160 --> 00:56:56,160
+Yeah. So, this, you're right.
+
+1038
+00:56:56,160 --> 00:56:58,160
+This, this does modify the stack trace.
+
+1039
+00:56:58,160 --> 00:57:02,160
+And that's always argument I hear against doing this.
+
+1040
+00:57:02,160 --> 00:57:05,160
+And, uh, it's, he's not the best person to pick a battle with.
+
+1041
+00:57:05,160 --> 00:57:08,160
+But, David Fowler also advocates against doing this.
+
+1042
+00:57:08,160 --> 00:57:13,160
+But, I can tell you, this has never been a problem.
+
+1043
+00:57:13,160 --> 00:57:20,160
+Um, so, uh, I've had bugs be thrown and you can still find them itself.
+
+1044
+00:57:20,160 --> 00:57:23,160
+Um, yeah, like your stack trace might look a little different.
+
+1045
+00:57:23,160 --> 00:57:26,160
+Um, but it's never been a problem in my experience.
+
+1046
+00:57:26,160 --> 00:57:30,160
+So, yes, it does change the stack trace a little bit, but.
+
+1047
+00:57:30,160 --> 00:57:33,160
+It has been a problem in my experience.
+
+1048
+00:57:33,160 --> 00:57:34,160
+That would be interesting.
+
+1049
+00:57:34,160 --> 00:57:38,160
+Not, not knowing which method called the trying method.
+
+1050
+00:57:38,160 --> 00:57:42,160
+So, like, um, the method that was actually trying to make the mistake
+
+1051
+00:57:42,160 --> 00:57:45,160
+that was actually trying was called from multiple parts.
+
+1052
+00:57:45,160 --> 00:57:48,160
+Um, that would call from the same place.
+
+1053
+00:57:48,160 --> 00:57:54,160
+Um, so, we didn't actually know which, which one was trying to.
+
+1054
+00:57:54,160 --> 00:57:55,160
+Gotcha. Fair enough.
+
+1055
+00:57:55,160 --> 00:57:56,160
+Okay. Yeah.
+
+1056
+00:57:56,160 --> 00:57:59,160
+So, maybe, maybe still await it.
+
+1057
+00:57:59,160 --> 00:58:01,160
+No problem.
+
+1058
+00:58:01,160 --> 00:58:02,160
+Yes, sir.
+
+1059
+00:58:02,160 --> 00:58:05,160
+Now, if you mentioned Configurite Falses and made it by ASIC,
+
+1060
+00:58:05,160 --> 00:58:10,160
+I know they call, uh, I write all the nice things I can call at the moment.
+
+1061
+00:58:10,160 --> 00:58:11,160
+Yeah.
+
+1062
+00:58:11,160 --> 00:58:16,160
+Is that really the nice thing about that call?
+
+1063
+00:58:16,160 --> 00:58:20,160
+Yeah, because again, um, you don't know how long that task is going to run.
+
+1064
+00:58:20,160 --> 00:58:23,160
+So, when you call a, uh, method that returns a task,
+
+1065
+00:58:23,160 --> 00:58:25,160
+that could run for 20 minutes. Who does?
+
+1066
+00:58:25,160 --> 00:58:31,160
+Um, so, yeah, you still want to give that control and allow somebody else to cancel that method.
+
+1067
+00:58:31,160 --> 00:58:34,160
+Um, and, I mean, we do have two minutes.
+
+1068
+00:58:34,160 --> 00:58:36,160
+So, yeah, synchronization context.
+
+1069
+00:58:36,160 --> 00:58:39,160
+Um, what's, what's kind of interesting is really what's happened.
+
+1070
+00:58:39,160 --> 00:58:45,160
+When we say Configurite Falses, what we're actually doing is setting the synchronization context to null.
+
+1071
+00:58:45,160 --> 00:58:48,160
+So, in ASP.NET Core, there, there is no synchronization context.
+
+1072
+00:58:48,160 --> 00:58:50,160
+So, it's OAs null.
+
+1073
+00:58:50,160 --> 00:58:54,160
+So, that's, that's kind of why Configurite Falses and True do the same thing.
+
+1074
+00:58:54,160 --> 00:58:57,160
+But, uh, yeah, definitely a cancellation token.
+
+1075
+00:58:57,160 --> 00:58:58,160
+Super important.
+
+1076
+00:58:58,160 --> 00:59:01,160
+Um, you know, if you control all the code, you can go and fix it.
+
+1077
+00:59:01,160 --> 00:59:04,160
+But if you're ever going to publish APIs or libraries,
+
+1078
+00:59:04,160 --> 00:59:06,160
+like, God, I have those in there for us.
+
+1079
+00:59:06,160 --> 00:59:12,160
+Otherwise, uh, yeah, I think it's, uh, uh, yeah.
+
+1080
+00:59:12,160 --> 00:59:21,160
+What's your opening up on like coding the method that they've met on the long line and away for you to know later?
+
+1081
+00:59:21,160 --> 00:59:22,160
+Oh, totally cool.
+
+1082
+00:59:22,160 --> 00:59:26,160
+I mean, that's what we're doing down here in that tri-ketch, finally block.
+
+1083
+00:59:26,160 --> 00:59:28,160
+As long as you await it.
+
+1084
+00:59:28,160 --> 00:59:35,160
+Um, and so that's, that's a tough part, you know, sometimes I've had to await it later, you know.
+
+1085
+00:59:35,160 --> 00:59:40,160
+Um, if you can avoid it, avoid it, but I've had to like save it as a field and circle back to await it later.
+
+1086
+00:59:40,160 --> 00:59:43,160
+But yeah, you don't always have to await it in line.
+
+1087
+00:59:43,160 --> 00:59:45,160
+Just don't lose track of it.
+
+1088
+00:59:45,160 --> 00:59:48,160
+That's the only reason why it can be dangerous.
+
+1089
+00:59:48,160 --> 00:59:50,160
+Good question. Yes.
+
+1090
+00:59:50,160 --> 00:59:54,160
+Well, I started with the way they set and spoke.
+
+1091
+00:59:54,160 --> 00:59:59,160
+Okay, I have a cancellation token that I use cancer things.
+
+1092
+00:59:59,160 --> 01:00:02,160
+But you're really, you're not sure that the can.
+
+1093
+01:00:02,160 --> 01:00:09,160
+Yeah, I mean, because.
+
+1094
+01:00:09,160 --> 01:00:20,160
+Yeah, I mean, there's, there's always a level of trust somewhere and really what we're assuming is that.
+
+1095
+01:00:20,160 --> 01:00:22,160
+When I call.
+
+1096
+01:00:22,160 --> 01:00:24,160
+You have to do this sometimes.
+
+1097
+01:00:24,160 --> 01:00:31,160
+Right, yeah, or, yeah, or passing it in, you know, like that and taking advantage of the existing dot APIs.
+
+1098
+01:00:31,160 --> 01:00:35,160
+But yeah, so when you do add in this cancellation token, that's, that's actually a really good point.
+
+1099
+01:00:35,160 --> 01:00:45,160
+So not only do we have to have a cancellation token as a parameter, but before we continue on with any logic, we should check to see if it's canceled.
+
+1100
+01:00:45,160 --> 01:00:54,160
+And if there's not something that we can pass the token into and check it for us, then yeah, token dot throw of cancellation requests is what I always use and what I recommend.
+
+1101
+01:00:54,160 --> 01:01:01,160
+But make sure you do that in your code and then the rest of us, yeah, we just kind of have to trust that everybody else did it in their code.
+
+1102
+01:01:01,160 --> 01:01:04,160
+That's, yeah, that's a really good point. Thank you.
+
+1103
+01:01:04,160 --> 01:01:09,160
+Do I see one more in the back?
+
+1104
+01:01:09,160 --> 01:01:12,160
+All right, well, thanks so much, guys. We'll see you around.
+
+1105
+01:01:12,160 --> 01:01:15,160
+Thank you.
+
