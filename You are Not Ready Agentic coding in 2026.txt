@@ -1,0 +1,2245 @@
+00:00 Hey folks, it's time we had another talk
+00:03 
+
+00:03 because things have been happening and
+00:05 
+
+00:05 not enough people are paying the right
+00:07 
+
+00:07 amount of attention here. So, in today's
+00:09 
+
+00:09 video, I want to go a bit into a bit of
+00:12 
+
+00:12 a rant and a bit of a like a broad
+00:14 
+
+00:14 helicopter view of what's been happening
+00:15 
+
+00:15 in the last couple of months and why I
+00:17 
+
+00:17 think it matters for the future of
+00:19 
+
+00:19 software development.
+00:21 
+
+00:21 Now to get started, I I still see a lot
+00:23 
+
+00:23 of software engineers uh especially old
+00:26 
+
+00:26 people or older seasoned engineers.
+00:28 
+
+00:28 That's what I mean. Uh being very
+00:30 
+
+00:30 skeptical about how far AI coding agents
+00:34 
+
+00:34 will actually get. And I think there's a
+00:36 
+
+00:36 structural under appreciation of where
+00:40 
+
+00:40 we are right now. I think 2026 will be a
+00:43 
+
+00:43 sobering year for a whole lot of people.
+00:46 
+
+00:46 [laughter]
+00:47 
+
+00:47 and we're going to go over some
+00:48 
+
+00:48 innovations that have been happening in
+00:50 
+
+00:50 a couple of last months uh to kind of
+00:53 
+
+00:53 shape the
+00:55 
+
+00:55 shape of thing where things are will be
+00:57 
+
+00:57 going or according to me where things
+00:59 
+
+00:59 will be going. Uh so that's what I'm
+01:00 
+
+01:00 going to try to do today. [snorts]
+01:03 
+
+01:03 Uh before we start, I want to point out
+01:05 
+
+01:05 that I am quite the AI skeptic myself,
+01:08 
+
+01:08 but I experiment heavily and I
+01:13 
+
+01:13 am continually impressed by uh what uh a
+01:17 
+
+01:17 software engineer with a an AI coding
+01:19 
+
+01:19 agent can do once they start building on
+01:22 
+
+01:22 top of it and once you start
+01:23 
+
+01:23 incorporating incorporating these new
+01:26 
+
+01:26 things that we will be discussing today.
+01:28 
+
+01:28 Second point I want to to highlight
+01:30 
+
+01:30 before we dive in is I am a somewhat
+01:34 
+
+01:34 experienced software engineer. I have 15
+01:37 
+
+01:37 uh years of experience writing software,
+01:39 
+
+01:39 leading teams, coaching teams on
+01:42 
+
+01:42 test-driven development, uh continuous
+01:45 
+
+01:45 delivery, software architecture and
+01:47 
+
+01:47 design stuff like that. So take what I
+01:50 
+
+01:50 say with a grain of salt always, but
+01:52 
+
+01:52 also bear in mind that I have been doing
+01:55 
+
+01:55 this for a while. So let's dig into
+01:57 
+
+01:57 these puzzle pieces uh that will make
+01:60 
+
+01:60 like the shape of what's to come a bit
+02:01 
+
+02:01 more clear, shall we? First thing I want
+02:04 
+
+02:04 to highlight is uh the large language
+02:07 
+
+02:07 models themselves. If you look at the
+02:11 
+
+02:11 new models coming out in the last couple
+02:13 
+
+02:13 of months, starting from the claw 4
+02:15 
+
+02:15 family of models and the GBT5 range or
+02:19 
+
+02:19 in the open uh community, the Quen coder
+02:21 
+
+02:21 3 kind of models, they are all these
+02:25 
+
+02:25 model providers, all these uh things
+02:27 
+
+02:27 like anthropic and openi are focusing on
+02:29 
+
+02:29 one thing right now or at least for our
+02:32 
+
+02:32 uh profession, they're focusing on
+02:35 
+
+02:35 agentic work like they're fine-tuning
+02:38 
+
+02:38 their models to do long horizon work,
+02:41 
+
+02:41 not minutes but hours of work
+02:44 
+
+02:44 autonomously without human intervention
+02:46 
+
+02:46 and lots of tool calling and all these
+02:49 
+
+02:49 model providers are doing it. But this
+02:51 
+
+02:51 is getting somewhere and impacting our
+02:53 
+
+02:53 field. So that's the first thing I want
+02:56 
+
+02:56 to highlight. These new models they are
+02:58 
+
+02:58 able to run for hours. They are able to
+03:01 
+
+03:01 do a lot of tool calling and it is going
+03:03 
+
+03:03 to be a huge unlock for software
+03:05 
+
+03:05 development. Okay. Second innovation I
+03:07 
+
+03:07 wanted to highlight is the Ralph Wigum
+03:10 
+
+03:10 loop. And you've probably seen the
+03:12 
+
+03:12 Simpson character pop up on your
+03:14 
+
+03:14 timeline. [laughter]
+03:16 
+
+03:16 And while it's a fun little experiment,
+03:18 
+
+03:18 and it's only like four lines of code,
+03:21 
+
+03:21 it is a crucial insight that will move
+03:24 
+
+03:24 things forward. So, we're not going to
+03:26 
+
+03:26 dive into too much details today, but I
+03:29 
+
+03:29 do want to like paint a picture of why I
+03:31 
+
+03:31 think Ralph is important.
+03:34 
+
+03:34 uh Ralph is a while loop put around a
+03:38 
+
+03:38 coding agent and there's some like
+03:40 
+
+03:40 nuances about context management and not
+03:43 
+
+03:43 doing context compaction stuff like that
+03:46 
+
+03:46 but in essence it's a while loop and the
+03:49 
+
+03:49 the halting condition or like the the
+03:52 
+
+03:52 break statement to jump out of the Y
+03:54 
+
+03:54 loop is like a deterministic way to
+03:57 
+
+03:57 verify whether or not work is done
+03:59 
+
+03:59 because if you've been working with an
+04:00 
+
+04:00 AI coding agent you recognize like the
+04:03 
+
+04:03 okay I'm all done all things green all
+04:06 
+
+04:06 tests pass and then you just like try to
+04:09 
+
+04:09 compile the code and it doesn't even
+04:11 
+
+04:11 compile so like this coding gen is lying
+04:12 
+
+04:12 in your face that's what the Ralph Wigan
+04:14 
+
+04:14 loop is trying to uh prevent by putting
+04:18 
+
+04:18 a while loop around around it and if
+04:20 
+
+04:20 it's not done done like if the code is
+04:22 
+
+04:22 not compiling and the test is not
+04:24 
+
+04:24 running uh it just starts a new session
+04:26 
+
+04:26 and has it continue to work so that's
+04:29 
+
+04:29 one argument that makes Ralph a powerful
+04:32 
+
+04:32 uh principle and the other principle is
+04:35 
+
+04:35 it shows us that we do not need AGI, we
+04:40 
+
+04:40 do not need super smart models, we just
+04:42 
+
+04:42 need persistence. [laughter]
+04:45 
+
+04:45 Just like the long running uh uh Agentic
+04:48 
+
+04:48 uh uh LLMs themselves, if you just put a
+04:50 
+
+04:50 while loop around them, again, it's the
+04:52 
+
+04:52 same idea. you have to be these things
+04:56 
+
+04:56 uh you can make them really persistent
+04:57 
+
+04:57 and have them doom loop and like iterate
+04:60 
+
+04:60 a bit more to a ideal state and you can
+05:03 
+
+05:03 get really far with it and that's for me
+05:05 
+
+05:05 like the essence of the Ralph loop. Now
+05:07 
+
+05:07 a third aspect for why I think the Ralph
+05:10 
+
+05:10 Wiggum loop is super important has to do
+05:12 
+
+05:12 with the autonomy slider a concept we
+05:15 
+
+05:15 discussed in one of my previous videos.
+05:17 
+
+05:17 Um but mainly um if you look at my back
+05:21 
+
+05:21 at my first video where I talked about
+05:22 
+
+05:22 AI augmented coding, I was really
+05:26 
+
+05:26 babysitting my agents. I was looking at
+05:29 
+
+05:29 every line of code as it got written. I
+05:31 
+
+05:31 was providing it real-time feedback. And
+05:34 
+
+05:34 that's not how I work today at all. And
+05:37 
+
+05:37 all of these uh things we're discussing
+05:38 
+
+05:38 in today's video are the reason why I am
+05:41 
+
+05:41 able and capable of not having to
+05:43 
+
+05:43 babysit these models anymore. And Ralph
+05:45 
+
+05:45 Wigum is one of those approaches that
+05:48 
+
+05:48 just
+05:49 
+
+05:49 uh allows me to like prepare a package
+05:53 
+
+05:53 of work, give it off to an agent, and I
+05:56 
+
+05:56 only have to come back when it's in a
+05:58 
+
+05:58 stage of high quality and like
+06:02 
+
+06:02 guaranteed completion. And it just saves
+06:04 
+
+06:04 so much time [laughter]
+06:06 
+
+06:06 and frustration not having to look at
+06:08 
+
+06:08 like an agent write code that I would
+06:09 
+
+06:09 write better. So yeah, the autonomy
+06:12 
+
+06:12 slider, we are really moving up today.
+06:14 
+
+06:14 The next innovation I want to talk about
+06:16 
+
+06:16 is beats basically [laughter]
+06:18 
+
+06:18 or like persistent memory upgrades for
+06:21 
+
+06:21 your coding agents. If you're a software
+06:23 
+
+06:23 engineer that's been experimenting with
+06:24 
+
+06:24 AI coding agents for longer than me, you
+06:28 
+
+06:28 will probably have your build your own
+06:30 
+
+06:30 solution for this. But if not, uh today
+06:33 
+
+06:33 these things are becoming like part of
+06:35 
+
+06:35 the product if you install a cloth code
+06:37 
+
+06:37 or a GitHub copilot. [snorts] Uh but
+06:40 
+
+06:40 yeah, what what is this beats thing? I
+06:43 
+
+06:43 like to think of bead as a Trello board
+06:46 
+
+06:46 for your coding agents. It's a way to
+06:50 
+
+06:50 put your plans. If you look at cloud
+06:52 
+
+06:52 code, the plans, it's a way to put your
+06:54 
+
+06:54 plans uh you break it down into
+06:56 
+
+06:56 subtasks, identify dependencies between
+06:60 
+
+06:60 subtasks or like blocking dependencies
+07:03 
+
+07:03 so you can reason about what work can
+07:05 
+
+07:05 happen in parallel, what work needs to
+07:07 
+
+07:07 happen in sequence. And it's all saved,
+07:10 
+
+07:10 it's all persisted uh outside of the
+07:13 
+
+07:13 context window. So there's like a real
+07:15 
+
+07:15 Trello board somewhere. Um for beats,
+07:17 
+
+07:17 it's a git repository with some JSON,
+07:19 
+
+07:19 but there's a real Trello board
+07:20 
+
+07:20 somewhere where your agents can look at
+07:23 
+
+07:23 the next task to be done and where they
+07:26 
+
+07:26 can update these tasks when they're done
+07:28 
+
+07:28 done. So there's like state management
+07:29 
+
+07:29 in there as well and that allows for
+07:32 
+
+07:32 yeah another unlock in AI augmented
+07:35 
+
+07:35 engineering. Okay, next innovation uh
+07:38 
+
+07:38 that I want to talk about is Gas Town.
+07:40 
+
+07:40 It's from the same author as Beats,
+07:42 
+
+07:42 Steve Yaggi, and it's a bit of a fever
+07:45 
+
+07:45 dream. [laughter]
+07:46 
+
+07:46 If you look at people talking about Gas
+07:49 
+
+07:49 Town or if you're reading the blog, it's
+07:51 
+
+07:51 some seriously cowboy wild west
+07:54 
+
+07:54 [laughter]
+07:55 
+
+07:55 But the ideas behind Gas Town are worth
+07:59 
+
+07:59 paying attention to. And the idea is
+08:01 
+
+08:01 like single sentence summary, multi-
+08:03 
+
+08:03 aent orchestrations. Say you have a
+08:06 
+
+08:06 trellboard like beats and you have a way
+08:08 
+
+08:08 to manage a fleet of these agents and
+08:11 
+
+08:11 have them pick up tasks and update
+08:13 
+
+08:13 states. That's that's a bit what Gas
+08:15 
+
+08:15 Town is. It's like the logical
+08:17 
+
+08:17 conclusion of where all this is going.
+08:20 
+
+08:20 I'm not suggesting you try out a Gas
+08:22 
+
+08:22 Town. I am suggesting you uh understand
+08:25 
+
+08:25 what it is and why we're going where
+08:28 
+
+08:28 Gast Town is pointing us. And the final
+08:31 
+
+08:31 thing I wanted to discuss that's been
+08:32 
+
+08:32 happening uh has is the whole open claw
+08:35 
+
+08:35 situation.
+08:37 
+
+08:37 Uh open claw. Where do I even start? Um
+08:41 
+
+08:41 in case you've been living under a rock,
+08:43 
+
+08:43 open claw is the AI personal assistant
+08:47 
+
+08:47 everyone is dreaming of. If you've seen
+08:50 
+
+08:50 the movie Her, it's literally the
+08:52 
+
+08:52 operating system in that movie. Uh
+08:54 
+
+08:54 except that it's like wildly insecure.
+08:56 
+
+08:56 [laughter]
+08:58 
+
+08:58 So yeah, don't install OpenClaw on your
+09:00 
+
+09:00 machine. Don't install OpenClaw on a
+09:03 
+
+09:03 virtual private server and have it read
+09:05 
+
+09:05 your mails and have it have access to
+09:07 
+
+09:07 your uh calendar. Uh it's a security
+09:11 
+
+09:11 nightmare and no amount of firewalls or
+09:14 
+
+09:14 prompting or whatever will save you from
+09:17 
+
+09:17 getting pawned.
+09:19 
+
+09:19 But that being said, if you have an open
+09:22 
+
+09:22 claw like a a brain with tools and you
+09:26 
+
+09:26 put it in a bunker with like nuclear
+09:29 
+
+09:29 grade defenses and you do not give it
+09:32 
+
+09:32 access to a worldwide web and you do not
+09:34 
+
+09:34 give it access to personal information
+09:36 
+
+09:36 like emails or calendars, uh you can do
+09:39 
+
+09:39 amazing things and that is why I want to
+09:41 
+
+09:41 highlight openclaw.
+09:43 
+
+09:43 Uh it shows that you don't need AGI
+09:46 
+
+09:46 again. If you just need a large language
+09:47 
+
+09:47 model as they are today, you give it
+09:49 
+
+09:49 some tools and you put it in a nuclear
+09:52 
+
+09:52 bunker and not give it access to your
+09:54 
+
+09:54 private information. It can do amazing
+09:56 
+
+09:56 things. And that's why I wanted to
+09:57 
+
+09:57 highlight open law. So that's what's
+10:00 
+
+10:00 been going on in the last couple of
+10:02 
+
+10:02 months. And now I want to direct your
+10:04 
+
+10:04 attention to uh one of these one s
+10:07 
+
+10:07 single uh AI coding tool and it's called
+10:10 
+
+10:10 clot code. And I don't want to point you
+10:12 
+
+10:12 to cloud code because I think it's the
+10:14 
+
+10:14 best tool and you should be using it in
+10:17 
+
+10:17 favor of anything else. I want to point
+10:19 
+
+10:19 you towards it because they anthropic
+10:22 
+
+10:22 the the authors of the cloud models and
+10:25 
+
+10:25 cloud code are really good at
+10:30 
+
+10:30 implementing all these things you've
+10:32 
+
+10:32 heard today uh in some kind of
+10:34 
+
+10:34 experimental form. So it's not
+10:36 
+
+10:36 production ready, don't get me wrong,
+10:37 
+
+10:37 but if you look at clot code today, it
+10:40 
+
+10:40 has all these things and that's amazing.
+10:42 
+
+10:42 And that's why I want to talk about clot
+10:43 
+
+10:43 code for a bit.
+10:45 
+
+10:45 So uh first Ralph Wigum, there's no
+10:48 
+
+10:48 literal Ralph Wigum loop. Uh but clot
+10:51 
+
+10:51 code has had hooks for the longest
+10:53 
+
+10:53 amount of time, which is a way to
+10:56 
+
+10:56 deterministically like stop an agent
+10:58 
+
+10:58 from saying it's done without being
+11:00 
+
+11:00 done. So clot code has hooks. Cloud code
+11:04 
+
+11:04 has sub agents which are like little
+11:07 
+
+11:07 agents that get spawned like dynamically
+11:10 
+
+11:10 and they have their own context window.
+11:12 
+
+11:12 So we're again uh uh nearing the the
+11:16 
+
+11:16 whole Ralph context management thing but
+11:18 
+
+11:18 Cloud Code has had this for a long while
+11:21 
+
+11:21 now and it's a super powerful feature
+11:23 
+
+11:23 especially uh last week u cloud code
+11:26 
+
+11:26 introduced teams which is basically gas
+11:30 
+
+11:30 town again. Uh teams is like you have a
+11:33 
+
+11:33 team lead agent and it can spawn like
+11:36 
+
+11:36 team member agents and people are like
+11:38 
+
+11:38 doing like UI experts, backend experts,
+11:41 
+
+11:41 database experts, whatever. I don't know
+11:43 
+
+11:43 if like specialist specialized sub
+11:46 
+
+11:46 agents are the way to go. I haven't made
+11:48 
+
+11:48 up my mind yet, but my point is Gas Town
+11:51 
+
+11:51 there's a better version of it in a beta
+11:54 
+
+11:54 beta version of it in clot code as well.
+11:57 
+
+11:57 Also the beats thing, cloud code has
+12:00 
+
+12:00 improved their plan mode. It's not like
+12:05 
+
+12:05 somewhere ephemeral in your context
+12:07 
+
+12:07 window anymore. It is a series of JSON
+12:10 
+
+12:10 files on disk. Very beats like and
+12:13 
+
+12:13 looking at like open claw. Yeah, cloud
+12:16 
+
+12:16 code is like poor man's openclaw, but it
+12:18 
+
+12:18 is pretty good at doing tool calling and
+12:21 
+
+12:21 and being a brain for a or like a glue
+12:25 
+
+12:25 layer between the brain and the tools.
+12:26 
+
+12:26 So, I think Cloud Code today checks
+12:29 
+
+12:29 everything off. And again, I'm not
+12:31 
+
+12:31 suggesting you should uh buy Cloud Code
+12:34 
+
+12:34 subscriptions because this is expensive
+12:36 
+
+12:36 as hell, but I just want to show you
+12:38 
+
+12:38 that there is like the shape of the
+12:41 
+
+12:41 future is forming and cloud code is kind
+12:43 
+
+12:43 of pointing the way I think. Now, one
+12:46 
+
+12:46 caveat if you do want to dig in, this
+12:49 
+
+12:49 stuff is not cheap. [laughter]
+12:52 
+
+12:52 
+
+12:52 >> [snorts]
+12:52 >> If you are running like the latest
+12:53 
+
+12:53 Sonnet or Opus models and you are
+12:56 
+
+12:56 starting to play around with this multi-
+12:58 
+
+12:58 aent stuff, you will need multiple
+13:01 
+
+13:01 hundreds of dollars to really rev these
+13:04 
+
+13:04 engines. So if you are a solo dev, uh
+13:07 
+
+13:07 start taking into this into your
+13:09 
+
+13:09 pricing. If you are an enterprise
+13:10 
+
+13:10 developer, wait until you get keys. Do
+13:14 
+
+13:14 not pay for this yourself
+13:16 
+
+13:16 because it's expensive as heck. So yeah,
+13:20 
+
+13:20 six months in my AI coding uh journey,
+13:23 
+
+13:23 things have shifted dramatically and the
+13:25 
+
+13:25 way I work with these tools have shifted
+13:27 
+
+13:27 dramatically. I am not babysitting these
+13:29 
+
+13:29 things because of all the innovations we
+13:31 
+
+13:31 just discussed and the quality of code
+13:35 
+
+13:35 that meets my eyes for the first time is
+13:38 
+
+13:38 almost indistinguishable from uh the
+13:40 
+
+13:40 quality of code that I handrolled
+13:42 
+
+13:42 before. So
+13:46 
+
+13:46 that's a weird feeling. So what does
+13:48 
+
+13:48 this mean for software engineers? Quite
+13:50 
+
+13:50 a lot actually. Um
+13:53 
+
+13:53 more than I thought it would impact our
+13:55 
+
+13:55 job as software engineers six months
+13:57 
+
+13:57 ago. Uh things are going a bit quicker
+13:59 
+
+13:59 than expected. [laughter]
+14:01 
+
+14:01 Uh but I want to dig into in today's
+14:03 
+
+14:03 video. I still I want to dig into a
+14:04 
+
+14:04 couple more things. And one of those
+14:07 
+
+14:07 things is which skills I think are
+14:09 
+
+14:09 becoming irrelevant, which evergreen
+14:12 
+
+14:12 skills will still be relevant and which
+14:14 
+
+14:14 new skills will become like super
+14:16 
+
+14:16 relevant in the future as well. And to
+14:19 
+
+14:19 start this discussion a bit to start
+14:21 
+
+14:21 this section, uh I want to show you my
+14:24 
+
+14:24 AI augmented coding maturity ladder that
+14:27 
+
+14:27 I use when I teach this stuff to uh
+14:29 
+
+14:29 software engineers. Here's the ladder.
+14:31 
+
+14:31 Uh no big secrets here. pretty
+14:34 
+
+14:34 straightforward. But I do think the
+14:35 
+
+14:35 latter metaphor makes a a whole lot of
+14:38 
+
+14:38 sense because of two reasons. One, I do
+14:41 
+
+14:41 think there are several stages.
+14:45 
+
+14:45 uh you need to uh like master and two I
+14:49 
+
+14:49 do think you need to start at the bottom
+14:52 
+
+14:52 or wherever you are today master that
+14:55 
+
+14:55 level and like move up because a whole
+14:58 
+
+14:58 lot of this is like compounding and you
+15:01 
+
+15:01 need the base level skills uh to
+15:03 
+
+15:03 actually leverage the higher level
+15:05 
+
+15:05 skills. So the way I um frame this
+15:07 
+
+15:07 ladder while coaching is figure out
+15:09 
+
+15:09 where we are or where you are as a
+15:12 
+
+15:12 software engineer on this AI coding
+15:14 
+
+15:14 ladder. Maybe it's in the loop agentic
+15:16 
+
+15:16 coding, maybe it's midloop generation.
+15:19 
+
+15:19 Doesn't matter where you are but look at
+15:21 
+
+15:21 where you are today, master that level
+15:23 
+
+15:23 and only then move up to the next level
+15:28 
+
+15:28 and yeah like learn the the relevant
+15:30 
+
+15:30 skills for that level. So yeah, let's
+15:32 
+
+15:32 dive into each and every level and let's
+15:34 
+
+15:34 focus a bit on the kind of skills you
+15:36 
+
+15:36 need uh to have or need to build. First
+15:39 
+
+15:39 level, lowest rung of the ladder is
+15:41 
+
+15:41 chat. Uh this means having chat GPT open
+15:45 
+
+15:45 having cloud open I don't care which
+15:47 
+
+15:47 model and like copy pasting in code or
+15:50 
+
+15:50 doing a product requirements document
+15:52 
+
+15:52 interactively but just like chatting
+15:55 
+
+15:55 with the model to
+15:57 
+
+15:57 ask it questions to solve problems for
+15:59 
+
+15:59 you
+16:01 
+
+16:01 and what skills are required in this
+16:03 
+
+16:03 stage
+16:04 
+
+16:04 uh not rocket science uh but also not
+16:08 
+
+16:08 something you pick up in an hour. So you
+16:10 
+
+16:10 will spend a couple of days, weeks, not
+16:13 
+
+16:13 that much more. So software engineers
+16:15 
+
+16:15 especially uh once you know how a large
+16:17 
+
+16:17 language model work will like fly
+16:18 
+
+16:18 through this chat phase. But you need
+16:21 
+
+16:21 basics of prompt engineering like basics
+16:24 
+
+16:24 of what goes in the context window. Why
+16:26 
+
+16:26 I should feed certain things into the
+16:28 
+
+16:28 context window and not like depend on
+16:31 
+
+16:31 the weights in the models and more
+16:33 
+
+16:33 importantly even what I should not put
+16:35 
+
+16:35 into a context window. prompt
+16:37 
+
+16:37 engineering and like the basics of
+16:39 
+
+16:39 context engineering. That's what you
+16:40 
+
+16:40 should master if you uh are working in
+16:44 
+
+16:44 the chat level. You know you've mastered
+16:46 
+
+16:46 this level if you are confident uh and
+16:50 
+
+16:50 you know that you can write a good
+16:51 
+
+16:51 prompt and the output is of a decent and
+16:54 
+
+16:54 consistent quality. Next level up,
+16:57 
+
+16:57 second rung of the ladder is midloop
+16:59 
+
+16:59 generation and this is where you meet
+17:01 
+
+17:01 your LLM in your IDE. If you are working
+17:04 
+
+17:04 in a jet brains IDE or wherever um and
+17:07 
+
+17:07 you have like autocomplete on steroids
+17:10 
+
+17:10 uh that's what I mean with med loop
+17:12 
+
+17:12 generation you type like a code comment
+17:14 
+
+17:14 and it suggests one or two or three
+17:16 
+
+17:16 alternative implementations and I think
+17:19 
+
+17:19 uh engineers don't need to spend a lot
+17:21 
+
+17:21 of time in this mid loop rung of the
+17:23 
+
+17:23 ladder but there are some skills uh and
+17:26 
+
+17:26 some things to learn that you need to
+17:28 
+
+17:28 learn to appreciate for example having
+17:30 
+
+17:30 like alternative design options
+17:34 
+
+17:34 like being suggested to you and
+17:36 
+
+17:36 evaluating these and selecting the best
+17:38 
+
+17:38 one. That's something not every junior
+17:41 
+
+17:41 software engineer does does from the
+17:43 
+
+17:43 start or even appreciates when they
+17:45 
+
+17:45 start working with these uh tools. But I
+17:48 
+
+17:48 do think it's an essential skill. Um so
+17:50 
+
+17:50 I think you have mastered this level mid
+17:52 
+
+17:52 loop generation if you use types in a
+17:56 
+
+17:56 strongly typed programming language.
+17:57 
+
+17:57 [laughter]
+17:58 
+
+17:58 But that's a side note. Uh but if you uh
+18:02 
+
+18:02 embrace suggestions and can critically
+18:05 
+
+18:05 evaluate like the best alternative and
+18:08 
+
+18:08 are fluent with uh writing code and um
+18:11 
+
+18:11 uh like uh growing code one bit at a
+18:14 
+
+18:14 time uh with the help of a large
+18:16 
+
+18:16 language model. I think if you master
+18:17 
+
+18:17 that you can consider yourself a master
+18:19 
+
+18:19 of the midloop generation level. The
+18:21 
+
+18:21 next rung is the in the loop agentic
+18:24 
+
+18:24 coding one and that's a level where a
+18:27 
+
+18:27 lot of people will be spending a lot of
+18:29 
+
+18:29 time and I do think you need to spend
+18:32 
+
+18:32 some time in here. I do think every
+18:34 
+
+18:34 engineer junior engineer senior engineer
+18:37 
+
+18:37 I don't care you need to be spending two
+18:40 
+
+18:40 three months in this stage and get very
+18:43 
+
+18:43 comfortable before moving on.
+18:46 
+
+18:46 So uh this looks like the babysitting uh
+18:49 
+
+18:49 phase I was in six months ago. But why I
+18:52 
+
+18:52 think it's important you spend some time
+18:54 
+
+18:54 in this phase or at this level of gentic
+18:56 
+
+18:56 coding is because you need to see how
+18:60 
+
+18:60 these things work. You need to see them
+19:02 
+
+19:02 struggle and you need to get frustrated
+19:06 
+
+19:06 with these struggles. As an engineer,
+19:08 
+
+19:08 when you see a a coding agent doom loop
+19:11 
+
+19:11 and like and not figure stuff out, your
+19:13 
+
+19:13 mind should go like, wait, it's doom
+19:16 
+
+19:16 looping. How can I
+19:18 
+
+19:18 help install guard rails, improve my
+19:21 
+
+19:21 prompt, improve the design of my
+19:23 
+
+19:23 codebase? All these things are like
+19:25 
+
+19:25 relevant levers you can pull, but this
+19:28 
+
+19:28 is the process you have to go through.
+19:30 
+
+19:30 you have to like see the struggle of a
+19:32 
+
+19:32 large language model and figure out ways
+19:35 
+
+19:35 to uh
+19:38 
+
+19:38 not have these problems in the next run
+19:40 
+
+19:40 or the next time you encounter them. And
+19:43 
+
+19:43 another skill I think is really
+19:44 
+
+19:44 important and that one I highlighted in
+19:47 
+
+19:47 one of my previous videos about AI
+19:49 
+
+19:49 augmented coding patterns is you should
+19:52 
+
+19:52 be building your prompt library, your
+19:56 
+
+19:56 skill library. You should be extracting
+19:58 
+
+19:58 reusable skills out of like interactive
+20:01 
+
+20:01 sessions with a model. And that's
+20:03 
+
+20:03 something that's also for me very much
+20:04 
+
+20:04 in this in the loop agentic coding phase
+20:07 
+
+20:07 like learn how a model behaves, get
+20:09 
+
+20:09 frustrated with uh the doom loops and
+20:12 
+
+20:12 like figure out ways to prevent it from
+20:14 
+
+20:14 doom looping and also like extracting
+20:16 
+
+20:16 reusable skills, meta prompts,
+20:20 
+
+20:20 uh hooks, everything on that level. So
+20:22 
+
+20:22 that's if you've mastered all those
+20:24 
+
+20:24 things and are very comfortable in doing
+20:26 
+
+20:26 these things, you're ready for the next
+20:28 
+
+20:28 level. So level four, that's where not a
+20:30 
+
+20:30 lot of people are today and that's where
+20:33 
+
+20:33 all these building blocks that we
+20:34 
+
+20:34 discussed today are proving very useful
+20:37 
+
+20:37 and that's something I like to call on
+20:39 
+
+20:39 the loop agenda coding. So again, it's
+20:42 
+
+20:42 the same, but you are not involved in
+20:44 
+
+20:44 the uh in the building phase. You spec
+20:48 
+
+20:48 the work, you hand it off to an agent,
+20:51 
+
+20:51 you go to sleep, you go have a coffee or
+20:53 
+
+20:53 you go do something else and when you
+20:54 
+
+20:54 come back it's like very high quality
+20:57 
+
+20:57 artifacts and you just have to like
+20:60 
+
+21:00 verify some things, tick some boxes and
+21:02 
+
+21:02 move on with your life. That's what I
+21:05 
+
+21:05 mean out the loop. Uh so you have
+21:08 
+
+21:08 mastered the on the loop sorry uh you've
+21:10 
+
+21:10 mastered the on the loop agentic coding
+21:11 
+
+21:11 thing if you can run two three four I
+21:14 
+
+21:14 don't know how much your brain can
+21:16 
+
+21:16 handle but if you can run multiple cloud
+21:19 
+
+21:19 code sessions in parallel and have them
+21:22 
+
+21:22 run each in their own work tree or
+21:23 
+
+21:23 whatever and you can still manage it and
+21:26 
+
+21:26 the output you get to see is of a high
+21:30 
+
+21:30 quality then you've mastered this on the
+21:32 
+
+21:32 loopen decoding rung up the ladder and
+21:35 
+
+21:35 the final phase This is multi-agent
+21:36 
+
+21:36 coding. This is the cloud code teams.
+21:39 
+
+21:39 This is the guest town level. Uh this is
+21:42 
+
+21:42 a very fresh level, but this is where
+21:44 
+
+21:44 things are going. I'm quite sure. And
+21:46 
+
+21:46 this is why I'm making this video
+21:49 
+
+21:49 and this is where I am today. So if you
+21:51 
+
+21:51 have any tips, please [laughter] shout
+21:53 
+
+21:53 out. And what does mastery at this level
+21:55 
+
+21:55 look like? I don't know. Everyone's
+21:57 
+
+21:57 figuring it out as they go. So if you
+21:59 
+
+21:59 have some advice on this, please let me
+22:01 
+
+22:01 know in the comments below. Now again
+22:02 
+
+22:02 this coding maturity ladder uh it is
+22:05 
+
+22:05 important to do your reps. It is
+22:08 
+
+22:08 important to start where you are master
+22:10 
+
+22:10 that level and move up uh when you are
+22:13 
+
+22:13 ready. If you start with a multi- aent
+22:15 
+
+22:15 coding setup and if you have not like
+22:17 
+
+22:17 implemented reusable skills uh played
+22:20 
+
+22:20 around with some MCP servers uh put in
+22:22 
+
+22:22 guard rails like test automation
+22:25 
+
+22:25 security vulnerability scanners whatever
+22:27 
+
+22:27 you will shoot yourself your
+22:30 
+
+22:30 organization you work for and your
+22:32 
+
+22:32 friends in the foot. So handle with care
+22:35 
+
+22:35 do your reps and climb this ladder
+22:37 
+
+22:37 deliberately. Okay. What does this mean
+22:39 
+
+22:39 for the skill set of tomorrow's software
+22:41 
+
+22:41 engineers? Uh I would like to pull this
+22:44 
+
+22:44 apart into two things or three things
+22:47 
+
+22:47 actually. Uh fading skills. So skills
+22:49 
+
+22:49 that were relevant yesterday that I
+22:51 
+
+22:51 don't think have much relevance today.
+22:53 
+
+22:53 And evergreen skills, skills that were
+22:55 
+
+22:55 useful yesterday and will become very
+22:57 
+
+22:57 relevant tomorrow still. And then the
+22:59 
+
+22:59 new skills, a couple of them we touched
+23:02 
+
+23:02 on while we went over the ladder. So
+23:04 
+
+23:04 let's start with fading skills.
+23:07 
+
+23:07 Syntax. Uh I can write React today. I
+23:10 
+
+23:10 have never learned React. So I don't
+23:12 
+
+23:12 think learning languages on a syntax
+23:15 
+
+23:15 level makes a whole lot of sense. Uh I
+23:18 
+
+23:18 would even say more uh writing code by
+23:21 
+
+23:21 hand in a wellestablished codebase with
+23:24 
+
+23:24 wellestablished architecture and system
+23:26 
+
+23:26 design and design patterns stuff like
+23:28 
+
+23:28 that with a lot of good examples. If you
+23:31 
+
+23:31 have a backend API for example and you
+23:34 
+
+23:34 are writing new end points in an
+23:37 
+
+23:37 established API by hand that is a thing
+23:41 
+
+23:41 of the past. I do not think that other
+23:44 
+
+23:44 than learning opportunities for
+23:46 
+
+23:46 opportunities for junior software
+23:47 
+
+23:47 engineers I do not think that has a
+23:50 
+
+23:50 place in tomorrow's world of software
+23:51 
+
+23:51 engineering. I had to go through all
+23:54 
+
+23:54 stages of grief because I like writing
+23:56 
+
+23:56 code by hand. I spent years of my life
+23:59 
+
+23:59 perfecting the art of refactoring and I
+24:02 
+
+24:02 know all the shortcuts of [laughter]
+24:04 
+
+24:04 of all refactorings but I don't think
+24:07 
+
+24:07 writing code by hand and well
+24:08 
+
+24:08 established code bases is super relevant
+24:11 
+
+24:11 anymore
+24:14 
+
+24:14 now. Okay. So if those are the skills
+24:16 
+
+24:16 that become less relevant or at least
+24:19 
+
+24:19 less relevant for senior engineers. If
+24:21 
+
+24:21 you're a junior engineer please write
+24:22 
+
+24:22 some code. You need to build up a mental
+24:25 
+
+24:25 model of uh programming. But uh if those
+24:28 
+
+24:28 skills are like on the way out are not
+24:30 
+
+24:30 the core skills you need to focus on,
+24:33 
+
+24:33 what are the evergreen skills that you
+24:35 
+
+24:35 need to focus on? Uh system designer
+24:38 
+
+24:38 architecture. Uh you need to be the one
+24:41 
+
+24:41 designing like the
+24:44 
+
+24:44 good example that an LLM can copy paste
+24:46 
+
+24:46 from. [laughter] You need to set up
+24:48 
+
+24:48 these walking skeletons. So uh before as
+24:51 
+
+24:51 an extreme programming software
+24:53 
+
+24:53 engineers uh you took a story and had an
+24:56 
+
+24:56 empty codebase and you like spec a
+24:58 
+
+24:58 walking skeleton that is an essential
+25:00 
+
+25:00 core skill. You need to be able to like
+25:03 
+
+25:03 set up a codebase with a minimal
+25:05 
+
+25:05 functional vertical slice and have like
+25:07 
+
+25:07 good design and architecture in place
+25:09 
+
+25:09 with test automation stuff like that. So
+25:12 
+
+25:12 specking out walking skeletons core
+25:14 
+
+25:14 skill uh if you've not done that a lot
+25:17 
+
+25:17 start learning it today. Another big
+25:20 
+
+25:20 skill that's becoming important and not
+25:22 
+
+25:22 a lot of software engineers like doing
+25:24 
+
+25:24 it but it's super essential is uh taking
+25:27 
+
+25:27 a fuzzy problem and making it more
+25:30 
+
+25:30 concrete. I'm thinking about product
+25:32 
+
+25:32 requirement documents, user story maps
+25:35 
+
+25:35 requirements, uh stuff like that. And
+25:38 
+
+25:38 next, if you have like a concrete like
+25:41 
+
+25:41 spec of the work to be done, you need to
+25:43 
+
+25:43 be able to break this work down into
+25:46 
+
+25:46 small vertical chunks. Again, the
+25:48 
+
+25:48 walking skeleton argument, you need to
+25:50 
+
+25:50 be able to break work down. This is like
+25:52 
+
+25:52 a senior engineering skill. In my
+25:56 
+
+25:56 organizations I consult with, it's
+25:58 
+
+25:58 typically like a senior engineers or
+26:01 
+
+26:01 tech leads that do this. But this is a
+26:02 
+
+26:02 skill everyone needs to master in the
+26:04 
+
+26:04 age of multi- aent uh uh orchestration.
+26:07 
+
+26:07 So uh you better learn to do some
+26:11 
+
+26:11 elephant carpacio. And if you don't know
+26:13 
+
+26:13 what elephant carpacio means, Google it,
+26:15 
+
+26:15 do the exercise, you'll thank me later.
+26:18 
+
+26:18 Next core skill, and that's a tricky one
+26:20 
+
+26:20 because I don't know how to teach this
+26:22 
+
+26:22 skill in the age of AI, but it's uh
+26:26 
+
+26:26 curating and perfecting your sense of
+26:28 
+
+26:28 judgment. Uh you need to know what good
+26:32 
+
+26:32 code looks like.
+26:35 
+
+26:35 And I I think the only way to do this is
+26:37 
+
+26:37 by seeing a lot of good code and writing
+26:40 
+
+26:40 a lot of good code by hand. So reading
+26:42 
+
+26:42 and writing yourself instead of like
+26:45 
+
+26:45 leaning on uh LLMs
+26:48 
+
+26:48 and yeah I don't think there's another
+26:49 
+
+26:49 way you need to do your reps.
+26:53 
+
+26:53 Uh and I think it's important to like
+26:55 
+
+26:55 have that sense of judgment so you can
+26:57 
+
+26:57 still validate outputs uh if if you need
+26:60 
+
+26:60 to put eyeballs on them. But uh it's not
+27:02 
+
+27:02 only a validation uh concern for me it's
+27:06 
+
+27:06 also a ownership and responsibility kind
+27:10 
+
+27:10 of thing.
+27:11 
+
+27:11 Because if you have like AI coding
+27:14 
+
+27:14 agents generate all of the code and you
+27:17 
+
+27:17 don't even look at it because you trust
+27:18 
+
+27:18 it, u
+27:21 
+
+27:21 they cannot become accountability syncs.
+27:24 
+
+27:24 You need to have ownership over the the
+27:27 
+
+27:27 code you're pushing into production. And
+27:29 
+
+27:29 I do think like tinkering with code once
+27:31 
+
+27:31 in a while um when I do I still do some
+27:34 
+
+27:34 like refactoring and uh on AI generated
+27:37 
+
+27:37 code but it's not because the code is
+27:40 
+
+27:40 not of decent quality. It's because uh
+27:43 
+
+27:43 playing around with the code uh allows
+27:46 
+
+27:46 me to understand the code and allows me
+27:48 
+
+27:48 to create a sense of ownership for the
+27:50 
+
+27:50 code because every line of code that
+27:52 
+
+27:52 gets pushed to production whether it was
+27:54 
+
+27:54 a cloud model or it was me personally uh
+27:57 
+
+27:57 I am the one that gets called at night
+27:59 
+
+27:59 when things blow up. So for me uh
+28:02 
+
+28:02 playing around with the code once in a
+28:03 
+
+28:03 while and still reading the code uh I
+28:06 
+
+28:06 push to production uh is not necessarily
+28:09 
+
+28:09 for like the quality bar. I have
+28:10 
+
+28:10 guardrails in place that like
+28:13 
+
+28:13 deterministically guarantee a very high
+28:15 
+
+28:15 quality. It's more of a an ownership
+28:18 
+
+28:18 kind of thing and a me still
+28:19 
+
+28:19 understanding the code kind of deal. So
+28:22 
+
+28:22 lastly, what are the completely new
+28:24 
+
+28:24 skills you should be learning? Uh and we
+28:26 
+
+28:26 hinted on some of them during the latter
+28:29 
+
+28:29 section, but I think uh first of all,
+28:32 
+
+28:32 you need like to have the basics down of
+28:34 
+
+28:34 prompt engineering, context engineering,
+28:37 
+
+28:37 hardness engineering. So it's not rocket
+28:40 
+
+28:40 science and it will not take you years
+28:42 
+
+28:42 to master these skills. It's uh pretty
+28:44 
+
+28:44 basic stuff actually. Uh but yeah, you
+28:47 
+
+28:47 need to do your reps a bit and you need
+28:48 
+
+28:48 to know you need to know these things.
+28:51 
+
+28:51 So uh have a look at all these terms if
+28:54 
+
+28:54 they are unfamiliar to you.
+28:56 
+
+28:56 And next up, we talked about it on air
+28:59 
+
+28:59 again. you need to be able to set up
+29:00 
+
+29:00 these uh
+29:03 
+
+29:03 agentic harnesses and these workflows
+29:06 
+
+29:06 and these custom pipelines stuff like
+29:08 
+
+29:08 that and more more than just setting it
+29:12 
+
+29:12 up. You need to be able to like debug
+29:13 
+
+29:13 them and improve them. And I found that
+29:16 
+
+29:16 that takes a couple of of months
+29:17 
+
+29:17 actually uh of working with these
+29:19 
+
+29:19 things, struggling with these things.
+29:22 
+
+29:22 I compared a bit with like your first
+29:24 
+
+29:24 stack trace. The first time a software
+29:26 
+
+29:26 developer sees a stack trace,
+29:29 
+
+29:29 it's really tricky to find a problem
+29:31 
+
+29:31 [laughter] in a codebase. But if you
+29:33 
+
+29:33 know how to read stack traces and if you
+29:35 
+
+29:35 know how to like go from a stack trace
+29:38 
+
+29:38 to the line of code, sorry, the line of
+29:40 
+
+29:40 code in the codebase, that's a problem.
+29:42 
+
+29:42 Uh there's some tips and tricks you can
+29:43 
+
+29:43 use, but it takes a little bit of
+29:45 
+
+29:45 practice. That's exactly what you have
+29:47 
+
+29:47 to do uh with uh custom prompt, skills,
+29:51 
+
+29:51 pipelines, stuff like that. And I think
+29:52 
+
+29:52 that has becoming a an essential skill
+29:56 
+
+29:56 uh because uh
+29:58 
+
+29:58 thinking about Andre Karpathy's quote
+30:01 
+
+30:01 that it's not the year of agents, it's
+30:04 
+
+30:04 the decade of agents. I think we will
+30:07 
+
+30:07 have job security as software engineers.
+30:10 
+
+30:10 Duh. But uh job will change. Duh. But a
+30:14 
+
+30:14 a small slash big part of the job will
+30:17 
+
+30:17 be setting up and debugging uh these
+30:21 
+
+30:21 agentic workflows
+30:23 
+
+30:23 and I don't think everyone will be able
+30:26 
+
+30:26 to do that. So a safe bet for me is to
+30:29 
+
+30:29 invest a bit [laughter]
+30:31 
+
+30:31 invest a bit in these skills and I think
+30:33 
+
+30:33 they will be paying off dividends in the
+30:36 
+
+30:36 next coming 10 years. So yeah to round
+30:39 
+
+30:39 off conclusion uh some things have been
+30:42 
+
+30:42 happening in the space and I think they
+30:44 
+
+30:44 are painting the shape of what's to come
+30:48 
+
+30:48 and I tried to uh give you like uh a way
+30:51 
+
+30:51 forward uh to meet you where you are and
+30:54 
+
+30:54 to show you where you should be going in
+30:56 
+
+30:56 the way forward. Now if you disagree or
+30:58 
+
+30:58 agree I would love to hear from you in
+30:60 
+
+31:00 the comments below and uh please I would
+31:03 
+
+31:03 love to see you next time. Go back.
