@@ -56,7 +56,15 @@ fi
 
 **If no transcriber found:**
 
-Offer automatic installation using the provided script:
+Offer automatic installation using the platform-specific script. On Windows, run this from PowerShell:
+
+```powershell
+& "<skill-directory>\scripts\install-requirements.ps1"
+```
+
+This installs Faster-Whisper, compatible PyAV, truststore, tqdm, and rich. It does not download a model; the selected model is fetched on the first transcription. On Linux/macOS, use the Bash installer below.
+
+The Bash installer workflow is:
 
 ```bash
 echo "⚠️  No transcription tool found"

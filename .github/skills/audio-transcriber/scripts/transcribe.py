@@ -38,6 +38,12 @@ except ImportError:
     subprocess.run([sys.executable, "-m", "pip", "install", "--user", "tqdm"], check=False)
     from tqdm import tqdm
 
+try:
+    import truststore
+    truststore.inject_into_ssl()
+except ImportError:
+    pass
+
 # Whisper engines
 try:
     from faster_whisper import WhisperModel

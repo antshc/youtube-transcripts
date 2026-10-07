@@ -55,7 +55,12 @@ This automatically:
 
 **Recommended (fastest):**
 ```bash
-pip install faster-whisper tqdm rich
+pip install faster-whisper 'av>=11,<19' truststore tqdm rich
+```
+
+On Windows, run the PowerShell installer from the skill directory instead:
+```powershell
+.\scripts\install-requirements.ps1
 ```
 
 **Alternative (original Whisper):**

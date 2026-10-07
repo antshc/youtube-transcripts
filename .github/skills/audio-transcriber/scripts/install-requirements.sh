@@ -69,16 +69,16 @@ echo ""
 echo -e "${BLUE}📦 Installing Faster-Whisper...${NC}"
 
 # Try different installation methods based on Python environment
-if python3 -m pip install faster-whisper --quiet 2>/dev/null; then
+if python3 -m pip install faster-whisper 'av>=11,<19' truststore --quiet 2>/dev/null; then
     echo -e "${GREEN}✅ Faster-Whisper installed successfully${NC}"
-elif python3 -m pip install --user --break-system-packages faster-whisper --quiet 2>/dev/null; then
+elif python3 -m pip install --user --break-system-packages faster-whisper 'av>=11,<19' truststore --quiet 2>/dev/null; then
     echo -e "${GREEN}✅ Faster-Whisper installed successfully (user mode)${NC}"
 else
     echo -e "${YELLOW}⚠️  Faster-Whisper installation failed, trying Whisper...${NC}"
     
-    if python3 -m pip install openai-whisper --quiet 2>/dev/null; then
+    if python3 -m pip install openai-whisper truststore --quiet 2>/dev/null; then
         echo -e "${GREEN}✅ Whisper installed successfully${NC}"
-    elif python3 -m pip install --user --break-system-packages openai-whisper --quiet 2>/dev/null; then
+    elif python3 -m pip install --user --break-system-packages openai-whisper truststore --quiet 2>/dev/null; then
         echo -e "${GREEN}✅ Whisper installed successfully (user mode)${NC}"
     else
         echo -e "${RED}❌ Failed to install transcription engine${NC}"
