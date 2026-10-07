@@ -30,6 +30,8 @@ Give concise, practical bullets. Include relevant best practices, pitfalls, trad
 
 List the main insights in chronological order, each with a timestamp and a short description. Use timestamps from the transcript. Never guess or manufacture timestamps; if the source has none, say that timestamps were not available.
 
+When the source is a YouTube video and its URL or video ID is known, make each timestamp a clickable link that opens the video at that moment: convert the timestamp to total seconds and link to `https://www.youtube.com/watch?v=VIDEO_ID&t=SECONDSs` (for example, `[12:34](https://www.youtube.com/watch?v=VIDEO_ID&t=754s)`; `1:02:03` becomes `t=3723s`). If the URL already has other query parameters, append `&t=SECONDSs` and replace any existing `t=`. Strip playlist or tracking parameters only when they interfere. If the video URL is not available, use plain-text timestamps.
+
 4. Include the video title or source link and transcript filename at the top when available. Omit unavailable metadata rather than leaving placeholders.
 5. Return the result as Markdown. Save it to a file only when asked, using the requested path and format.
-6. Before finishing, check that all four sections are present, claims are grounded in the transcript, extrapolated examples are identified, and timestamps are accurate or explicitly unavailable.
+6. Before finishing, check that all four sections are present, claims are grounded in the transcript, extrapolated examples are identified, and timestamps are accurate (and linked with correct seconds when the YouTube URL is known) or explicitly unavailable.
