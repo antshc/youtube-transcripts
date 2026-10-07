@@ -111,6 +111,21 @@ The goal examples stop at a verifiable end state; the loop examples keep repeati
 - If the work recurs on a stable cadence, consider a scheduled task.
 - If a check can be bypassed, redesign the check before trusting it.
 
+## Workshop Repository Examples
+
+Where each best practice is demonstrated in [aie-ai-native-workshop](https://github.com/workos/aie-ai-native-workshop). Paths are relative to the repo root; the repo has no checked-in hook, so the gate hook is built as a workshop exercise.
+
+| Best practice | Example in the repo |
+|---|---|
+| Outcome plus evidence (goal with a measurable finish line) | [playground/goals/](https://github.com/workos/aie-ai-native-workshop/tree/main/playground/goals): "Work through `playground/goals/TASK.md` until `bun playground/goals/check.ts` shows 5/5." Also [Block 2](https://github.com/workos/aie-ai-native-workshop/blob/main/curriculum/02-loops-and-goals.md): "It's not done until every todo is checked off." |
+| Loop until a check passes | [playground/loops/](https://github.com/workos/aie-ai-native-workshop/tree/main/playground/loops): "Run `bun playground/loops/check.ts` in a loop, fixing `slugify.ts` until it passes." Goals and loops compose: a loop whose body advances the goal's checklist by one item. |
+| Parallel, isolated work | [Block 1](https://github.com/workos/aie-ai-native-workshop/blob/main/curriculum/01-voice-coding.md) (three tabs, one voice, many agents) and Block 2 (each agent on its own git worktree). |
+| Verification gates | [Block 3](https://github.com/workos/aie-ai-native-workshop/blob/main/curriculum/03-verification-gates.md): a hook running lint, typecheck, and tests on every change; "gates pass, not 'the model sounds confident'". |
+| Independent adversarial review | Block 3 and [.claude/settings.json](https://github.com/workos/aie-ai-native-workshop/blob/main/.claude/settings.json): `/codex:adversarial-review` via the `codex` plugin, or `codex exec "Adversarially review this diff..."` as the fallback. |
+| Run manually first, then schedule | [playground/scheduled/](https://github.com/workos/aie-ai-native-workshop/tree/main/playground/scheduled) and [Block 4](https://github.com/workos/aie-ai-native-workshop/blob/main/curriculum/04-scheduled-tasks.md): schedule `report.ts` every 2 minutes, or a weekly lint-fix-gate-post run. |
+| Clarity before tokens burn | `ideation` plugin (interview to 95% confidence), listed in [skills/README.md](https://github.com/workos/aie-ai-native-workshop/blob/main/skills/README.md). |
+| Reusable skills and privacy boundaries | [.claude/skills/](https://github.com/workos/aie-ai-native-workshop/tree/main/.claude/skills) (`setup-workshop`, `setup-handy`, `coach-checkin`) and the planned local-only `loop-analyzer` spec in [skills/](https://github.com/workos/aie-ai-native-workshop/tree/main/skills). |
+
 ## Key Points with Timestamps
 
 - **[00:00:42]** The talk's premise: engineers should move beyond managing one agent session at a time.
