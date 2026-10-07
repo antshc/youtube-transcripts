@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.0.0] - 2026-10-07
+
+### Changed
+
+- Skill runs from GitHub Copilot on Windows/PowerShell; SKILL.md commands are PowerShell
+- `install-requirements.ps1`: added `openai-whisper` fallback, pip check, `-Model` and `-SkipModelDownload`, model pre-download
+- Added `examples/basic-transcription.ps1`
+
+### Removed
+
+- Claude CLI and `gh copilot` LLM integration, prompt-engineer workflow, summary/minutes generation (use the `transcript-summary` skill)
+- `--prompt` option and `summary-*.md` output from `transcribe.py`
+
+---
+
 ## [1.2.1] - 2026-02-04
 
 ### 🔒 Security

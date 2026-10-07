@@ -1,362 +1,86 @@
-# Audio Transcriber Skill v1.2.1
+# Audio Transcriber Skill v2.0.0
 
-Transform audio recordings into professional Markdown documentation with **intelligent atas/summaries using LLM integration** (Claude/Copilot CLI) and automatic prompt engineering.
+Transcribe audio recordings to a timestamped Markdown transcript, locally, with Faster-Whisper (preferred) or OpenAI Whisper. Runs from GitHub Copilot in PowerShell.
 
-## What's New in v2.0
+Summaries, minutes, and action items are not part of this skill; use the `transcript-summary` skill on the generated transcript.
 
-- **Progress Tracking** — 4-phase gauge bar (Audio Validation → Transcription → Summary Generation → Markdown Export) displayed during execution
-- **Error Handling** — Handles missing transcription engine, unsupported formats, LLM unavailability, and corrupt audio files with clear recovery steps
-- **EVals** — `evals/evals.json` with 3 realistic test cases; `evals/trigger-eval.json` with 20 queries (10 trigger / 10 no-trigger) for description optimization
-- **Standardized description** — SKILL.md description updated to Anthropic skill-creator format
-- **All 8 platforms** — Now supported on all 8 AI CLI platforms
+## Features
 
-## 🆕 What's New in v1.2.1
+- Timestamped Markdown transcript with metadata (file, language, engine, date)
+- 99 languages with auto-detection
+- Local processing, no cloud uploads or API keys
+- Formats: MP3, WAV, M4A, OGG, FLAC, WEBM, MP4 (ffmpeg for conversion)
+- Output name `transcript-YYYYMMDD-HHMMSS.md`, so earlier runs are never overwritten
 
-- **🧠 LLM Integration** - Claude CLI (primary) or GitHub Copilot CLI (fallback) for intelligent processing
-- **✨ Smart Prompts** - Automatic integration with prompt-engineer skill
-  - User-provided prompts → automatically improved → user chooses version
-  - No prompt → analyzes transcript → suggests format → generates structured prompt
-- **📊 Progress Indicators** - Visual progress bars (tqdm) and spinners (rich)
-- **📁 Timestamp Filenames** - `transcript-YYYYMMDD-HHMMSS.md` + `summary-YYYYMMDD-HHMMSS.md`
-- **🧹 Auto-Cleanup** - Removes temporary `metadata.json` and `transcription.json`
-- **🎨 Rich Terminal UI** - Beautiful formatted output with panels and colors
+## Installation
 
-See **[CHANGELOG.md](./CHANGELOG.md)** for complete v1.1.0 details.
-
-## 🎯 Core Features
-
-- **📝 Rich Markdown Output** - Structured reports with metadata tables, timestamps, and formatting
-- **🎙️ Speaker Diarization** - Automatically identifies and labels different speakers
-- **📊 Technical Metadata** - Extracts file size, duration, language, processing time
-- **📋 Intelligent Atas/Summaries** - Generated via LLM (Claude/Copilot) with customizable prompts
-- **💡 Executive Summaries** - AI-generated structured summaries with topics, decisions, action items
-- **🌍 Multi-language** - Supports 99 languages with auto-detection
-- **⚡ Zero Configuration** - Auto-discovers Faster-Whisper/Whisper installation
-- **🔒 Privacy-First** - 100% local Whisper processing, no cloud uploads
-- **🚀 Flexible Modes** - Transcript-only or intelligent processing with LLM
-
-## 📦 Installation
-
-### Quick Install (NPX)
-
-```bash
-npx claude-superskills@latest install audio-transcriber
-```
-
-This automatically:
-- Downloads the skill
-- Installs Python dependencies (faster-whisper, tqdm, rich)
-- Installs ffmpeg (macOS via Homebrew)
-- Sets up the skill globally
-
-### Manual Installation
-
-#### 1. Install Transcription Engine
-
-**Recommended (fastest):**
-```bash
-pip install faster-whisper 'av>=11,<19' truststore tqdm rich
-```
-
-On Windows, run the PowerShell installer from the skill directory instead:
 ```powershell
-.\scripts\install-requirements.ps1
+.\scripts\install-requirements.ps1                  # installs engine + pre-downloads the 'base' model
+.\scripts\install-requirements.ps1 -Model small     # pre-download a different model
+.\scripts\install-requirements.ps1 -SkipModelDownload
 ```
 
-**Alternative (original Whisper):**
-```bash
-pip install openai-whisper tqdm rich
+Requires Python 3.10+. The installer falls back to `openai-whisper` if Faster-Whisper cannot be installed. ffmpeg is optional: `winget install Gyan.FFmpeg`.
+
+Linux/macOS users can use `scripts/install-requirements.sh`.
+
+## Usage
+
+From Copilot:
+
+```
+transcribe audio to markdown: meeting.mp3
 ```
 
-#### 2. Install Audio Tools (Optional)
+Directly:
 
-For format conversion support:
-```bash
-# macOS
-brew install ffmpeg
-
-# Linux
-apt install ffmpeg
+```powershell
+python .\scripts\transcribe.py meeting.mp3 --model small --output-dir .\out
 ```
 
-#### 3. Install LLM CLI (Optional - for intelligent summaries)
+Or the example wrapper:
 
-**Claude CLI (recommended):**
-```bash
-# Follow: https://docs.anthropic.com/en/docs/claude-cli
+```powershell
+.\examples\basic-transcription.ps1 -AudioFile meeting.mp3 -Model small
 ```
 
-**GitHub Copilot CLI (alternative):**
-```bash
-gh extension install github/gh-copilot
-```
+| Option | Default | Description |
+|--------|---------|-------------|
+| `--model` | `base` | `tiny`, `base`, `small`, `medium`, `large` |
+| `--output-dir` | `.` | Where the transcript is written |
 
-#### 4. Install Skill
-
-**Global installation:**
-```bash
-cd /path/to/claude-superskills
-./scripts/local-install.sh
-```
-
-**Repository only:**
-```bash
-# Skill is already available if you cloned the repo
-```
-
-## 🚀 Usage
-
-### Basic Transcription
-
-```bash
-copilot> transcribe audio to markdown: meeting.mp3
-```
-
-**Output:**
-- `meeting.md` - Full Markdown report with metadata, transcription, minutes, summary
-
-### With Subtitles
-
-```bash
-copilot> convert audio file to text with subtitles: interview.wav
-```
-
-**Generates:**
-- `interview.md` - Markdown report
-- `interview.srt` - Subtitle file
-
-### Batch Processing
-
-```bash
-copilot> transcribe these audio files: recordings/*.mp3
-```
-
-**Processes all MP3 files in the directory.**
-
-### Trigger Phrases
-
-Activate the skill with any of these phrases:
-
-- "transcribe audio to markdown"
-- "transcribe this audio"
-- "convert audio file to text"
-- "extract speech from audio"
-- "audio to text with metadata"
-
-## 📋 Use Cases
-
-### 1. Team Meetings
-Record standups, planning sessions, or retrospectives and automatically generate:
-- Participant list
-- Discussion topics with timestamps
-- Decisions made
-- Action items assigned
-
-### 2. Client Calls
-Transcribe client conversations with:
-- Speaker identification
-- Key agreements documented
-- Follow-up tasks extracted
-
-### 3. Interviews
-Convert interviews to text with:
-- Question/answer attribution
-- Subtitle generation for video
-- Searchable transcript
-
-### 4. Lectures & Training
-Document educational content with:
-- Timestamped notes
-- Topic breakdown
-- Key concepts summary
-
-### 5. Content Creation
-Analyze podcasts, videos, YouTube content:
-- Full transcription
-- Chapter markers (timestamps)
-- Summary for show notes
-
-## 📊 Output Example
+## Output
 
 ```markdown
-# Audio Transcription Report
+# Audio Transcription
 
-## 📊 Metadata
-
-| Field | Value |
-|-------|-------|
-| **File Name** | team-standup.mp3 |
-| **File Size** | 3.2 MB |
-| **Duration** | 00:12:47 |
-| **Language** | English (en) |
-| **Processed Date** | 2026-02-02 14:35:21 |
-| **Speakers Identified** | 5 |
-| **Transcription Engine** | Faster-Whisper (model: base) |
+**File:** team-standup.mp3
+**Language:** EN
+**Engine:** faster-whisper
+**Date:** 2026-02-02 14:35:21
 
 ---
 
-## 🎙️ Full Transcription
+## Full Transcription
 
-**[00:00:12 → 00:00:45]** *Speaker 1*  
+**[00:12 → 00:45]**  
 Good morning everyone. Let's start with updates from the frontend team.
-
-**[00:00:46 → 00:01:23]** *Speaker 2*  
-We completed the dashboard redesign and deployed to staging yesterday.
-
----
-
-## 📋 Meeting Minutes
-
-### Participants
-- Speaker 1 (Meeting Lead)
-- Speaker 2 (Frontend Developer)
-- Speaker 3 (Backend Developer)
-- Speaker 4 (Designer)
-- Speaker 5 (Product Manager)
-
-### Topics Discussed
-1. **Dashboard Redesign** (00:00:46)
-   - Completed and deployed to staging
-   - Positive feedback from QA team
-
-2. **API Performance Issues** (00:03:12)
-   - Database query optimization needed
-   - Target response time < 200ms
-
-### Decisions Made
-- ✅ Approved dashboard for production deployment
-- ✅ Allocated 2 sprint points for API optimization
-
-### Action Items
-- [ ] **Deploy dashboard to production** - Assigned to: Speaker 2 - Due: 2026-02-05
-- [ ] **Optimize database queries** - Assigned to: Speaker 3
-- [ ] **Schedule user testing session** - Assigned to: Speaker 5
-
----
-
-## 📝 Executive Summary
-
-The team standup covered progress on the dashboard redesign, which has been successfully completed and is ready for production deployment. The frontend team received positive feedback from QA and the design aligns with user requirements.
-
-Backend performance concerns were raised regarding API response times. The team decided to prioritize query optimization in the current sprint, with a target of sub-200ms response times.
-
-Next steps include production deployment of the dashboard by end of week and scheduling user testing sessions to validate the new design with real users.
-
-### Key Points
-- 🔹 Dashboard redesign complete and staging-approved
-- 🔹 API performance optimization prioritized
-- 🔹 User testing scheduled for next week
-
-### Next Steps
-1. Production deployment (Speaker 2)
-2. Database optimization (Speaker 3)
-3. User testing coordination (Speaker 5)
 ```
 
-## ⚙️ Configuration
+## Troubleshooting
 
-No configuration needed! The skill automatically:
-- Detects Faster-Whisper or Whisper installation
-- Chooses the fastest available engine
-- Selects appropriate model based on file size
-- Auto-detects language
-
-## 🔧 Troubleshooting
-
-### "No transcription tool found"
-**Solution:** Install Whisper:
-```bash
-pip install faster-whisper
-```
-
-### "Unsupported format"
-**Solution:** Install ffmpeg:
-```bash
-brew install ffmpeg  # macOS
-apt install ffmpeg   # Linux
-```
-
-### Slow processing
-**Solution:** Use a smaller Whisper model:
-```bash
-# Edit the skill to use "tiny" or "base" model instead of "medium"
-```
-
-### Poor speaker identification
-**Solution:** 
-- Ensure clear audio with minimal background noise
-- Use a better microphone for recordings
-- Try the "medium" or "large" Whisper model
-
-## 🛠️ Advanced Usage
-
-### Custom Model Selection
-
-Edit `SKILL.md` Step 2 to change model:
-```python
-model = WhisperModel("small", device="cpu")  # Change "base" to "small", "medium", etc.
-```
-
-### Output Language Control
-
-Force output in specific language:
-```bash
-# Edit Step 3 to set language explicitly
-```
-
-### Batch Settings
-
-Process specific file types only:
-```bash
-copilot> transcribe audio: recordings/*.wav  # Only WAV files
-```
-
-## 📚 FAQ
-
-**Q: Does this work offline?**  
-A: Yes! 100% local processing, no internet required after initial model download.
-
-**Q: What's the difference between Whisper and Faster-Whisper?**  
-A: Faster-Whisper is 4-5x faster with same quality. Always prefer it if available.
-
-**Q: Can I transcribe YouTube videos?**  
-A: Not directly. Use a YouTube downloader first, then transcribe the audio file. Or use the `youtube-summarizer` skill instead.
-
-**Q: How accurate is speaker identification?**  
-A: Accuracy depends on audio quality. Clear recordings with distinct voices work best. Currently uses simple estimation; future versions will use advanced diarization.
-
-**Q: What languages are supported?**  
-A: 99 languages including English, Portuguese, Spanish, French, German, Chinese, Japanese, Arabic, and more.
-
-**Q: Can I edit the meeting minutes format?**  
-A: Yes! Edit the Markdown template in SKILL.md Step 3.
-
-## 🔗 Related Skills
-
-- **youtube-summarizer** - Extract and summarize YouTube video transcripts
-- **prompt-engineer** - Optimize prompts for better AI summaries
-
-## 📄 License
-
-This skill is part of the claude-superskills repository.  
-MIT License - See repository LICENSE file.
-
-## 🤝 Contributing
-
-Found a bug or have a feature request?  
-Open an issue in the [claude-superskills repository](https://github.com/yourusername/claude-superskills).
-
----
+| Problem | Fix |
+|---------|-----|
+| No transcription engine | Run `scripts\install-requirements.ps1` |
+| Unsupported format | Install ffmpeg: `winget install Gyan.FFmpeg` |
+| Slow processing | Use `--model tiny` or `base` |
+| Inaccurate text | Use `--model medium` or `large`; improve audio quality |
+| Model download blocked by proxy | The scripts use `truststore`, so the Windows certificate store applies |
 
 ## Metadata
 
 | Field | Value |
 |-------|-------|
-| Version | 2.1.0 |
-| Author | Eric Andrade |
-| Created | 2025-02-01 |
-| Updated | 2026-03-19 |
-| Platforms | GitHub Copilot CLI, Claude Code, OpenAI Codex, OpenCode, Gemini CLI, Antigravity, Cursor IDE, AdaL CLI |
+| Version | 2.0.0 |
 | Category | content |
-| Tags | audio, transcription, whisper, meeting-minutes, speech-to-text |
-| Risk | safe |
+| Tags | audio, transcription, whisper, speech-to-text |
